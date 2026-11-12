@@ -1,0 +1,20 @@
+/* 每个工人通过独立transform移动，光标层不会截获页面输入。 */
+.swarm-experience .cursors {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 30;
+}
+.swarm-experience .cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+.swarm-experience .cursor svg {
+  position: absolute;
+  overflow: visible;
+  filter: drop-shadow(0 1px 1.5px rgb(0 0 0 / 28%));
+}

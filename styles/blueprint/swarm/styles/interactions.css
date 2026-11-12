@@ -1,0 +1,61 @@
+/* 点击层位于场景图形之上，沿用相同几何与变换，不改变施工中的布局。 */
+.swarm-experience .scene-action {
+  position: absolute;
+  z-index: 1;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+.swarm-experience .scene-action--link:hover {
+  background: rgb(76 91 212 / 8%);
+  box-shadow: 0 2px 0 #4c5bd4;
+}
+.swarm-experience .scene-action--button:hover {
+  background: rgb(76 91 212 / 18%);
+  box-shadow: 0 0 0 2px rgb(76 91 212 / 35%);
+}
+.swarm-experience .scene-action:active {
+  background: rgb(76 91 212 / 28%);
+}
+.swarm-experience .scene-action:focus-visible,
+.swarm-experience .intro-trigger:focus-visible {
+  outline: 2px solid #4c5bd4;
+  outline-offset: 4px;
+}
+.swarm-experience .intro-trigger {
+  display: grid;
+  place-items: center;
+  padding: 14px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.swarm-experience .intro-trigger:hover {
+  background: rgb(76 91 212 / 5%);
+}
+.swarm-experience .intro-mark {
+  display: block;
+  width: 112px;
+  height: 112px;
+  color: #8b93a1;
+}
+html[data-theme="dark"] .swarm-experience .intro-mark {
+  color: #9aa3ad;
+}
+.swarm-experience .intro-trigger:disabled {
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .swarm-experience .scene-action {
+    transition: none;
+  }
+}

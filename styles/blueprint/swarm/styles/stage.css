@@ -1,0 +1,70 @@
+/* 页面使用设计画布坐标，窄屏缩放由useSwarm统一管理。 */
+.swarm-experience .page {
+  position: relative;
+  width: 100%;
+  overflow: clip;
+  display: flow-root;
+}
+.swarm-experience .canvas,
+.swarm-experience .nav-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+}
+.swarm-experience .nav-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.swarm-experience .nav-backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--paper);
+}
+.swarm-experience .paths {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+.swarm-experience .el-text {
+  position: absolute;
+  font-feature-settings: "cv11", "ss01";
+}
+.swarm-experience .el-rect {
+  position: absolute;
+  transition:
+    background-color 0.22s ease,
+    border-radius 0.22s ease,
+    box-shadow 0.22s ease;
+}
+.swarm-experience .text-sel {
+  background: #0d99ff47;
+}
+.swarm-experience .caret {
+  display: inline-block;
+  width: 1px;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: currentColor;
+  animation: swarm-blink 1s steps(1) infinite;
+}
+@keyframes swarm-blink {
+  50% {
+    opacity: 0;
+  }
+}
+.swarm-experience .intro-logo {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+.swarm-experience .intro-logo.gone {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.92);
+}

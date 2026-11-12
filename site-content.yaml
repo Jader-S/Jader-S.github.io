@@ -1,0 +1,330 @@
+# =============================================================================
+# 个人站内容配置（单一数据源）
+# -----------------------------------------------------------------------------
+# 内容全部来自 E:\Jader\blog 已发布的内容：
+#   - 履历 / 作品 / 技术栈 / 领域 → src/i18n/zh.ts
+#   - 博客 15 篇 → src/content/blog/*.mdx 的 frontmatter
+# 改这里的字段后，按 .cursor/skills/*/references/apply-content.md 的映射
+# 同步到 data/ + lib/i18n/locales/{zh,en}.ts（两语言必须同时改）。
+# 不编造私人事实；id 用驼峰英文，删掉某个数组项 = 下架该条目。
+# =============================================================================
+
+meta:
+  # preview = 允许大量占位；ready = 关键信息已替换
+  mode: ready
+  defaultLocale: zh
+  # 五套风格并列；/ 默认蓝图，/astra 是内嵌的 ASTRA 太空站
+  preferredStyle: blueprint # atelier | classic | particle | blueprint | astra
+
+site:
+  github: "https://github.com/Jader-S"
+  yearsOfExperience: 7
+  blogProfile: "https://jaderai.cn/blog"
+
+profile:
+  zh:
+    name: "孙珺宇 · Jader"
+    title: "高级前端工程师 / AI 应用工程师"
+    tagline: "一个前端工程师的太空站 · 性能治理 · 数字孪生 · AI 工程"
+    highlights:
+      - { label: "前端经验", value: "7 年" }
+      - { label: "核心项目", value: "3 段实战" }
+      - { label: "技术文章", value: "15 篇" }
+      - { label: "双栈主力", value: "Vue + React" }
+  en:
+    name: "Jader Sun"
+    title: "Senior Frontend Engineer / AI Application Engineer"
+    tagline: "A frontend engineer's space station · performance · digital twins · AI engineering"
+    highlights:
+      - { label: "Experience", value: "7 yrs" }
+      - { label: "Core Projects", value: "3" }
+      - { label: "Articles", value: "15" }
+      - { label: "Dual Stack", value: "Vue + React" }
+
+hero:
+  zh:
+    role: "高级前端工程师 · AI 应用"
+    viewResume: "查看履历"
+    github: "GitHub"
+  en:
+    role: "Senior Frontend Engineer · AI"
+    viewResume: "View resume"
+    github: "GitHub"
+
+about:
+  zh:
+    title: "关于我"
+    subtitle: "从航天产线到智慧配电，再到把 AI 写进工程流"
+    headline: "把复杂业务做成"
+    headlineHighlight: "可量化、可复用"
+    headlineEnd: "的前端系统"
+    location: "中国 · 北京"
+    summary:
+      - "7 年复杂 B/S 系统前端经验，黑龙江大学软件工程本科（2019）。从联夯的航天产线数字孪生，到氪邦的智慧办公平台，再到施耐德电气的中低压配电系统，一直做从 0 到 1 与大型重构。"
+      - "当前主线是性能治理与架构重构：POI ConfigTools 配电树 72s → 2.1s（34×）、页面跳转 14s → 1.2s（12×）、JS Heap 4GB OOM 归零；并把关键链路打点、热点分层、单一树 + 节点索引这套方法沉淀成可复用范式。"
+      - "同时把 GitHub Copilot 从个人工具变成团队能力（人效 +70%），落地五层 AI 协作体系，并用 LangGraph / 自研 MCP Server / Skills 做有状态的 Agent 工程。这个站点本身就是一条可点开的作品线索。"
+  en:
+    title: "About Me"
+    subtitle: "From aerospace production lines to smart distribution, and AI in the engineering loop"
+    headline: "Turning complex business systems into"
+    headlineHighlight: "measurable, reusable"
+    headlineEnd: "frontend systems"
+    location: "Beijing, China"
+    summary:
+      - "7 years of frontend engineering on complex B/S systems, BS in Software Engineering (Heilongjiang University, 2019). From a 1:1 digital twin of an aerospace production line, to a smart-office platform, to Schneider Electric's low-voltage distribution tooling — always zero-to-one builds and large-scale refactors."
+      - "Current focus: performance governance and architecture. POI ConfigTools tree build 72s to 2.1s (34x), page transition 14s to 1.2s (12x), a 4GB heap OOM eliminated. The profiling → hotspot layering → single tree + node index method is now a reusable playbook."
+      - "Also turned GitHub Copilot from a personal tool into a team capability (+70% throughput) with a five-layer AI collaboration system, and build stateful agents with LangGraph, self-hosted MCP servers and Skills. This site is itself a clickable project trail."
+
+# 技术栈：category.id + skill ids；文案在 name / skills 映射里
+skills:
+  categories:
+    - id: coreFrameworks
+      zh: { name: "核心框架" }
+      en: { name: "Core Frameworks" }
+      skills:
+        - { id: react18, zh: "React 18", en: "React 18" }
+        - { id: vue23, zh: "Vue 2/3", en: "Vue 2/3" }
+        - { id: typescript, zh: "TypeScript", en: "TypeScript" }
+        - { id: r3f, zh: "React Three Fiber", en: "React Three Fiber" }
+        - { id: zustand, zh: "Zustand", en: "Zustand" }
+    - id: buildTools
+      zh: { name: "构建与工程化" }
+      en: { name: "Build & Tooling" }
+      skills:
+        - { id: vite, zh: "Vite", en: "Vite" }
+        - { id: webpack, zh: "Webpack", en: "Webpack" }
+        - { id: eslint, zh: "ESLint", en: "ESLint" }
+        - { id: vitest, zh: "Vitest", en: "Vitest" }
+        - { id: mdx, zh: "MDX", en: "MDX" }
+    - id: dataVisualization
+      zh: { name: "数据可视化与 3D" }
+      en: { name: "Visualization & 3D" }
+      skills:
+        - { id: threeJs, zh: "Three.js", en: "Three.js" }
+        - { id: echarts, zh: "ECharts", en: "ECharts" }
+        - { id: svg, zh: "SVG", en: "SVG" }
+        - { id: gsap, zh: "GSAP", en: "GSAP" }
+        - { id: canvas, zh: "Canvas / GLSL", en: "Canvas / GLSL" }
+    - id: performance
+      zh: { name: "性能治理" }
+      en: { name: "Performance" }
+      skills:
+        - {
+            id: profiling,
+            zh: "PerformanceObserver 打点",
+            en: "PerformanceObserver Profiling",
+          }
+        - { id: rendering, zh: "渲染链路优化", en: "Render Pipeline Tuning" }
+        - { id: memory, zh: "内存 / OOM 定位", en: "Memory & OOM Analysis" }
+        - {
+            id: virtualization,
+            zh: "虚拟滚动 / 懒加载",
+            en: "Virtualization & Lazy Loading",
+          }
+    - id: aiEngineering
+      zh: { name: "AI 工程与 Agent" }
+      en: { name: "AI Engineering & Agents" }
+      skills:
+        - { id: langgraph, zh: "LangGraph", en: "LangGraph" }
+        - { id: mcp, zh: "MCP Server", en: "MCP Server" }
+        - { id: aiAgent, zh: "ReAct / Tool Calling", en: "ReAct / Tool Calling" }
+        - { id: copilot, zh: "Copilot 团队赋能", en: "Copilot Team Enablement" }
+        - { id: sse, zh: "SSE / WebSocket 流式", en: "SSE / WebSocket Streaming" }
+    - id: backend
+      zh: { name: "后端协作与全栈" }
+      en: { name: "Backend & Full Stack" }
+      skills:
+        - { id: fastapi, zh: "FastAPI", en: "FastAPI" }
+        - { id: postgresql, zh: "PostgreSQL", en: "PostgreSQL" }
+        - { id: sqlalchemy, zh: "SQLAlchemy / Alembic", en: "SQLAlchemy / Alembic" }
+        - { id: docker, zh: "Docker / CI-CD", en: "Docker / CI-CD" }
+        - { id: pytest, zh: "pytest", en: "pytest" }
+    - id: industrial
+      zh: { name: "工业互联网与实时" }
+      en: { name: "Industrial & Realtime" }
+      skills:
+        - { id: digitalTwin, zh: "Three.js 数字孪生", en: "Three.js Digital Twin" }
+        - { id: signalr, zh: "SignalR", en: "SignalR" }
+        - { id: websocket, zh: "WebSocket", en: "WebSocket" }
+        - {
+            id: industrialProtocols,
+            zh: "Modbus / IEC 61850",
+            en: "Modbus / IEC 61850",
+          }
+    - id: practices
+      zh: { name: "工程实践" }
+      en: { name: "Engineering Practices" }
+      skills:
+        - { id: git, zh: "Git", en: "Git" }
+        - { id: cicd, zh: "CI/CD", en: "CI/CD" }
+        - { id: designDocs, zh: "ADR / 设计文档", en: "ADR / Design Docs" }
+        - { id: unitTesting, zh: "单元测试", en: "Unit Testing" }
+        - { id: codeReview, zh: "Code Review", en: "Code Review" }
+
+# 企业/作品项目（结构 + 文案）
+enterpriseProjects:
+  - id: poiConfigTools
+    tech: ["React", "TypeScript", "ECharts", "SVG", "SignalR"]
+    highlight: true
+    zh:
+      name: "施耐德 · POI 中低压配电"
+      description: "Power Operation Insight 核心配置工具，管理万点级中低压配电系统。主导性能治理与架构重构：配电树 72s→2.1s（34×）、页面跳转 14s→1.2s、OOM 归零；落地单线图 SVG 电流动画、DER 实时方向判定、POAE 看板 Vue→React 迁移，以及五层 AI 协作体系（团队人效 +70%）。"
+    en:
+      name: "Schneider · POI ConfigTools"
+      description: "Core configuration tool for Power Operation Insight, handling 10k+ point low-voltage distribution systems. Led performance governance: tree build 72s to 2.1s (34x), page transition 14s to 1.2s, OOM eliminated. Delivered SVG current-flow animation, DER direction detection, a Vue-to-React dashboard migration, and a five-layer AI workflow (+70% team throughput)."
+  - id: smartMeeting
+    tech: ["Vue 3", "TypeScript", "ECharts", "多端适配"]
+    highlight: true
+    zh:
+      name: "氪邦 · 智慧会议子系统"
+      description: "企业级会议全流程管控：会议室资源池与状态屏协同、智能排期、会中控屏与议题汇报。独立开发待办督办、会议纪要、电子席卡等核心模块，抽离通用组件体系使团队效率提升 30%+，并适配大屏 / 中屏 / 小屏多硬件分辨率。"
+    en:
+      name: "Kebang · Smart Meeting Suite"
+      description: "Enterprise meeting lifecycle platform: room resource pools, status screens, smart scheduling, in-meeting control. Built task tracking, minutes and electronic nameplates, extracted a shared component system lifting team efficiency by 30%+, and adapted across large / medium / small screens."
+  - id: aerospaceLine
+    tech: ["Three.js", "Vue 2", "WebSocket", "ECharts"]
+    highlight: true
+    zh:
+      name: "联夯 · 首都航天机械产线"
+      description: "B/S 架构自动化产线管控系统，配合机床与机器人实现全自动运行。从 0 到 1 搭建前端架构、封装 Axios / WebSocket 通信；用 Three.js 把物理产线 1:1 实时映射到浏览器（模型轻量化 + LOD + 帧率优化），并落地 SVG / ECharts 全流程可视化与自定义权限体系。"
+    en:
+      name: "Lianhang · Aerospace Production Line"
+      description: "B/S production-line control system driving CNC machines and robots end to end. Built the frontend from scratch, wrapped Axios / WebSocket comms, mirrored the physical line 1:1 in the browser with Three.js (mesh decimation + LOD + frame tuning), and shipped SVG / ECharts dashboards with a custom permission model."
+
+# 开源项目（可有 link）
+githubProjects:
+  - id: astraPortfolio
+    tech: ["Vite", "React", "R3F", "MDX", "GSAP"]
+    link: "https://github.com/Jader-S/Jader-S.github.io"
+    highlight: true
+    zh:
+      name: "ASTRA · 3D 星图作品站"
+      description: "一个前端工程师的太空站：9 万粒子螺旋星系、飞行式星球导航、可交互 Demo 与 MDX 技术日志。Vite + React + R3F + Zustand，纯静态部署在 jaderai.cn。"
+    en:
+      name: "ASTRA · 3D Galaxy Portfolio"
+      description: "A frontend engineer's space station: a 90k-particle spiral galaxy, fly-to navigation between planets, interactive demos and MDX engineering notes. Vite + React + R3F + Zustand, served statically at jaderai.cn."
+  - id: skillQaAgent
+    tech: ["React", "TypeScript", "Vite", "Zustand", "sql.js"]
+    link: "https://github.com/Jader-S/skill-qa-agent"
+    highlight: true
+    zh:
+      name: "技能问答 Agent · Skill QA"
+      description: "本地优先的学习与面试助手：把课程资料整理成知识点，按章节自测，再用同一份知识库做模拟面试。网页版数据全部落在浏览器（sql.js WASM + IndexedDB），未配置 API Key 时自动以 Mock 离线模式运行。"
+    en:
+      name: "Skill QA Agent"
+      description: "A local-first study and interview assistant: turn course material into knowledge points, self-test by chapter, then run a mock interview on the same knowledge base. All browser data stays local (sql.js WASM + IndexedDB); without an API key it runs fully offline in Mock mode."
+
+# 经验领域
+experience:
+  - id: performance
+    icon: "⚡"
+    zh:
+      title: "性能治理与架构重构"
+      description: "关键链路打点 → 热点分层拆解 → 单一树 + 节点索引 Map + UUID 事务回滚。配电树 34× 提速、跳转 12× 提速、4GB Heap OOM 归零。"
+    en:
+      title: "Performance & Architecture"
+      description: "Instrument the critical path, stratify hotspots, then rebuild around a single tree with a node index and transactional rollback. 34x tree build, 12x navigation, a 4GB heap OOM eliminated."
+  - id: digitalTwin
+    icon: "🏭"
+    zh:
+      title: "数字孪生与工业互联网"
+      description: "航天产线 1:1 实时映射、机床与机器人协同、模型轻量化与 LOD；Modbus / IEC 61850 业务语义与 SignalR 实时驱动。"
+    en:
+      title: "Digital Twins & Industrial IoT"
+      description: "1:1 real-time aerospace line mirroring, CNC/robot coordination, mesh decimation and LOD; Modbus / IEC 61850 semantics with SignalR-driven updates."
+  - id: smartOffice
+    icon: "🏢"
+    zh:
+      title: "智慧办公与 B 端 SaaS"
+      description: "会议全流程管控、待办督办、电子席卡与多端适配；通用组件体系让团队开发效率提升 30%+。"
+    en:
+      title: "Smart Office & B2B SaaS"
+      description: "Meeting lifecycle control, task tracking, electronic nameplates and multi-screen adaptation; a shared component system lifted team efficiency by 30%+."
+  - id: powerSystems
+    icon: "🔌"
+    zh:
+      title: "智慧配电"
+      description: "中低压配电树、单线图 SVG 电流动画、DER 实时方向判定、POAE 自定义看板与运行时抄表能耗可视化。"
+    en:
+      title: "Smart Power Distribution"
+      description: "Low-voltage distribution trees, SVG current-flow single-line diagrams, real-time DER direction detection, POAE dashboards and runtime energy metering."
+  - id: aiEngineering
+    icon: "🤖"
+    zh:
+      title: "AI 工程与 Agent"
+      description: "五层 AI 协作体系（规则 / Skill / Memory / 代理路由）、LangGraph 有状态编排、自研 MCP Server、SSE 流式对话；Copilot 团队人效 +70%。"
+    en:
+      title: "AI Engineering & Agents"
+      description: "Five-layer AI collaboration (rules / skills / memory / agent routing), LangGraph stateful orchestration, self-hosted MCP servers, SSE streaming; Copilot drove +70% team throughput."
+  - id: visualization
+    icon: "📊"
+    zh:
+      title: "复杂数据可视化"
+      description: "ECharts 万点级时序与像素放大镜、数据大屏、OEE / 设备健康度看板，以及自研 GLSL 星系着色器。"
+    en:
+      title: "Complex Data Visualization"
+      description: "ECharts 10k-point time series with a pixel magnifier, data walls, OEE / equipment health dashboards, and hand-written GLSL galaxy shaders."
+
+# 博客：来自 blog/src/content/blog/*.mdx 的 frontmatter
+# likes / views 没有对应数据源，统一为 0；url 指向已上线的 jaderai.cn
+blogs:
+  - title: "在浏览器里复原一条航天产线"
+    description: "用 Three.js + ECharts 把七八年前做过的数字孪生重做一遍：主题变量桥接、资源清理、让模拟数据活起来，以及我特意没做的事。"
+    url: "https://jaderai.cn/blog/rebuilding-a-production-line-in-the-browser"
+    date: "2026-11-12"
+  - title: "把做过的事，变成能点开看的 Demo"
+    description: "星图搭好了，点进「作品」星球却发现卡片是空的。作品集要回答的不是「我会什么特效」，而是「我解决过什么问题」。"
+    url: "https://jaderai.cn/blog/turning-work-into-interactive-demos"
+    date: "2026-11-11"
+  - title: "当鼠标一动，整片星空都在抖"
+    description: "一天之内连着改了两轮交互：上午修「一眼看过去不对劲」，下午修「改完反而更不对劲」。四个玄学 bug 最后都指向同一件事——交互状态放错了层。"
+    url: "https://jaderai.cn/blog/astra-interaction-redesign"
+    date: "2026-11-09"
+  - title: "让 Agent 自己写代码：沙箱、OSS 和多智能体"
+    description: "沙箱销毁了文件还在、deploy 工具直接返回公网 URL。跨过这一步，Agent 从「回答问题」变成「交付东西」。"
+    url: "https://jaderai.cn/blog/coding-agent-sandbox-oss-and-multi-agent"
+    date: "2026-10-28"
+  - title: "写了 deny，.env 还是能读：文件权限的顺序语义"
+    description: "ACL 按列表顺序匹配、第一条命中即生效、全不中默认允许。宽泛的 allow 写在前面，deny 永远轮不到。"
+    url: "https://jaderai.cn/blog/filesystem-permission-first-match-wins"
+    date: "2026-10-28"
+  - title: "Agent 移交成功了，下一轮怎么又跑回默认？"
+    description: "acitve_agent 少一个字母，不报错、不抛栈，只是每轮静默回落到默认 Agent。写状态和读状态，是一对字节级契约。"
+    url: "https://jaderai.cn/blog/handoff-typo-silent-fallback"
+    date: "2026-10-28"
+  - title: "一个 Cursor 窗口、三套 .venv：我是怎么把 Python 环境串烂的"
+    description: "三类看起来毫不相干的报错，同一个根因：作用域错了。项目目录、解释器、虚拟环境、笔记本内核，四者必须指向同一套。"
+    url: "https://jaderai.cn/blog/python-venv-scope-mess"
+    date: "2026-10-21"
+  - title: "从手写 ReAct 到图运行时：Agent 怎么「记住」和「被打断」"
+    description: "手写一轮 ReAct、接上 Skill 与 MCP，再换到 StateGraph + Checkpointer。Agent 的难点从来不是让模型说话，是第 N 轮还知道自己干到哪。"
+    url: "https://jaderai.cn/blog/from-handwritten-react-to-langgraph-runtime"
+    date: "2026-08-31"
+  - title: "Agent 报错后别再发一遍消息：用 input=None 从检查点接着跑"
+    description: "检查点已经替我保存了现场，我却亲手又铺了一层新现场。「重试」和「用户又发了一句」，是两种 API。"
+    url: "https://jaderai.cn/blog/langgraph-retry-with-input-none"
+    date: "2026-08-25"
+  - title: "从空目录到第一颗星球"
+    description: "一个 3D 作品站最早的一周，我在想什么、先做什么，又刻意没做什么。"
+    url: "https://jaderai.cn/blog/astra-build-log"
+    date: "2026-08-04"
+  - title: "给一个 3D 作品站立规矩"
+    description: "动手写业务代码之前，先把视觉、产品、代码三层的决定写死。附一个真实踩到的坑：MDX 不是 Markdown。"
+    url: "https://jaderai.cn/blog/designing-astras-visual-language"
+    date: "2026-08-04"
+  - title: "一个能跑的电商后台，和会流式说话的 AI 导购"
+    description: "从 UV workspace 到 OSS 直传、JWT、SSE / WS，做完一个带测试和前端 Demo 的电商后台 + AI 导购闭环。真正值钱的是配置、逻辑、测试各切一刀。"
+    url: "https://jaderai.cn/blog/fastapi-ecommerce-with-streaming-ai-guide"
+    date: "2026-08-03"
+  - title: "SSE 明明在推流，前端却收到一坨 JSON"
+    description: "全局统一响应中间件默认假设「响应是完整 JSON」，把事件流整个消费掉再包一层信封。引入 SSE / WS，必须留显式逃生舱。"
+    url: "https://jaderai.cn/blog/unified-response-middleware-breaks-sse"
+    date: "2026-07-30"
+  - title: "make test 卡死半小时：元凶是系统代理，不是 Postgres"
+    description: "httpx 默认 trust_env=True，把 localhost 请求也送进了 Clash。测本地服务时，健康检查与测试客户端都该显式 trust_env=False。"
+    url: "https://jaderai.cn/blog/httpx-proxy-blocks-local-tests"
+    date: "2026-07-28"
+  - title: "先把地基打牢：uv、Docker 和第一个 PostgreSQL 容器"
+    description: "七月中旬没碰模型，全在跟环境较劲。这一周最值的产出不是某个 Demo，是把「版本、依赖、解释器、数据都跟着项目走」这条姿势定下来。"
+    url: "https://jaderai.cn/blog/python-tooling-and-first-postgres-container"
+    date: "2026-07-22"

@@ -1,0 +1,69 @@
+/* 施工选框和测量标签在内容之上、工人光标之下。 */
+.swarm-experience .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+.swarm-experience .overlay svg {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+.swarm-experience .badge {
+  position: absolute;
+  transform: translate(-50%);
+  padding: 1px 4px;
+  border-radius: 2px;
+  color: #fff;
+  font:
+    600 11px/16px Inter,
+    system-ui,
+    sans-serif;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.swarm-experience .ruler {
+  position: fixed;
+  z-index: 20;
+  background: #2c2c2c;
+  pointer-events: none;
+}
+.swarm-experience .ruler-top {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  border-bottom: 1px solid #3a3a3a;
+}
+.swarm-experience .ruler-left {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 20px;
+  border-right: 1px solid #3a3a3a;
+}
+.swarm-experience .ruler svg {
+  display: block;
+}
+.swarm-experience .ruler-corner {
+  position: fixed;
+  z-index: 21;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  background: #2c2c2c;
+}
+.swarm-experience .rtext {
+  font:
+    500 9px Inter,
+    system-ui,
+    sans-serif;
+  fill: #8c8c8c;
+}
+.swarm-experience .rsel {
+  fill: #0d99ff;
+}
