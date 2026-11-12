@@ -1,0 +1,188 @@
+.ecm {
+  display: grid;
+  gap: 20px;
+}
+
+/* ===== 三段叙事（问题 / 思路 / 结果） ===== */
+.ecm__narrative {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.ecm__narrative > div {
+  padding: 14px 16px;
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.ecm__narrative h4 {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--neon-purple);
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+
+.ecm__narrative p {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ===== 主图 + 放大镜叠加 ===== */
+.ecm__stage {
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background:
+    radial-gradient(120% 120% at 100% 0%, rgba(34, 211, 238, 0.08) 0%, transparent 55%),
+    var(--glass-bg);
+  overflow: hidden;
+}
+
+.ecm__chart {
+  width: 100%;
+  height: 440px;
+}
+
+/* 放大镜画布：覆盖在主图之上，事件穿透到下方 ECharts。 */
+.ecm__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ecm__loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+}
+
+/* ===== 提示 ===== */
+.ecm__hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-faint);
+  letter-spacing: 0.04em;
+}
+
+/* ===== 参数条 ===== */
+.ecm__params {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 22px;
+  padding: 14px 16px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.ecm__param {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.ecm__param input[type='range'] {
+  width: 150px;
+  accent-color: var(--neon-cyan);
+}
+
+.ecm__param i {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 12px;
+  color: var(--neon-cyan);
+  min-width: 46px;
+}
+
+/* ===== 模式切换段控（视觉放大 / 数据放大） ===== */
+.ecm__seg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ecm__seg-label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.ecm__seg-btn {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ecm__seg-btn:hover {
+  border-color: rgba(34, 211, 238, 0.4);
+  color: var(--text-bright);
+}
+
+.ecm__seg-btn.is-active {
+  border-color: var(--neon-cyan);
+  background: rgba(34, 211, 238, 0.12);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.25);
+}
+
+.ecm__meta {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+  letter-spacing: 0.08em;
+}
+
+/* ===== 读数 ===== */
+.ecm__readout {
+  padding: 12px 16px;
+  border: 1px solid var(--neon-cyan);
+  border-radius: var(--radius-md);
+  background: rgba(34, 211, 238, 0.06);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--neon-cyan);
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 768px) {
+  .ecm__chart {
+    height: 340px;
+  }
+  .ecm__params {
+    gap: 14px;
+  }
+  .ecm__meta {
+    width: 100%;
+    margin-left: 0;
+  }
+}

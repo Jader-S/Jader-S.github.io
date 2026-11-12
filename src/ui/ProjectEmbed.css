@@ -1,0 +1,152 @@
+/* ProjectEmbed — 外部整项目内嵌预览 */
+.proj-embed {
+  position: relative;
+  width: 100%;
+  margin-top: 14px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #05080f;
+  min-height: 320px;
+}
+/* 窄屏下这里被设成桌面逻辑宽度 + transform 缩放，iframe 仍按桌面布局渲染 */
+.proj-embed__viewport {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+.proj-embed__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #0b1020;
+}
+
+/* 工具条：常驻右上，全屏时移到右下避开被嵌应用的顶栏 */
+.proj-embed__bar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+.proj-embed__scale-note {
+  padding: 5px 9px;
+  border-radius: var(--radius-sm);
+  background: rgba(6, 12, 22, 0.86);
+  color: var(--text-dim);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.proj-embed__bar button,
+.proj-embed__bar a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+  background: rgba(6, 12, 22, 0.86);
+  backdrop-filter: blur(8px);
+  color: var(--neon-cyan);
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out-expo);
+}
+.proj-embed__bar button:hover,
+.proj-embed__bar a:hover {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.35);
+}
+
+/* Fullscreen API：元素本身进全屏，DOM 不移动 → iframe 不重载 */
+.proj-embed:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  aspect-ratio: auto !important;
+}
+/* 浏览器拒绝 fullscreen 时的降级覆盖层 */
+.proj-embed--full:not(:fullscreen) {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+.proj-embed--full {
+  aspect-ratio: auto !important;
+}
+.proj-embed--full .proj-embed__bar {
+  top: auto;
+  bottom: 16px;
+  right: 16px;
+}
+
+.proj-embed__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 13px;
+  background: var(--glass-bg);
+}
+.proj-embed__overlay p { margin: 0; }
+.proj-embed__overlay a,
+.proj-embed__overlay--error a {
+  color: var(--neon-cyan);
+  text-decoration: underline;
+}
+.proj-embed__overlay--error button {
+  padding: 7px 16px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.proj-embed__spinner {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--glass-border);
+  border-top-color: var(--neon-cyan);
+  animation: projSpin 0.8s linear infinite;
+}
+@keyframes projSpin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 760px) {
+  /* 固定高度而非宽高比：缩放视图需要一个稳定的宿主高度来反推 iframe 逻辑高度 */
+  .proj-embed {
+    height: 50vh;
+    min-height: 360px;
+    aspect-ratio: auto !important;
+  }
+  .proj-embed__bar { top: 8px; right: 8px; left: 8px; }
+  .proj-embed__bar button,
+  .proj-embed__bar a { padding: 6px 9px; font-size: 10px; }
+}

@@ -1,0 +1,282 @@
+/* ============================================================
+   Content panel (V2)
+   - 加宽到 min(1240px, 92vw)，取消正文 760px 二次收窄
+   - 顶部霓虹滚动进度条 + sticky header
+   - 深色实底（对比度）+ 桌面给左侧 NavRail 让位
+   - 移动端全屏 + safe-area + touch-action: pan-y（抵消 body 的 none）
+   ============================================================ */
+.panel-shell {
+  position: fixed;
+  inset: 24px;
+  z-index: var(--z-panel);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: panelFadeIn 0.6s var(--ease-out-expo);
+  transition: opacity 0.28s ease, transform 0.28s var(--ease-out-expo);
+}
+
+@keyframes panelFadeIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* HOP / 返航途中：旧面板淡出，避免文字硬切 */
+.panel-shell--leaving {
+  opacity: 0;
+  transform: translateY(-14px) scale(0.985);
+  pointer-events: none;
+}
+
+.panel {
+  pointer-events: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(1240px, 92vw);
+  max-height: calc(100vh - 48px);
+  /* 深色实底：玻璃质感保留在边缘，但主体不透光。
+     --glass-bg 仅 5% 白，叠在星云上会让亮背景穿透正文，对比度不达标（WCAG AA）。 */
+  background: linear-gradient(160deg, rgba(11, 15, 28, 0.97), rgba(6, 9, 18, 0.98));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow:
+    0 0 40px rgba(34, 211, 238, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+/* 顶部滚动进度细线 */
+.panel__progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 3;
+  background: rgba(34, 211, 238, 0.08);
+  pointer-events: none;
+}
+.panel__progress > span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+  box-shadow: 0 0 12px var(--neon-cyan-glow);
+  transition: transform 0.12s linear;
+}
+
+.panel__scroll {
+  flex: 1;
+  min-height: 0; /* flex 子项必须允许收缩，否则 overflow-y:auto 不生效 */
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 44px 40px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--neon-cyan-soft) transparent;
+}
+.panel__scroll::-webkit-scrollbar { width: 6px; }
+.panel__scroll::-webkit-scrollbar-thumb {
+  background: rgba(34, 211, 238, 0.35);
+  border-radius: 999px;
+}
+
+.panel__header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 0 -44px 28px;
+  padding: 30px 44px 20px;
+  background: linear-gradient(180deg, rgba(9, 12, 23, 0.97) 72%, rgba(9, 12, 23, 0));
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(34, 211, 238, 0.15);
+}
+
+.panel__titles {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.panel__title {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--neon-cyan);
+  margin: 0;
+  text-shadow: 0 0 16px rgba(34, 211, 238, 0.3);
+}
+
+.panel__sub {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin: 0;
+}
+
+.panel__return {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  background: var(--glass-bg);
+  color: var(--neon-cyan);
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s var(--ease-out-expo);
+}
+
+.panel__return:hover {
+  background: rgba(34, 211, 238, 0.12);
+  color: var(--text-primary);
+  border-color: var(--neon-cyan);
+}
+
+.panel__body {
+  color: var(--text-primary);
+  font-size: 17px;
+  line-height: 1.8;
+  max-width: none;
+}
+
+.panel__body h2 {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.32em;
+  color: var(--neon-purple);
+  margin: 36px 0 16px;
+  padding-left: 16px;
+  text-transform: uppercase;
+}
+.panel__body h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 16px;
+  border-radius: 2px;
+  background: var(--neon-purple);
+  box-shadow: 0 0 10px var(--neon-purple-soft);
+}
+
+.panel__body h3 {
+  font-family: var(--font-display);
+  font-size: 19px;
+  color: var(--text-primary);
+  margin: 24px 0 8px;
+}
+
+.panel__body p {
+  margin: 0 0 16px;
+  color: var(--text-primary);
+}
+
+.panel__body strong { color: var(--neon-cyan); font-weight: 600; }
+
+.panel__body code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 2px 6px;
+  background: rgba(34, 211, 238, 0.1);
+  color: var(--neon-cyan);
+  border-radius: 4px;
+}
+
+.panel__body pre {
+  margin: 0 0 18px;
+  padding: 16px 18px;
+  background: rgba(3, 6, 14, 0.55);
+  border: 1px solid rgba(34, 211, 238, 0.16);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.panel__body pre code { background: none; padding: 0; }
+
+.panel__body ul { padding-left: 20px; }
+.panel__body li { margin-bottom: 8px; }
+.panel__body a { border-bottom: 1px solid var(--neon-cyan-soft); }
+
+/* ===================== Reveal blocks ===================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+}
+.reveal--in { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .panel-shell, .panel-shell--leaving { transition: none; }
+}
+
+/* ===================== Desktop: 给左侧 NavRail 让位 =====================
+   面板从 x=208 起（rail 占 16..184 + 24 间距），放大后不再压住导航文字。
+   NavRail 提到面板之上作为兜底，内容态仍可直接切星球（HOP）。 */
+@media (min-width: 769px) {
+  .panel-shell { left: 208px; right: 24px; }
+  .panel { width: min(1240px, 100%); }
+  .nav-rail { z-index: calc(var(--z-panel) + 1); }
+}
+
+/* ===================== Tablet ===================== */
+@media (max-width: 1024px) {
+  /* 用 100% 而非 94vw，避免面板宽过上面让位后的容器而重新盖住 NavRail */
+  .panel { width: min(1100px, 100%); }
+  .panel__scroll { padding: 0 32px 36px; }
+  .panel__header { top: 0; margin: 0 -32px 24px; padding: 24px 32px 18px; }
+  .panel__title { font-size: 34px; }
+}
+
+/* ===================== Mobile ===================== */
+@media (max-width: 768px) {
+  .panel-shell { inset: 0; }
+  .panel {
+    width: 100%;
+    max-height: none;
+    height: 100%;
+    border: none;
+    border-radius: 0;
+    background: rgba(8, 11, 20, 0.97);
+  }
+  /* 取消 header 负 margin：它在 overflow-x:hidden 的滚动容器里会把右侧
+     「返回」按钮推出裁剪边界。改为 scroll 无横向 padding，由 header / body
+     各自控制内边距，header 即可满宽且不被裁。 */
+  .panel__scroll {
+    padding: 0 0 calc(96px + env(safe-area-inset-bottom));
+    touch-action: pan-y;
+  }
+  .panel__header {
+    position: sticky;
+    top: 0;
+    margin: 0 0 22px;
+    padding: calc(14px + env(safe-area-inset-top)) 20px 16px;
+    background: rgba(8, 11, 20, 0.97);
+  }
+  .panel__title { font-size: 24px; }
+  .panel__sub { font-size: 12px; }
+  .panel__return { font-size: 10px; letter-spacing: 0.15em; min-height: 44px; padding: 8px 12px; }
+  .panel__body { font-size: 15px; line-height: 1.75; padding: 0 20px; }
+  .panel__body h2 { margin: 28px 0 12px; }
+  .panel__body h3 { font-size: 17px; }
+  .panel__body pre { font-size: 12px; padding: 12px; }
+}

@@ -1,0 +1,124 @@
+/* ============================================================
+   Home hero — low-third first impression over the 3D scene.
+   pointer-events:none so planet clicks reach the canvas.
+   Staggered entrance; brand carries a gentle idle glitch.
+   ============================================================ */
+.home-hero {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 13vh;
+  z-index: var(--z-hud);
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+/* 飞行途中（穿越/返航）隐藏首页 hero，让第一视角穿越更纯净 */
+.home-hero--flying {
+  opacity: 0;
+}
+
+.home-hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+}
+
+.home-hero__kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.55em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding-left: 0.55em;
+  opacity: 0;
+  animation: heroRise 0.7s var(--ease-out-expo) 0.1s forwards;
+}
+
+.home-hero__brand {
+  font-family: var(--font-display);
+  font-size: clamp(56px, 12vw, 132px);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  margin: 0;
+  padding-left: 0.18em;
+  color: var(--text-primary);
+  text-shadow:
+    0 0 18px rgba(34, 211, 238, 0.55),
+    0 0 54px rgba(34, 211, 238, 0.25);
+  opacity: 0;
+  animation: heroRise 0.9s var(--ease-out-expo) 0.25s forwards;
+}
+
+.home-hero__tag {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.6vw, 17px);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  opacity: 0;
+  animation: heroRise 0.7s var(--ease-out-expo) 0.45s forwards;
+}
+
+.home-hero__rule {
+  width: 72px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+  box-shadow: 0 0 12px var(--neon-cyan-glow);
+  opacity: 0;
+  animation: heroRise 0.7s var(--ease-out-expo) 0.6s forwards;
+}
+
+.home-hero__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  opacity: 0;
+  animation: heroRise 0.7s var(--ease-out-expo) 0.72s forwards;
+}
+
+.home-hero__status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 8px var(--neon-cyan-glow);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+.home-hero__hint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  opacity: 0;
+  animation: heroHint 0.7s var(--ease-out-expo) 0.9s forwards;
+}
+
+@keyframes heroRise {
+  from { opacity: 0; transform: translateY(18px); filter: blur(6px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@keyframes heroHint {
+  from { opacity: 0; }
+  to { opacity: 0.7; }
+}
+
+@media (max-width: 768px) {
+  .home-hero { padding-bottom: 19vh; }
+  .home-hero__brand { letter-spacing: 0.12em; padding-left: 0.12em; }
+  /* 底部已有一次性 NavHint 胶囊 + tab，隐藏重复的常驻引导行，避免两行提示挤在一起 */
+  .home-hero__hint { display: none; }
+}

@@ -1,0 +1,344 @@
+/* 会议编排看板 · ASTRA 霓虹玻璃风 */
+.cb {
+  display: grid;
+  gap: 16px;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+}
+
+/* ── 工具栏 ───────────────────────────── */
+.cb-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+}
+.cb-toolbar__group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cb-toolbar__right {
+  margin-left: auto;
+}
+.cb-toolbar__label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.cb-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.cb-legend__item i {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+  box-shadow: 0 0 8px currentColor;
+}
+.cb-conflict {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+}
+.cb-conflict.is-bad {
+  color: #fca5a5;
+  border-color: rgba(248, 113, 113, 0.5);
+  background: rgba(248, 113, 113, 0.1);
+}
+
+.cb-hint {
+  font-size: 12px;
+  color: var(--text-dim);
+  padding: 8px 12px;
+  border-left: 2px solid var(--neon-cyan);
+  background: rgba(34, 211, 238, 0.06);
+  border-radius: 4px;
+}
+
+/* ── 芯片 / 按钮 ─────────────────────── */
+.cb-chip {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out-expo);
+}
+.cb-chip:hover { color: var(--text-primary); border-color: var(--neon-cyan); }
+.cb-chip.is-on {
+  color: #052e2b;
+  background: linear-gradient(90deg, var(--neon-cyan), #67e8f9);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.4);
+}
+.cb-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--neon-cyan);
+  background: rgba(34, 211, 238, 0.12);
+  color: var(--neon-cyan);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out-expo);
+}
+.cb-btn:hover:not(:disabled) { background: rgba(34, 211, 238, 0.22); box-shadow: 0 0 16px rgba(34, 211, 238, 0.4); }
+.cb-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.cb-btn--danger {
+  border-color: rgba(248, 113, 113, 0.6);
+  background: rgba(248, 113, 113, 0.12);
+  color: #fca5a5;
+}
+
+/* ── 看板网格 ────────────────────────── */
+.cb-board {
+  position: relative;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  grid-template-rows: 44px 1fr;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+  overflow: hidden;
+}
+.cb-corner {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  border-right: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+}
+.cb-days-head {
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-bottom: 1px solid var(--glass-border);
+}
+.cb-day-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
+}
+.cb-day-head__wd {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+}
+.cb-day-head__dt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.cb-axis {
+  grid-column: 1;
+  grid-row: 2;
+  position: relative;
+  border-right: 1px solid var(--glass-border);
+}
+.cb-axis__tick {
+  position: absolute;
+  right: 6px;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-faint);
+}
+.cb-days {
+  grid-column: 2;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  position: relative;
+}
+.cb-col {
+  position: relative;
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
+}
+.cb-col__grid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ── 会议卡片 ────────────────────────── */
+.cb-card {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  border-radius: 6px;
+  padding: 6px 8px;
+  overflow: hidden;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--room) 22%, transparent);
+  border: 1px solid var(--room);
+  border-left: 3px solid var(--room);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  transition: transform 0.15s var(--ease-out-expo), box-shadow 0.15s var(--ease-out-expo);
+  user-select: none;
+}
+.cb-card:hover {
+  transform: translateY(-2px);
+  z-index: 999 !important;
+  outline: 2px solid var(--neon-cyan);
+  outline-offset: 1px;
+  box-shadow: 0 0 22px rgba(34, 211, 238, 0.55);
+  filter: brightness(1.12);
+  /* hover 时背景改为不透明，盖住下层卡片透出的文字，避免视觉重叠 */
+  background: color-mix(in srgb, var(--room) 72%, #0b1220);
+}
+.cb-card.is-dragging { opacity: 0.35; }
+.cb-card--ghost {
+  background: color-mix(in srgb, var(--neon-cyan) 14%, transparent);
+  border: 1px dashed var(--neon-cyan);
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.35);
+  pointer-events: none;
+  z-index: 50;
+}
+.cb-card.is-conflict {
+  border-color: #fca5a5;
+  background: rgba(248, 113, 113, 0.16);
+}
+.cb-card.is-conflict:hover {
+  /* 冲突卡 hover 同样改不透明，盖住下层文字 */
+  background: color-mix(in srgb, #f87171 72%, #0b1220);
+}
+.cb-card__title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cb-card__meta {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cb-card__time {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-faint);
+  margin-top: 2px;
+}
+.cb-card__badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #fca5a5;
+  color: #2a0606;
+  font-weight: 700;
+}
+
+/* ── 表单抽屉 ────────────────────────── */
+.cb-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 16, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.cb-modal__panel {
+  width: min(420px, 92vw);
+  padding: 22px;
+  border: 1px solid var(--neon-cyan);
+  border-radius: var(--radius-md);
+  background: #0b1220;
+  box-shadow: 0 0 40px rgba(34, 211, 238, 0.2);
+  display: grid;
+  gap: 14px;
+}
+.cb-modal__title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--neon-cyan);
+  margin: 0;
+}
+.cb-field {
+  display: grid;
+  gap: 6px;
+}
+.cb-field > span {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+.cb-field input,
+.cb-field select {
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 13px;
+}
+.cb-field input:focus,
+.cb-field select:focus {
+  outline: none;
+  border-color: var(--neon-cyan);
+}
+.cb-field--row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.cb-field--row label {
+  display: grid;
+  gap: 6px;
+}
+.cb-modal__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+.cb-spacer { flex: 1; }
+
+@media (max-width: 768px) {
+  .cb-board { font-size: 11px; }
+  .cb-day-head__dt { display: none; }
+}

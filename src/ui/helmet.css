@@ -1,0 +1,79 @@
+/* ===================== Helmet visor (first-person POV) =====================
+   Layered over the 3D canvas. The goal is to sell "I am looking through a
+   spacesuit helmet visor" without ever showing a body:
+     - curved corner darkening (barrel vignette)
+     - a glowing inner rim (the helmet's opening edge)
+     - a slow glass sheen sweep + a breathing light
+   Pure CSS, no assets, pointer-events:none.
+   ====================================================================== */
+.helmet {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 72% 72% at 50% 50%,
+      transparent 42%,
+      rgba(2, 3, 8, 0.5) 78%,
+      rgba(2, 3, 8, 0.95) 100%
+    );
+}
+
+/* curved visor glass — inner shadow gives the "port hole" depth + a faint rim */
+.helmet__visor {
+  position: absolute;
+  inset: 0;
+  border-radius: 28% 28% 32% 32% / 22% 22% 28% 28%;
+  box-shadow:
+    inset 0 0 170px 64px rgba(1, 2, 6, 0.6),
+    inset 0 0 0 2px rgba(150, 210, 255, 0.10);
+  animation: visorBreathe 7s ease-in-out infinite;
+}
+
+/* bright inner rim — the literal edge of the helmet opening */
+.helmet__rim {
+  position: absolute;
+  inset: 16px;
+  border-radius: 24% 24% 28% 28% / 19% 19% 24% 24%;
+  border: 1px solid rgba(120, 200, 255, 0.16);
+  box-shadow:
+    inset 0 0 44px rgba(34, 211, 238, 0.06),
+    0 0 34px rgba(34, 211, 238, 0.05);
+}
+
+/* top glass sheen sweep */
+.helmet::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -45%;
+  width: 165%;
+  height: 135%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse 50% 42% at 50% 0%,
+    rgba(190, 232, 255, 0.14),
+    transparent 70%
+  );
+}
+
+/* bottom visor reflection */
+.helmet::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 30%;
+  background: linear-gradient(180deg, transparent, rgba(34, 211, 238, 0.06));
+}
+
+@keyframes visorBreathe {
+  0%, 100% { opacity: 0.82; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .helmet__visor { animation: none; }
+}

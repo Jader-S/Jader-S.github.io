@@ -1,0 +1,58 @@
+/* DemoStage — 大空间 demo 共享容器（平移 / 双指缩放 / 滚轮缩放） */
+.demo-stage {
+  position: relative;
+  overflow: hidden;
+  /* 全站 body 禁了原生手势，这里接管平移/缩放 */
+  touch-action: none;
+  width: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+}
+.demo-stage:active {
+  cursor: grabbing;
+}
+.demo-stage__content {
+  transform-origin: 0 0;
+  will-change: transform;
+}
+.demo-stage__toolbar {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  gap: 6px;
+  z-index: 5;
+}
+.demo-stage__btn {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  line-height: 1;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--text-primary);
+  cursor: pointer;
+  backdrop-filter: blur(var(--glass-blur));
+  transition: all 0.18s var(--ease-out-expo);
+}
+.demo-stage__btn:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.35);
+}
+.demo-stage__hint {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  pointer-events: none;
+  z-index: 5;
+}

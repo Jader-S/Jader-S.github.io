@@ -1,0 +1,188 @@
+/* ── 3D 工厂流水线 ─────────────────────────────── */
+.fl-root {
+  position: relative;
+  width: 100%;
+  height: clamp(460px, 78vh, 800px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: #070b14;
+  overflow: hidden;
+}
+.fl-root canvas { display: block; }
+
+/* 3D 里的工位名标签（drei Html） */
+.fl-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  color: var(--text-primary);
+  padding: 3px 8px;
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  background: rgba(7, 11, 20, 0.82);
+}
+
+/* 图例 / 操作提示（不是 KPI 看板） */
+.fl-legend {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 7px 11px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  background: rgba(7, 11, 20, 0.72);
+  backdrop-filter: blur(var(--glass-blur));
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  pointer-events: none;
+}
+.fl-legend__item { display: inline-flex; align-items: center; gap: 6px; }
+.fl-legend__dot { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+.fl-legend__dot--idle { background: #53708d; border: 1px solid #7d97b2; }
+.fl-legend__dot--busy { background: var(--neon-cyan); box-shadow: 0 0 8px var(--neon-cyan-glow); }
+.fl-legend__tip { color: var(--text-faint); }
+
+/* 全局控制条 */
+.fl-toolbar {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  z-index: 4;
+  display: flex;
+  gap: 6px;
+}
+.fl-toolbar button {
+  min-width: 52px;
+  padding: 7px 11px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  background: rgba(7, 11, 20, 0.78);
+  backdrop-filter: blur(var(--glass-blur));
+  transition: all 0.18s var(--ease-out-expo);
+}
+.fl-toolbar button:hover { color: var(--neon-cyan); border-color: var(--neon-cyan); }
+.fl-toolbar button[data-active='true'] {
+  color: var(--neon-cyan);
+  background: rgba(34, 211, 238, 0.16);
+  border-color: var(--neon-cyan);
+}
+
+/* 点击工序设备后的极简设置浮层 */
+.fl-panel {
+  position: absolute;
+  right: 12px;
+  top: 56px;
+  z-index: 4;
+  width: 244px;
+  padding: 14px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  background: rgba(9, 15, 26, 0.9);
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.55);
+}
+.fl-panel__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.fl-panel__title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--neon-cyan);
+}
+.fl-panel__close {
+  font-size: 12px;
+  line-height: 1;
+  color: var(--text-faint);
+  padding: 3px 5px;
+}
+.fl-panel__close:hover { color: var(--text-primary); }
+.fl-panel__row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 11px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.fl-panel__row b { color: var(--text-primary); font-weight: 500; }
+.fl-panel__row b.is-busy { color: var(--neon-cyan); }
+.fl-progress {
+  height: 5px;
+  margin-top: 8px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+.fl-progress i {
+  display: block;
+  height: 100%;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 10px var(--neon-cyan-glow);
+  transition: width 0.1s linear;
+}
+.fl-panel__label {
+  display: flex;
+  justify-content: space-between;
+  margin: 16px 0 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.fl-panel__label b { color: var(--neon-cyan); font-weight: 500; }
+.fl-panel input[type='range'] { width: 100%; accent-color: var(--neon-cyan); }
+.fl-panel__input { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.fl-panel__input input {
+  width: 68px;
+  padding: 5px 7px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+}
+.fl-panel__input span { font-family: var(--font-mono); font-size: 10px; color: var(--text-faint); }
+.fl-panel__hint {
+  margin: 12px 0 0;
+  font-size: 10.5px;
+  line-height: 1.65;
+  color: var(--text-faint);
+}
+
+.fl-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-dim);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+}
+
+@media (max-width: 760px) {
+  .fl-root { height: 60vh; min-height: 360px; }
+  .fl-legend { gap: 9px; padding: 6px 8px; font-size: 9px; }
+  .fl-legend__tip { display: none; }
+  .fl-toolbar { right: 8px; top: 8px; }
+  .fl-toolbar button { min-width: 44px; padding: 6px 8px; font-size: 10px; }
+  .fl-panel {
+    left: 8px;
+    right: 8px;
+    top: auto;
+    bottom: 8px;
+    width: auto;
+  }
+}

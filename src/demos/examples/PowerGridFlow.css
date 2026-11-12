@@ -1,0 +1,301 @@
+/* 施耐德配电回路 · 电流方向动画 · ASTRA 霓虹风 */
+.pgf {
+  display: grid;
+  gap: 14px;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+}
+
+/* ── 控制台 ───────────────────────────── */
+.pgf-console {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px 16px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+}
+.pgf-console__label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.pgf-console__hint {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.pgf-btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--neon-cyan);
+  background: rgba(34, 211, 238, 0.12);
+  color: var(--neon-cyan);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out-expo);
+}
+.pgf-btn:hover {
+  background: rgba(34, 211, 238, 0.22);
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.4);
+}
+.pgf-btn--danger {
+  border-color: rgba(248, 113, 113, 0.6);
+  background: rgba(248, 113, 113, 0.12);
+  color: #fca5a5;
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* ── 主体：画布 + 面板 ──────────────────── */
+.pgf-body {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 14px;
+  align-items: start;
+}
+.pgf-stage {
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+}
+.pgf-svg {
+  display: block;
+}
+
+/* 进线 / 母线 */
+.pgf-wire-base {
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.pgf-grid-dot {
+  fill: #f59e0b;
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.7));
+}
+.pgf-grid-label {
+  fill: #f59e0b;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+.pgf-bus {
+  fill: rgba(34, 211, 238, 0.18);
+  stroke: var(--neon-cyan);
+  stroke-width: 1;
+  filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.45));
+}
+.pgf-bus-label {
+  fill: var(--text-dim);
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+}
+
+/* 流动虚线（dash-offset 动画，方向由符号决定）
+   稀疏「发光光珠」：小圆点 + 大间距，避免密虚线观感 */
+.pgf-wire-flow {
+  stroke-width: 5;
+  stroke-linecap: round;
+  /* 3px 点 + 90px 间隙 = 沿线路跑的离散光珠（更稀疏） */
+  stroke-dasharray: 3 90;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes pgfFlowDown {
+  to {
+    stroke-dashoffset: -93;
+  }
+}
+@keyframes pgfFlowUp {
+  to {
+    stroke-dashoffset: 93;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pgf-wire-flow {
+    animation: none;
+  }
+}
+
+/* 删除 ✕ */
+.pgf-del {
+  cursor: pointer;
+}
+.pgf-del circle {
+  fill: rgba(248, 113, 113, 0.12);
+  stroke: rgba(248, 113, 113, 0.5);
+  stroke-width: 1;
+}
+.pgf-del text {
+  fill: #fca5a5;
+  font-size: 14px;
+  pointer-events: none;
+}
+.pgf-del:hover circle {
+  fill: rgba(248, 113, 113, 0.28);
+}
+
+/* 断路器（可拖拽调功率） */
+.pgf-breaker {
+  cursor: ew-resize;
+  /* 全局 body 禁了 touch-action；断路器自身声明 none，避免拖拽功率时
+     被 stage 的横向滚动抢走手势 */
+  touch-action: none;
+}
+.pgf-breaker rect {
+  fill: #0e1726;
+  stroke: var(--neon-cyan);
+  stroke-width: 1.5;
+  transition: all 0.15s var(--ease-out-expo);
+}
+.pgf-breaker.is-sel rect {
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 12px rgba(34, 211, 238, 0.6));
+}
+.pgf-breaker:hover rect {
+  filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.45));
+}
+.pgf-breaker__name {
+  fill: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+}
+.pgf-breaker__val {
+  fill: var(--neon-cyan);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+/* 设备 */
+.pgf-device rect {
+  fill: #0b1220;
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 1;
+}
+.pgf-device--storage rect {
+  stroke: rgba(245, 158, 11, 0.6);
+}
+.pgf-device__name {
+  fill: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+}
+.pgf-device__sub {
+  fill: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+}
+
+/* ── 控制面板 ─────────────────────────── */
+.pgf-panel {
+  padding: 16px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+  display: grid;
+  gap: 12px;
+}
+.pgf-panel__title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: var(--neon-cyan);
+}
+.pgf-panel__empty {
+  color: var(--text-dim);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.pgf-panel__sub {
+  font-size: 12px;
+  opacity: 0.7;
+}
+.pgf-field {
+  display: grid;
+  gap: 6px;
+}
+.pgf-field > span {
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+}
+.pgf-field input {
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+.pgf-field input:focus {
+  outline: none;
+  border-color: var(--neon-cyan);
+}
+.pgf-range {
+  width: 100%;
+  accent-color: var(--neon-cyan);
+}
+.pgf-readout {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+}
+.pgf-readout__dir {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+.pgf-readout__mag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.pgf-tip {
+  font-size: 11px;
+  color: var(--text-faint);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* 图例 */
+.pgf-legend {
+  display: grid;
+  gap: 8px;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--glass-border);
+}
+.pgf-legend span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.pgf-legend i {
+  width: 16px;
+  height: 4px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.pgf-legend__off {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+@media (max-width: 760px) {
+  .pgf-body {
+    grid-template-columns: 1fr;
+  }
+}

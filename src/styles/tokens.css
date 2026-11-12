@@ -1,0 +1,115 @@
+:root {
+  /* Space palette */
+  --bg-space: #05060a;
+  --bg-deep: #0a0d18;
+  --bg-elev: rgba(255, 255, 255, 0.04);
+
+  /* Neon accents */
+  --neon-cyan: #22d3ee;
+  --neon-cyan-soft: rgba(34, 211, 238, 0.4);
+  --neon-cyan-glow: rgba(34, 211, 238, 0.7);
+  --neon-purple: #a855f7;
+  --neon-purple-soft: rgba(168, 85, 247, 0.4);
+
+  /* Glass */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-strong: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(34, 211, 238, 0.3);
+  --glass-blur: 12px;
+
+  /* Text */
+  --text-primary: #e6f1ff;
+  --text-dim: rgba(230, 241, 255, 0.6);
+  --text-faint: rgba(230, 241, 255, 0.35);
+
+  /* Type */
+  --font-display: 'Orbitron', 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Sizing */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* Z layers */
+  --z-bg: 0;
+  --z-canvas: 1;
+  --z-hud: 10;
+  --z-panel: 20;
+  --z-intro: 30;
+  --z-modal: 40;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--bg-space);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+body {
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+/* 3D canvas 独占指针手势；内容面板的滚动容器另行放开 pan-y（见 panel.css） */
+canvas {
+  touch-action: none;
+}
+
+a {
+  color: var(--neon-cyan);
+  text-decoration: none;
+  transition: color 0.2s var(--ease-out-expo);
+}
+
+a:hover {
+  color: var(--text-primary);
+}
+
+button {
+  font-family: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--neon-cyan);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--neon-cyan-soft);
+  color: var(--text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

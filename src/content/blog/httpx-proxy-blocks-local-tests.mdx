@@ -1,0 +1,76 @@
+---
+title: "make test 卡死半小时：元凶是系统代理，不是 Postgres"
+date: "2026-07-28"
+tags: ["FastAPI", "测试", "httpx"]
+excerpt: "httpx 默认 trust_env=True，把 localhost 请求也送进了 Clash。测本地服务时，健康检查与测试客户端都该显式 trust_env=False。"
+---
+
+> 2026 年 7 月 28 日，`make test` 卡了将近半小时。我一口咬定是 Postgres 没起来，把容器日志翻了个遍、把连接池配置改了两轮，最后元凶是本机开着的 Clash 代理——跟数据库一点关系没有。
+
+## 现象
+
+e2e 测试启动后长时间没进展，进程停在「等本地测试服务器就绪」的轮询里。服务其实早就起来了，手动 curl 也通，就是测试里的健康检查永远等不到响应。
+
+本机开着代理（常见端口 `7897`），系统代理 / `HTTP_PROXY` 已经注入环境。
+
+## 问题代码
+
+默认写法会读环境代理：
+
+```python
+import httpx
+
+# 默认 trust_env=True → 走 HTTP_PROXY / HTTPS_PROXY / 系统代理
+resp = httpx.get(f"http://localhost:{TEST_SERVER_PORT}/docs")
+```
+
+异步客户端同理：
+
+```python
+async with httpx.AsyncClient(base_url=f"http://localhost:{port}") as client:
+    ...
+```
+
+## 根因
+
+httpx（以及部分基于它的客户端）默认 `trust_env=True`。这个默认值访问公网时很贴心——公司代理统一走，不用每个请求配一遍；但**测本地 `127.0.0.1` / `localhost` 时是灾难**：请求被代理截走，健康检查失败，上层一直重试，表现出来就是「卡住」。
+
+最容易误判的地方在于，症状看起来像「服务器没起来」，于是排查方向全落在服务端。我那半小时基本花在了错误的一侧。
+
+## 正确写法
+
+项目里已经改成显式关闭环境代理：
+
+```python
+# apps/web-service/test/conftest.py（节选）
+
+# 等待测试服务器就绪
+resp = httpx.get(
+    f"http://localhost:{TEST_SERVER_PORT}/docs",
+    trust_env=False,
+)
+
+# 异步测试客户端
+async with AsyncClient(
+    base_url=f"http://localhost:{TEST_SERVER_PORT}",
+    trust_env=False,
+) as client:
+    yield client
+```
+
+如果确实需要保留代理访问外网，可以只对 localhost 关，或在测试进程里临时清掉：
+
+```powershell
+$env:HTTP_PROXY = ""
+$env:HTTPS_PROXY = ""
+$env:ALL_PROXY = ""
+```
+
+但我更推荐把 `trust_env=False` 写进代码——它不依赖每个人记得清环境变量，也不依赖「我这台机器没开代理」这种运气。
+
+## 可复用结论
+
+测本地服务时：**健康检查与测试 HTTP 客户端都应 `trust_env=False`**。
+
+在开发机开着系统代理的情况下，这是比「再等一会儿」「再查一遍数据库」更该先确认的一项。下次看到「本地请求莫名超时」，先问一句：这个请求真的发到 localhost 了吗？
+

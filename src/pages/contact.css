@@ -1,0 +1,257 @@
+/* ============================================================
+   Contact (ECHO 联络星) — 手机端动作 / 电脑端二维码 + 号码
+   配色沿用太空 HUD，主强调色用联络星品牌粉 #ff4d8d
+   ============================================================ */
+.contact {
+  --contact-accent: #ff4d8d;
+  --contact-accent-soft: rgba(255, 77, 141, 0.35);
+  --contact-accent-glow: rgba(255, 77, 141, 0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  padding: 8px 0 24px;
+  animation: contactIn 0.5s var(--ease-out-expo);
+}
+
+@keyframes contactIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================== 手机端：直达动作按钮 ===================== */
+.contact__actions {
+  display: grid;
+  /* minmax(0,1fr) 而非 1fr：1fr = minmax(auto,1fr)，按钮内容会把列撑到视口外 */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+}
+
+.contact__action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  min-height: 56px;
+  padding: 14px 8px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: #05060a;
+  border: 1px solid transparent;
+  transition: transform 0.18s var(--ease-out-expo), box-shadow 0.18s var(--ease-out-expo);
+}
+.contact__action:active { transform: scale(0.97); }
+
+.contact__action--wechat {
+  background: linear-gradient(135deg, #2dd4a7, #18b886);
+  box-shadow: 0 0 22px rgba(45, 212, 167, 0.45);
+}
+.contact__action--phone {
+  background: linear-gradient(135deg, var(--contact-accent), #ff7aa8);
+  box-shadow: 0 0 22px var(--contact-accent-glow);
+  text-decoration: none;
+}
+.contact__action-ico { font-size: 18px; line-height: 1; }
+
+/* ===================== 电脑端 + 手机端共用网格 ===================== */
+.contact__grid {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.contact__qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.contact__qr-frame {
+  padding: 14px;
+  border-radius: var(--radius-md);
+  background: #0b0f1c;
+  border: 1px solid var(--contact-accent-soft);
+  box-shadow:
+    0 0 26px var(--contact-accent-glow),
+    inset 0 0 16px rgba(255, 77, 141, 0.12);
+  line-height: 0;
+}
+/* 官方二维码原图是白底绿码：frame 跟着转白，避免出现「深色框里贴白纸」 */
+.contact__qr-frame[data-qr='image'] {
+  background: #ffffff;
+  padding: 8px;
+  box-shadow: 0 0 26px var(--contact-accent-glow);
+}
+
+.contact__qr-frame svg { display: block; border-radius: 6px; }
+.contact__qr-img {
+  display: block;
+  width: 220px;
+  height: 220px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+.contact__qr-stub {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 200px;
+  padding: 24px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.8;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+  border: 1px dashed var(--contact-accent-soft);
+  border-radius: 6px;
+}
+
+.contact__qr-cap {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* ===================== 明细行 ===================== */
+.contact__details {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.contact__row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.contact__row:last-child { border-bottom: none; padding-bottom: 0; }
+
+.contact__k {
+  flex: 0 0 64px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--contact-accent);
+}
+
+.contact__v {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 18px;
+  color: var(--text-primary);
+  word-break: break-all;
+}
+.contact__v--mono { font-family: var(--font-mono); letter-spacing: 0.04em; }
+
+.contact__copy {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  background: var(--glass-bg);
+  color: var(--neon-cyan);
+  transition: all 0.18s var(--ease-out-expo);
+  white-space: nowrap;
+}
+.contact__copy:hover {
+  background: rgba(34, 211, 238, 0.12);
+  color: var(--text-primary);
+  border-color: var(--neon-cyan);
+}
+
+.contact__hint {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+.contact__qr-hint {
+  margin: 0;
+  max-width: 260px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-faint);
+}
+.contact__qr-tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 100%;
+}
+.contact__save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 9px 16px;
+  border: 1px solid var(--contact-accent-soft);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 77, 141, 0.08);
+  color: var(--contact-accent);
+  min-height: 44px;
+}
+.contact__warn {
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--contact-accent);
+  background: rgba(255, 77, 141, 0.07);
+  border-left: 2px solid var(--contact-accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* ===================== 响应式 ===================== */
+@media (max-width: 768px) {
+  .contact { gap: 22px; }
+  .contact__grid {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .contact__qr-frame { padding: 12px; }
+  .contact__qr-img { width: 200px; height: 200px; }
+  .contact__details { width: 100%; }
+  .contact__row { gap: 10px; }
+  .contact__k { flex-basis: 52px; }
+  .contact__v { font-size: 16px; }
+  .contact__copy { padding: 8px 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact { animation: none; }
+}

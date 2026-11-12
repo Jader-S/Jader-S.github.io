@@ -1,0 +1,763 @@
+/* ===================== HUD frame ===================== */
+.viewport-frame {
+  position: fixed;
+  inset: 16px;
+  pointer-events: none;
+  z-index: var(--z-hud);
+}
+
+.viewport-frame__corner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--neon-cyan);
+  opacity: 0.55;
+}
+
+.viewport-frame__corner--tl {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+.viewport-frame__corner--tr {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+}
+.viewport-frame__corner--bl {
+  bottom: 0;
+  left: 0;
+  border-right: none;
+  border-top: none;
+}
+.viewport-frame__corner--br {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+/* ===================== Coord readout ===================== */
+.coord-readout {
+  position: fixed;
+  right: 36px;
+  bottom: 36px;
+  z-index: var(--z-hud);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  text-align: right;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(var(--glass-blur));
+  display: grid;
+  gap: 4px;
+  min-width: 140px;
+}
+
+.coord-readout__label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--neon-cyan);
+  text-transform: uppercase;
+}
+
+.coord-readout__axis {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.coord-readout__axis-name {
+  color: var(--neon-purple);
+  margin-right: 6px;
+}
+
+/* ===================== Scan line ===================== */
+.scan-line {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--z-hud);
+  background: linear-gradient(180deg, transparent 0%, rgba(34, 211, 238, 0.06) 50%, transparent 100%);
+  background-size: 100% 200%;
+  animation: scan 6s linear infinite;
+}
+
+@keyframes scan {
+  from { background-position: 0 -100%; }
+  to { background-position: 0 100%; }
+}
+
+/* ===================== Corner gauge ===================== */
+.corner-gauge {
+  position: fixed;
+  top: 36px;
+  left: 36px;
+  z-index: var(--z-hud);
+  display: grid;
+  gap: 4px;
+  padding: 10px 14px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(var(--glass-blur));
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out-expo);
+}
+
+.corner-gauge:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+
+.corner-gauge__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 110px;
+  justify-content: space-between;
+}
+
+.corner-gauge__row--mono {
+  font-size: 10px;
+}
+
+.corner-gauge__row--lang {
+  margin-top: 2px;
+  font-size: 9px;
+  color: var(--neon-cyan);
+  letter-spacing: 0.4em;
+}
+
+.corner-gauge__dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 8px var(--neon-cyan-glow);
+}
+.corner-gauge__dot[data-quality='low'] { background: #fbbf24; box-shadow: 0 0 8px rgba(251, 191, 36, 0.7); }
+.corner-gauge__dot[data-quality='med'] { background: #34d399; box-shadow: 0 0 8px rgba(52, 211, 153, 0.7); }
+.corner-gauge__dot[data-quality='high'] { background: var(--neon-cyan); }
+.corner-gauge__dot[data-quality='ultra'] { background: var(--neon-purple); box-shadow: 0 0 8px var(--neon-purple-soft); }
+
+.corner-gauge__q-label {
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+/* ===================== Nav rail ===================== */
+.nav-rail {
+  position: fixed;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: var(--z-hud);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(var(--glass-blur));
+  min-width: 168px;
+}
+
+.nav-rail__brand {
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.4em;
+  color: var(--neon-cyan);
+  text-decoration: none;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.nav-rail__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-rail__item {
+  display: grid;
+  grid-template-columns: 8px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  text-align: left;
+  transition: all 0.2s var(--ease-out-expo);
+}
+
+.nav-rail__item:hover {
+  background: var(--glass-bg-strong);
+  border-color: var(--glass-border);
+  color: var(--text-primary);
+}
+
+.nav-rail__item[data-active='true'] {
+  border-color: var(--neon-cyan);
+  background: rgba(34, 211, 238, 0.08);
+  color: var(--text-primary);
+}
+
+.nav-rail__dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.nav-rail__name {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--text-primary);
+}
+
+.nav-rail__label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.nav-rail__lang {
+  margin-top: 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  background: var(--glass-bg);
+  color: var(--neon-cyan);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  transition: all 0.2s var(--ease-out-expo);
+}
+
+.nav-rail__lang:hover {
+  border-color: var(--neon-cyan);
+  color: var(--text-primary);
+}
+
+/* ===================== Planet chip (3D label) ===================== */
+/*
+ * V2：IDLE 常驻可见（导航可发现性），紧凑态显示 编号 + 中文名 + 拉丁名，
+ * hover / focus 展开描述。触控目标 ≥44px。
+ */
+.planet-chip {
+  --chip-color: var(--neon-cyan);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 14px;
+  /* 深色实底：亮星系核心上仍保证文字 4.5:1 对比度（WCAG AA） */
+  background: color-mix(in srgb, var(--chip-color) 10%, rgba(6, 10, 20, 0.88));
+  border: 1px solid color-mix(in srgb, var(--chip-color) 55%, transparent);
+  border-left: 3px solid var(--chip-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  text-align: left;
+  cursor: pointer;
+  backdrop-filter: blur(var(--glass-blur));
+  font-family: var(--font-body);
+  /* V3/1A：只过渡颜色/边框/阴影，绝不过渡尺寸或 transform。
+     transform 会移动命中区，触发「进入→位移→离开→回位」的抖动循环。 */
+  transition: background 0.25s var(--ease-out-expo), border-color 0.25s var(--ease-out-expo),
+    box-shadow 0.25s var(--ease-out-expo);
+  white-space: nowrap;
+  opacity: 1;
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
+}
+
+.planet-chip__num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--chip-color);
+  opacity: 0.85;
+}
+
+.planet-chip__main {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.planet-chip__label {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.planet-chip__name {
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--chip-color);
+  opacity: 0.9;
+}
+
+/* ── V3/1A：描述改为「绝对定位浮层」，不参与 button 盒模型 ──────────
+   展开/收起不再改变 button 尺寸或命中区，hover 进出不会自我抖动。 */
+.planet-chip__desc {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 220px;
+  max-width: 78vw;
+  padding: 10px 12px;
+  background: rgba(6, 10, 20, 0.98);
+  border: 1px solid color-mix(in srgb, var(--chip-color) 40%, transparent);
+  border-left: 3px solid var(--chip-color);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--text-primary);
+  white-space: normal;
+  /* 浮层不接收指针：鼠标移到描述上不会触发新的 enter/leave 循环 */
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 0.22s ease, transform 0.22s var(--ease-out-expo), visibility 0.22s;
+  z-index: 2;
+}
+
+/* hover / focus 只改颜色与辉光，绝不改尺寸、位移（命中区恒定） */
+.planet-chip:hover,
+.planet-chip:focus-visible {
+  background: color-mix(in srgb, var(--chip-color) 22%, rgba(6, 10, 20, 0.9));
+  border-color: var(--chip-color);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--chip-color) 45%, transparent);
+}
+
+/* 键盘焦点环（P5 无障碍） */
+.planet-chip:focus-visible {
+  outline: 2px solid var(--chip-color);
+  outline-offset: 3px;
+}
+
+/* 展开态单轨：只由 DOM 事件写入的 data-expanded 驱动 */
+.planet-chip[data-expanded='true'] .planet-chip__desc {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* 首个未访问星球的脉冲引导环 */
+.planet-chip--hint::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border: 1px solid var(--chip-color);
+  border-radius: calc(var(--radius-sm) + 4px);
+  pointer-events: none;
+  animation: chipPulse 2s ease-in-out infinite;
+}
+
+@keyframes chipPulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0; transform: scale(1.09); }
+}
+
+/* ===================== One-time nav hint ===================== */
+.nav-hint {
+  position: fixed;
+  left: 50%;
+  top: 28px;
+  transform: translateX(-50%);
+  z-index: var(--z-hud);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--neon-cyan);
+  border-radius: 999px;
+  backdrop-filter: blur(var(--glass-blur));
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 0 26px rgba(34, 211, 238, 0.28);
+  animation: navHintIn 0.7s var(--ease-out-expo) both;
+}
+
+.nav-hint__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 10px var(--neon-cyan-glow);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+.nav-hint__en {
+  color: var(--text-faint);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+}
+
+@keyframes navHintIn {
+  from { opacity: 0; transform: translate(-50%, -12px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .planet-chip--hint::after { animation: none; opacity: 0.4; }
+  .planet-chip, .planet-chip__desc { transition: none; }
+  .nav-hint { animation: none; }
+  .nav-hint__dot { animation: none; }
+}
+
+/* ===================== Replay intro button ===================== */
+.hud-replay {
+  position: fixed;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-hud);
+  padding: 10px 20px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  color: var(--neon-cyan);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  backdrop-filter: blur(var(--glass-blur));
+  transition: all 0.2s var(--ease-out-expo);
+}
+
+.hud-replay:hover {
+  background: rgba(34, 211, 238, 0.12);
+  border-color: var(--neon-cyan);
+  color: var(--text-primary);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+}
+
+/* ===================== Loading HUD ===================== */
+.loading-hud {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 24px;
+  background: var(--bg-space);
+}
+
+.loading-hud__ring {
+  width: 64px;
+  height: 64px;
+  border: 2px solid transparent;
+  border-top-color: var(--neon-cyan);
+  border-right-color: var(--neon-cyan);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  box-shadow: 0 0 24px rgba(34, 211, 238, 0.4);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-hud__label {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.5em;
+  color: var(--neon-cyan);
+  text-transform: uppercase;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* ===================== Fallback (2D) ===================== */
+.fallback {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-bg);
+  background: radial-gradient(ellipse at center, #0a0d18 0%, #05060a 70%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80px 32px 32px;
+  overflow-y: auto;
+  touch-action: auto;
+}
+
+.fallback__title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  letter-spacing: 0.3em;
+  color: var(--neon-cyan);
+  margin: 0 0 8px;
+}
+
+.fallback__hint {
+  color: var(--text-dim);
+  margin: 0 0 32px;
+}
+
+.fallback__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  width: 100%;
+  max-width: 980px;
+}
+
+.fallback__card {
+  display: grid;
+  gap: 6px;
+  padding: 20px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: all 0.2s var(--ease-out-expo);
+}
+
+.fallback__card:hover {
+  border-color: var(--neon-cyan);
+  background: rgba(34, 211, 238, 0.08);
+  transform: translateY(-2px);
+}
+
+.fallback__card-name {
+  font-family: var(--font-display);
+  letter-spacing: 0.2em;
+  color: var(--neon-cyan);
+}
+
+.fallback__card-label {
+  font-size: 14px;
+}
+
+.fallback__card-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* ===================== Error notice ===================== */
+.error-notice {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-modal);
+  padding: 12px 18px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.6);
+  border-radius: var(--radius-sm);
+  color: #fecaca;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+/* ===================== Glitch label ===================== */
+.glitch-label {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-label::before,
+.glitch-label::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  clip-path: inset(0 0 0 0);
+}
+
+.glitch-label::before {
+  color: var(--neon-cyan);
+  text-shadow: -1px 0 var(--neon-cyan);
+}
+
+.glitch-label::after {
+  color: var(--neon-purple);
+  text-shadow: 1px 0 var(--neon-purple);
+}
+
+/* hover → full flicker; always → gentle breathing shimmer (for hero brand) */
+.glitch-label:hover::before,
+.glitch-label--always::before {
+  opacity: 0.9;
+  animation: glitchTop 0.7s steps(2, end) infinite;
+}
+
+.glitch-label:hover::after,
+.glitch-label--always::after {
+  opacity: 0.9;
+  animation: glitchBottom 0.7s steps(2, end) infinite reverse;
+}
+
+/* gentle idle: slow, low-amplitude, mostly transparent */
+.glitch-label--always::before {
+  opacity: 0.35;
+  animation: glitchIdle 6.5s ease-in-out infinite;
+}
+
+.glitch-label--always::after {
+  opacity: 0.35;
+  animation: glitchIdle 6.5s ease-in-out infinite reverse;
+}
+
+@keyframes glitchIdle {
+  0%, 100% { transform: translate(0, 0); opacity: 0; }
+  48% { opacity: 0; }
+  52% { transform: translate(-1.5px, 1px); opacity: 0.4; }
+  56% { transform: translate(1.5px, -1px); opacity: 0.35; }
+  60% { opacity: 0; }
+}
+
+.glitch-label[data-text='undefined']::before,
+.glitch-label[data-text='undefined']::after {
+  content: none;
+}
+
+@keyframes glitchTop {
+  0% { transform: translate(0, 0); clip-path: inset(0 0 62% 0); }
+  25% { transform: translate(-2px, -1px); clip-path: inset(0 0 55% 0); }
+  50% { transform: translate(2px, 1px); clip-path: inset(10% 0 48% 0); }
+  75% { transform: translate(-1px, 0); clip-path: inset(0 0 60% 0); }
+  100% { transform: translate(0, 0); clip-path: inset(0 0 62% 0); }
+}
+
+@keyframes glitchBottom {
+  0% { transform: translate(0, 0); clip-path: inset(58% 0 0 0); }
+  25% { transform: translate(2px, 1px); clip-path: inset(52% 0 0 0); }
+  50% { transform: translate(-2px, -1px); clip-path: inset(46% 0 8% 0); }
+  75% { transform: translate(1px, 0); clip-path: inset(55% 0 0 0); }
+  100% { transform: translate(0, 0); clip-path: inset(58% 0 0 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch-label:hover::before,
+  .glitch-label--always::before,
+  .glitch-label:hover::after,
+  .glitch-label--always::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* ===================== Mobile ===================== */
+@media (max-width: 768px) {
+  /* 次要仪表隐藏，把窄屏让给导航与内容 */
+  .coord-readout,
+  .corner-gauge,
+  .scan-line,
+  .helmet,
+  .reticle { display: none; }
+
+  .nav-rail {
+    left: 8px;
+    right: 8px;
+    top: auto;
+    bottom: 0;
+    transform: none;
+    flex-direction: row;
+    min-width: 0;
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    overflow: visible;
+    gap: 4px;
+    z-index: var(--z-panel); /* 内容态也能切星球 */
+  }
+  .nav-rail__brand { display: none; }
+  /* grid 4 等列强制均分：flex 方案在窄屏会被 min-content 撑开，
+     导致第 4 个 tab 与语言按钮被挤出屏幕 */
+  .nav-rail__list {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+  }
+  .nav-rail__item {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 3px;
+    padding: 6px 2px;
+    white-space: nowrap;
+  }
+  .nav-rail__dot { width: 7px; height: 7px; }
+  .nav-rail__name {
+    font-size: 9px;
+    letter-spacing: 0.04em;
+    max-width: 100%;
+    overflow: hidden;
+  }
+  .nav-rail__label { font-size: 11px; }
+  /* 语言按钮压成 38px 窄条并退出 flex 争抢，4 个 tab 才能均分、不被挤出屏幕 */
+  .nav-rail__lang {
+    flex: 0 0 38px;
+    min-width: 38px;
+    min-height: 44px;
+    margin-top: 0;
+    padding: 6px 4px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  /* hint 贴着 tab 上方；replay 挪到右上角，两者不再共用一个 bottom 叠在一起 */
+  .nav-hint { top: auto; bottom: calc(84px + env(safe-area-inset-bottom)); font-size: 10px; padding: 8px 14px; }
+  .nav-hint__en { display: none; }
+  .hud-replay {
+    top: calc(14px + env(safe-area-inset-top));
+    right: 12px;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    padding: 8px 12px;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+  }
+
+  /* 竖屏窄屏：chip 收紧，给 3D 标签留出更多横向余量 */
+  .planet-chip { min-height: 44px; padding: 6px 10px; gap: 7px; }
+  .planet-chip__label { font-size: 13px; }
+  .planet-chip__name { font-size: 9px; letter-spacing: 0.16em; }
+  .planet-chip__desc { display: none; } /* 触屏无 hover，避免展开态溢出 */
+}
+
+@media (max-width: 480px) {
+  .nav-hint { letter-spacing: 0.1em; }
+}

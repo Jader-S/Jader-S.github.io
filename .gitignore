@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+.dist-verify/
+*.tsbuildinfo
+vite.config.ts.timestamp-*.mjs
+
+# local env / secrets
+.env
+.env.*
+!.env.example
+
+# local artifacts & scratch
+npm-install.log
+package.json.bak
+logs/
+.workbuddy/
+galaxy-demo/
+scroll-demo/
+/*.png
+/*.jpg
+
+# local working docs (kept on disk, not published in the public repo)
+DESIGN_*.md
+SCROLL_DEMO_PLAN.md
+DEPLOY_GITHUB_PAGES.md
