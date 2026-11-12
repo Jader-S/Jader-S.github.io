@@ -2,7 +2,7 @@
 
 一个前端工程师的太空站。3D 星图导航 + 可交互 Demo 展示，暗黑太空 / 霓虹 HUD 视觉。
 
-在线地址：<https://jader-s.github.io/>
+在线地址：<https://jaderai.cn/>（`https://jader-s.github.io/` 会 301 跳转过来）
 
 ## Tech stack
 
