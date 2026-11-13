@@ -267,6 +267,7 @@ uno.config.ts
 - 6 份 Demo CSS 的硬编码色已全部替换为 `--demo-*` token 与 `color-mix()`，无残留裸色值。
 - `lib/demo-theme.ts`：ECharts / 2D Canvas / R3F 材质无法解析 `var()`，由 `readDemoPalette()` 读取同一组基础 token 并解析成具体 `rgb()` / `rgba()`，保证 CSS 与画布配色同源。
 - 3D 工厂的舞台底色、状态灯、轨道与机械手强调色跟随主题；工业金属材质是物理固有色（albedo），不随主题染色。
+- 5 套风格 × 明暗 2 态的量化走查：正文 / 次级 / 标题 / 强调 / 危险 / 警示等 9 项指标全部 ≥ 4.5:1（最低 4.66:1）；只调整 `[data-demo-theme]` 作用域内的语义色，不改站点级 `--theme-accent`。
 
 ---
 

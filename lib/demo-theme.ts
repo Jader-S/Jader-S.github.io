@@ -117,20 +117,21 @@ function snapshotTokens(): RawTokens {
 }
 
 function build(raw: RawTokens): DemoPalette {
-  const accent = parseColor(raw.accent, ACCENT_FALLBACK);
-  const accentLight = parseColor(raw.accentLight, [103, 232, 249]);
   const ink = parseColor(raw.ink, INK_FALLBACK);
   const text = parseColor(raw.text, [216, 222, 232]);
-  const muted = parseColor(raw.muted, [148, 163, 184]);
+  // 与 demo-tokens.css 同权重：强调色 / 次级文字向 ink 压一档，小字达 AA。
+  const accent = mix(parseColor(raw.accent, ACCENT_FALLBACK), ink, 0.78);
+  const accentLight = mix(parseColor(raw.accentLight, [103, 232, 249]), ink, 0.7);
+  const muted = mix(parseColor(raw.muted, [148, 163, 184]), ink, 0.7);
   const faint = parseColor(raw.faint, [100, 116, 139]);
   const page = parseColor(raw.page, [11, 16, 24]);
   const border = parseColor(raw.border, [127, 145, 170]);
 
   // Same weights as demo-tokens.css --demo-danger / --demo-warning / ...
-  const danger = mix([248, 113, 113], ink, 0.58);
-  const warning = mix([245, 158, 11], ink, 0.62);
-  const success = mix([52, 211, 153], ink, 0.58);
-  const violet = mix([168, 85, 247], ink, 0.6);
+  const danger = mix([248, 113, 113], ink, 0.45);
+  const warning = mix([245, 158, 11], ink, 0.45);
+  const success = mix([52, 211, 153], ink, 0.45);
+  const violet = mix([168, 85, 247], ink, 0.52);
 
   return {
     accent: toRgb(accent),

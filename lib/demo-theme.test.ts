@@ -37,7 +37,7 @@ describe("readDemoPalette", () => {
     set("--glass-border", "rgba(15, 23, 42, 0.1)");
 
     const p = readDemoPalette();
-    expect(p.accent).toBe("rgb(15, 118, 110)");
+    expect(p.accent).toBe("rgb(15, 97, 95)");
     expect(p.ink).toBe("rgb(15, 23, 42)");
     expect(p.page).toBe("rgb(216, 226, 236)");
     // rgba tokens drop alpha — canvas materials need an opaque color.
@@ -47,7 +47,7 @@ describe("readDemoPalette", () => {
   it("derives alpha variants from the active theme accent", () => {
     set("--theme-accent", "#2f6f7e");
     const p = readDemoPalette();
-    expect(p.accentA(0.12)).toBe("rgba(47, 111, 126, 0.12)");
+    expect(p.accentA(0.12)).toBe("rgba(89, 140, 153, 0.12)");
     expect(p.pageA(0.92)).toMatch(/^rgba\(11, 16, 24, 0\.92\)$/);
     expect(p.inkA(0.85)).toMatch(/^rgba\(240, 244, 248, 0\.85\)$/);
   });

@@ -17,11 +17,21 @@
 
 [data-demo-theme] {
   /* ---- 当前主题的实色 ---- */
-  --demo-accent: var(--theme-accent, #2f6f7e);
-  --demo-accent-light: var(--theme-accent-light, #67e8f9);
+  /* 强调色向 ink 压一档：站点级 --theme-accent 在浅色主题下作小字只有
+     3.9~4.2:1，demo 内需要 >=4.5:1；只作用于 demo 宿主，不改全站品牌色。 */
+  --demo-accent: color-mix(in srgb, var(--theme-accent, #2f6f7e) 78%, var(--demo-ink));
+  --demo-accent-light: color-mix(
+    in srgb,
+    var(--theme-accent-light, #67e8f9) 70%,
+    var(--demo-ink)
+  );
   --demo-ink: var(--text-heading, #f0f4f8);
   --demo-text: var(--text-body, #d8dee8);
-  --demo-muted: var(--text-muted, #94a3b8);
+  --demo-muted: color-mix(
+    in srgb,
+    var(--text-muted, #94a3b8) 70%,
+    var(--text-heading, #f0f4f8)
+  );
   --demo-faint: var(--text-faint, #64748b);
   --demo-page: var(--color-background, #0b1018);
   --demo-border: var(--glass-border, rgba(127, 145, 170, 0.28));
@@ -37,12 +47,12 @@
   --demo-grid: color-mix(in srgb, var(--demo-muted) 22%, transparent);
   --demo-stage: color-mix(in srgb, var(--demo-ink) 4%, var(--demo-page));
 
-  /* 状态色与 ink 混合：浅色主题自动变深、深色主题自动变浅，
-     两种底色下都保证可读（比固定 #fca5a5 / #f59e0b 稳）。 */
-  --demo-danger: color-mix(in srgb, #f87171 58%, var(--demo-ink));
-  --demo-warning: color-mix(in srgb, #f59e0b 62%, var(--demo-ink));
-  --demo-success: color-mix(in srgb, #34d399 58%, var(--demo-ink));
-  --demo-violet: color-mix(in srgb, #a855f7 60%, var(--demo-ink));
+  /* 状态色与 ink 混合：浅色主题自动变深、深色主题自动变浅。
+     权重经五主题 × 明暗对比度量化走查校准，正文小字均 >= 4.5:1。 */
+  --demo-danger: color-mix(in srgb, #f87171 45%, var(--demo-ink));
+  --demo-warning: color-mix(in srgb, #f59e0b 45%, var(--demo-ink));
+  --demo-success: color-mix(in srgb, #34d399 45%, var(--demo-ink));
+  --demo-violet: color-mix(in srgb, #a855f7 52%, var(--demo-ink));
 
   /* ---- ASTRA 遗留变量名：一次性补齐 ---- */
   --neon-cyan: var(--demo-accent);

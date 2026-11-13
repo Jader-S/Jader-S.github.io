@@ -132,8 +132,9 @@ test.describe("style pages", () => {
         };
       });
       // 这些变量原本只在 .astra-root 下定义；弹框 portal 到 body 后全部失效。
-      expect(values.accent).toMatch(/^#/);
-      expect(values.muted).toMatch(/^#/);
+      // 现在由 demo 桥接层解析为有效色值：纯 hex 或 color-mix（含 hex）都算解析成功。
+      expect(values.accent).toMatch(/^#|color-mix/);
+      expect(values.muted).toMatch(/^#|color-mix/);
       expect(values.radius).toBe("12px");
       expect(values.surface).toContain("color-mix");
       resolved.push(values.accent);
