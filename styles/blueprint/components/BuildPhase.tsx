@@ -5,12 +5,12 @@ import { useTheme } from "@/components/ThemeProvider";
 import { useI18n } from "@/components/I18nProvider";
 import { blogPosts } from "@/data/blogs";
 import { openBlog } from "@/lib/blog-modal";
-import { type ProjectId } from "@/data/project-details";
+import { demoCatalog, type DemoSlug, type ProjectId } from "@/data/project-details";
 import { experienceDomains, type ExperienceDomainId } from "@/data/experience";
 import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
 import { skillCategories, type SkillCategoryId } from "@/data/skills";
-import { openDemoIndex, openProject } from "@/lib/project-modal";
+import { openDemo, openDemoIndex, openProject } from "@/lib/project-modal";
 import { ActionType } from "@/styles/blueprint/swarm/interactions/actions.js";
 import { createPortfolioInteractions } from "@/styles/blueprint/swarm/interactions/portfolio-actions.js";
 import { createPortfolioSceneFactory } from "@/styles/blueprint/swarm/scene/create-portfolio-scene.js";
@@ -68,6 +68,13 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
       };
     });
 
+    // 实验室：平铺 6 个 Demo，卡片点击在当前页打开对应 Demo（与作品卡片同构）。
+    const demos = demoCatalog.map((demo) => ({
+      title: demo.title[locale],
+      body: demo.desc[locale],
+      slug: demo.slug,
+    }));
+
     return {
       name: t.profile.name,
       title: t.profile.title,
@@ -89,6 +96,12 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
         title: t.work.title,
         subtitle: t.work.subtitle,
         items: workItems,
+      },
+      lab: {
+        index: t.lab.index,
+        title: t.lab.title,
+        subtitle: t.lab.subtitle,
+        items: demos,
       },
       skills: {
         index: t.skills.index,
@@ -118,7 +131,7 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
         { id: "blog", label: t.footer.blog, kind: "scroll", target: "b-title" },
       ],
     };
-  }, [resolved, t]);
+  }, [resolved, t, locale]);
 
   const sceneFactory = useMemo(
     () => createPortfolioSceneFactory(sceneCopy),
@@ -132,6 +145,7 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
         github: sceneCopy.github,
         posts: sceneCopy.blog.posts,
         projects: sceneCopy.work.items,
+        demos: sceneCopy.lab.items,
         links: sceneCopy.links,
       }),
     [sceneCopy]
@@ -170,8 +184,13 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
       return true;
     }
     if (next.id === "lab") {
-      // 绘制页没有独立的 #lab 段，实验室菜单直接打开当前页 Demo 列表弹框。
+      // 绘制页已含独立的 #lab 段（画布模块），导航走 SCROLL，这里仅作兜底。
       openDemoIndex();
+      return true;
+    }
+    if (next.id === "demo" && next.slug) {
+      // 实验室卡片在当前页打开对应 Demo，返回直接关弹框、落回画布。
+      openDemo(next.slug as DemoSlug, { kind: "lab" });
       return true;
     }
     if (next.id === "project" && next.projectId) {

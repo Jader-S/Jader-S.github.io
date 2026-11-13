@@ -13,7 +13,7 @@ import { useBlogModalStore } from "./blog-modal";
 /**
  * Where a demo's back button returns to.
  * - project: the project detail it was opened from
- * - demos: the in-page demo index (blueprint's drawn page has no #lab section)
+ * - demos: the in-page demo index (fallback when no #lab section is mounted)
  * - lab: the standalone #lab page section — closing the modal lands right back on it
  */
 export type ProjectModalReturn =

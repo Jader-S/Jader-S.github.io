@@ -3,7 +3,7 @@ import { ActionType, InteractionStyle } from "./actions.js";
 /**
  * Click targets for the full drawn portfolio.
  * Scroll targets are scene element ids, so the engine keeps building as the page moves.
- * @param {{nav:string[], primaryCta:string, github:string, posts:{title:string, meta?:string, slug:string}[], projects:{title:string, id:string, link?:string}[], links:{id:string, label:string, kind:string, href?:string, target?:string}[]}} copy Nav labels, buttons, blog post slugs, work items, and the footer index.
+ * @param {{nav:string[], primaryCta:string, github:string, posts:{title:string, meta?:string, slug:string}[], projects:{title:string, id:string, link?:string}[], demos?:{title:string, slug:string}[], links:{id:string, label:string, kind:string, href?:string, target?:string}[]}} copy Nav labels, buttons, blog post slugs, work items, lab demos, and the footer index.
  * @returns {object[]} Interaction definitions.
  */
 export function createPortfolioInteractions(copy) {
@@ -26,11 +26,11 @@ export function createPortfolioInteractions(copy) {
     action,
   });
 
-  // 5 项是旧布局；6 项时第 3 个菜单是「实验室」，它没有绘制场景段，
-  // 改派发 lab action 打开当前页的 Demo 列表弹框（不跳路由）。
+  // 5 项是旧布局；6 项时第 3 个菜单是「实验室」，它现在有自己的绘制场景段
+  // (#lab)，所以派发 SCROLL 到 l-title，与作品 / 技能一样在主页画布里展示。
   const NAV_TARGETS = {
     5: ["a-title", "w-title", "k-title", "b-title", "d-title"],
-    6: ["a-title", "w-title", null, "k-title", "b-title", "d-title"],
+    6: ["a-title", "w-title", "l-title", "k-title", "b-title", "d-title"],
   };
   const targets = NAV_TARGETS[copy.nav.length] ?? NAV_TARGETS[5];
   const navInteractions = copy.nav.map((label, index) => {
@@ -67,6 +67,19 @@ export function createPortfolioInteractions(copy) {
     };
   });
 
+  // 实验室卡片：与作品卡片同构，点击在当前页打开对应 Demo 弹框（不跳路由）。
+  const labCards = (copy.demos ?? []).slice(0, 6).map((demo, index) => {
+    const suffix = index === 0 ? "" : `~${index}`;
+    return {
+      id: `l${index}`,
+      elements: [`lab-t${suffix}`, `lab-b${suffix}`],
+      after: index === 0 ? ["t:lab-t", "t:lab-b"] : [`d:lab:${index - 1}`],
+      label: demo.title,
+      style: InteractionStyle.LINK,
+      action: { type: ActionType.CUSTOM, id: "demo", slug: demo.slug },
+    };
+  });
+
   return [
     ...navInteractions,
     {
@@ -87,6 +100,7 @@ export function createPortfolioInteractions(copy) {
     },
     ...posts,
     ...workItems,
+    ...labCards,
     ...copy.links.map((link, index) => ({
       id: `f-l${index}`,
       elements: [`f-l${index}`, `f-n${index}`],

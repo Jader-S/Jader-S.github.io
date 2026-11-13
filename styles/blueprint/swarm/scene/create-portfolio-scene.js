@@ -11,7 +11,7 @@ import {
 } from "./theme.js";
 
 /** Full drawn page. Each block sits lower on the canvas so scrolling reveals the next build. */
-export const PORTFOLIO_SCENE_HEIGHT = 5160;
+export const PORTFOLIO_SCENE_HEIGHT = 5880;
 
 const COL = 373;
 const ROW = 250;
@@ -118,6 +118,7 @@ export function createPortfolioSceneFactory(copy) {
     drawStats(scene, copy.highlights);
     drawAbout(scene, copy.about);
     drawWork(scene, copy.work);
+    drawLab(scene, copy.lab);
     drawSkills(scene, copy.skills);
     drawBlog(scene, copy.blog);
     drawExperience(scene, copy.experience);
@@ -393,18 +394,46 @@ function drawWork(scene, work) {
 }
 
 /**
+ * Lab demos on the same 3×2 board, slotted between work and skills.
+ * @param {SceneBuilder} scene Scene under construction.
+ * @param {{index:string, title:string, subtitle:string, items:{title:string, body:string, slug?:string}[]}} lab Lab copy.
+ */
+function drawLab(scene, lab) {
+  scene.frame("lab", 2140, 2860);
+  scene.guide("g-lab", "x", CONTENT_LEFT, 2180);
+  scene.guide("g-lab-r", "x", 760, 2180);
+  scene.text("l-index", CONTENT_LEFT, 2200, lab.index, TEXT_STYLES.small, {
+    snap: "g-lab",
+  });
+  scene.text("l-title", CONTENT_LEFT, 2232, lab.title, TEXT_STYLES.h2, {
+    w: 560,
+    snap: "g-lab",
+    grow: true,
+  });
+  scene.text("l-lead", 760, 2244, fit(lab.subtitle, 380, 15.5, 3), TEXT_STYLES.body, {
+    w: 380,
+    snap: "g-lab-r",
+  });
+  scene.frame("lgrid", 2380, 2860, true);
+  scene.horizontal("l-mid", 2620);
+  scene.vertical("l-v1", 453, 2380, 2860);
+  scene.vertical("l-v2", 826, 2380, 2860);
+  board(scene, "lab", CONTENT_LEFT, 2428, lab.items.slice(0, 6));
+}
+
+/**
  * Skill categories on the same 3×2 board.
  * @param {SceneBuilder} scene Scene under construction.
  * @param {{index:string, title:string, subtitle:string, items:{title:string, body:string}[]}} skills Skill copy.
  */
 function drawSkills(scene, skills) {
-  scene.frame("skills", 2140, 2860);
-  scene.guide("g-skills", "x", CONTENT_LEFT, 2180);
-  scene.guide("g-skills-r", "x", 760, 2180);
-  scene.text("k-index", CONTENT_LEFT, 2200, skills.index, TEXT_STYLES.small, {
+  scene.frame("skills", 2860, 3580);
+  scene.guide("g-skills", "x", CONTENT_LEFT, 2900);
+  scene.guide("g-skills-r", "x", 760, 2900);
+  scene.text("k-index", CONTENT_LEFT, 2920, skills.index, TEXT_STYLES.small, {
     snap: "g-skills",
   });
-  scene.text("k-title", CONTENT_LEFT, 2232, skills.title, TEXT_STYLES.h2, {
+  scene.text("k-title", CONTENT_LEFT, 2952, skills.title, TEXT_STYLES.h2, {
     w: 560,
     snap: "g-skills",
     grow: true,
@@ -412,7 +441,7 @@ function drawSkills(scene, skills) {
   scene.text(
     "k-lead",
     760,
-    2244,
+    2964,
     fit(skills.subtitle, 380, 15.5, 3),
     TEXT_STYLES.body,
     {
@@ -420,11 +449,11 @@ function drawSkills(scene, skills) {
       snap: "g-skills-r",
     }
   );
-  scene.frame("kgrid", 2380, 2860, true);
-  scene.horizontal("k-mid", 2620);
-  scene.vertical("k-v1", 453, 2380, 2860);
-  scene.vertical("k-v2", 826, 2380, 2860);
-  board(scene, "skill", CONTENT_LEFT, 2428, skills.items.slice(0, 6));
+  scene.frame("kgrid", 3100, 3580, true);
+  scene.horizontal("k-mid", 3340);
+  scene.vertical("k-v1", 453, 3100, 3580);
+  scene.vertical("k-v2", 826, 3100, 3580);
+  board(scene, "skill", CONTENT_LEFT, 3148, skills.items.slice(0, 6));
 }
 
 /**
@@ -433,12 +462,12 @@ function drawSkills(scene, skills) {
  * @param {{index:string, title:string, subtitle:string, posts:{title:string, meta:string}[]}} blog Blog copy.
  */
 function drawBlog(scene, blog) {
-  scene.frame("blog", 2860, 3520);
-  scene.guide("g-blog", "x", CONTENT_LEFT, 2900);
-  scene.text("b-index", CONTENT_LEFT, 2920, blog.index, TEXT_STYLES.small, {
+  scene.frame("blog", 3580, 4240);
+  scene.guide("g-blog", "x", CONTENT_LEFT, 3620);
+  scene.text("b-index", CONTENT_LEFT, 3640, blog.index, TEXT_STYLES.small, {
     snap: "g-blog",
   });
-  scene.text("b-title", CONTENT_LEFT, 2952, blog.title, TEXT_STYLES.h2, {
+  scene.text("b-title", CONTENT_LEFT, 3672, blog.title, TEXT_STYLES.h2, {
     w: 640,
     snap: "g-blog",
     grow: true,
@@ -446,7 +475,7 @@ function drawBlog(scene, blog) {
   scene.text(
     "b-lead",
     CONTENT_LEFT,
-    3048,
+    3768,
     fit(blog.subtitle, 760, 15.5, 2),
     TEXT_STYLES.body,
     {
@@ -454,7 +483,7 @@ function drawBlog(scene, blog) {
     }
   );
   blog.posts.slice(0, 4).forEach((post, index) => {
-    const y = 3140 + index * 88;
+    const y = 3860 + index * 88;
     scene.horizontal(
       `b-rule${index}`,
       y - 16,
@@ -486,13 +515,13 @@ function drawBlog(scene, blog) {
  * @param {{index:string, title:string, subtitle:string, items:{title:string, body:string}[]}} experience Domain copy.
  */
 function drawExperience(scene, experience) {
-  scene.frame("domains", 3520, 4240, true);
-  scene.guide("g-exp", "x", CONTENT_LEFT, 3560);
-  scene.guide("g-exp-r", "x", 760, 3560);
-  scene.text("d-index", CONTENT_LEFT, 3580, experience.index, TEXT_STYLES.small, {
+  scene.frame("domains", 4240, 4960, true);
+  scene.guide("g-exp", "x", CONTENT_LEFT, 4280);
+  scene.guide("g-exp-r", "x", 760, 4280);
+  scene.text("d-index", CONTENT_LEFT, 4300, experience.index, TEXT_STYLES.small, {
     snap: "g-exp",
   });
-  scene.text("d-title", CONTENT_LEFT, 3612, experience.title, TEXT_STYLES.h2, {
+  scene.text("d-title", CONTENT_LEFT, 4332, experience.title, TEXT_STYLES.h2, {
     w: 560,
     snap: "g-exp",
     grow: true,
@@ -500,7 +529,7 @@ function drawExperience(scene, experience) {
   scene.text(
     "d-lead",
     760,
-    3624,
+    4344,
     fit(experience.subtitle, 380, 15.5, 3),
     TEXT_STYLES.body,
     {
@@ -508,11 +537,11 @@ function drawExperience(scene, experience) {
       snap: "g-exp-r",
     }
   );
-  scene.frame("dgrid", 3760, 4240);
-  scene.horizontal("d-mid", 4000);
-  scene.vertical("d-v1", 453, 3760, 4240);
-  scene.vertical("d-v2", 826, 3760, 4240);
-  board(scene, "dom", CONTENT_LEFT, 3808, experience.items.slice(0, 6));
+  scene.frame("dgrid", 4480, 4960);
+  scene.horizontal("d-mid", 4720);
+  scene.vertical("d-v1", 453, 4480, 4960);
+  scene.vertical("d-v2", 826, 4480, 4960);
+  board(scene, "dom", CONTENT_LEFT, 4528, experience.items.slice(0, 6));
 }
 
 /**
@@ -525,12 +554,12 @@ function drawClosing(scene, copy, getWorkerCount) {
   const sealSize = 88;
   const sealScale = sealSize / LU_SEAL_VIEWBOX;
   const sealX = CONTENT_LEFT;
-  const sealY = 4380;
+  const sealY = 5100;
   const sealInk = COLORS.dim;
 
-  scene.frame("cta", 4240, 4620);
-  scene.guide("g-cta", "x", CONTENT_LEFT, 4280);
-  scene.text("x-title", CONTENT_LEFT, 4310, copy.signTitle, TEXT_STYLES.h2, {
+  scene.frame("cta", 4960, 5340);
+  scene.guide("g-cta", "x", CONTENT_LEFT, 5000);
+  scene.text("x-title", CONTENT_LEFT, 5030, copy.signTitle, TEXT_STYLES.h2, {
     w: 560,
     snap: "g-cta",
     grow: true,
@@ -551,7 +580,7 @@ function drawClosing(scene, copy, getWorkerCount) {
       deps: ["t:x-title"],
     }
   );
-  scene.text("x-count", CONTENT_LEFT, 4496, "", monoStyle(13, COLORS.muted, 500), {
+  scene.text("x-count", CONTENT_LEFT, 5216, "", monoStyle(13, COLORS.muted, 500), {
     w: 520,
     dyn: () => copy.builtBy.replace("{n}", String(getWorkerCount())),
     deps: ["p:seal"],
@@ -564,13 +593,13 @@ function drawClosing(scene, copy, getWorkerCount) {
  * @param {object} copy Scene copy.
  */
 function drawFooter(scene, copy) {
-  scene.frame("footer", 4620, PORTFOLIO_SCENE_HEIGHT, true);
-  scene.text("f-name", CONTENT_LEFT, 4688, copy.name, TEXT_STYLES.h1, {
+  scene.frame("footer", 5340, PORTFOLIO_SCENE_HEIGHT, true);
+  scene.text("f-name", CONTENT_LEFT, 5408, copy.name, TEXT_STYLES.h1, {
     w: 1000,
     grow: true,
   });
   copy.links.forEach((link, index) => {
-    const y = 4824 + index * 68;
+    const y = 5544 + index * 68;
     scene.horizontal(
       `f-rule${index}`,
       y - 20,
@@ -597,5 +626,5 @@ function drawFooter(scene, copy) {
       { w: 640, deps: [`p:f-rule${index}`] }
     );
   });
-  scene.text("f-copy", CONTENT_LEFT, 5104, copy.footer, TEXT_STYLES.small);
+  scene.text("f-copy", CONTENT_LEFT, 5824, copy.footer, TEXT_STYLES.small);
 }

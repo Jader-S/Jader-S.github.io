@@ -153,11 +153,11 @@ describe("blueprint build-phase work interactions", () => {
       links: [],
     }) as unknown as WorkInteraction[];
 
-    // nav0~1..nav0~5；第 3 个菜单没有绘制场景段，派发 CUSTOM lab。
+    // nav0~1..nav0~5；第 3 个菜单「实验室」现在有自己的绘制场景段，走 SCROLL l-title。
     const nav = interactions.filter((item) => item.id.startsWith("nav0~"));
     expect(nav).toHaveLength(5);
     expect(nav[0].action).toEqual({ type: ActionType.SCROLL, target: "w-title" });
-    expect(nav[1].action).toEqual({ type: ActionType.CUSTOM, id: "lab" });
+    expect(nav[1].action).toEqual({ type: ActionType.SCROLL, target: "l-title" });
     expect(nav[2].action).toEqual({ type: ActionType.SCROLL, target: "k-title" });
     expect(nav[4].action).toEqual({ type: ActionType.SCROLL, target: "d-title" });
   });
