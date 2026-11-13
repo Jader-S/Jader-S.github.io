@@ -1,11 +1,12 @@
 # PLAN_BLOGUPDATE_V2 — blogUpdate 改造需求梳理与分期计划
 
-> 状态：**Phase 1（`3b238b1`）+ Phase 2（`2dc4734`）已交付 · Phase 3 待启动**
+> 状态：**Phase 1（`3b238b1`）+ Phase 2（`2dc4734`）+ Phase 3（`ef1879e`）已交付 · Phase 4 待启动**
 > 创建：2026-11-13 ｜ 范围：`E:\Jader\blogUpdate`（Next 15 / React 19 / UnoCSS / 5 主题）
 > 需求确认后按 Phase 分步执行，每期单独验收、单独提交。
 > 2026-11-13 更新 1：Q1/Q2/Q3/Q4 均选方案 1（见 6.1），补充「3.2 默认命名总表」与「6.2 默认执行项」。
 > 2026-11-13 更新 2：命名表按默认确认；Phase 1 完成并提交，验收结果见第 8 节。
 > 2026-11-13 更新 3：Phase 2 完成并提交，路由 10 → 6 条、静态导出 24 → 9 页，验收结果见第 9 节。
+> 2026-11-13 更新 4：Phase 3 完成并提交，移动端切换器收成 30px 细边条 + 左滑抽屉，验收结果见第 10 节。
 
 ---
 
@@ -296,4 +297,36 @@
 - astra 的语言偏好存在自己的 zustand store，未与根 `I18nProvider` 同步，弹框在 astra 下的文案语言可能与星图 UI 不一致 —— Phase 5 统一命名时一并处理。
 - 改动 `content/blog/*.mdx` 后需重跑 `npm run gen:blog-content`（或重启 dev / 重新 build，pre-hook 会自动执行）。
 
-**下一步**：Phase 3 移动端主题切换器抽屉（<768px 收成左侧 28–32px 细边条 + 点击展开），按 Q3 方案 1 执行。
+**当时的下一步**：Phase 3 移动端主题切换器抽屉（<768px 收成左侧 28–32px 细边条 + 点击展开），按 Q3 方案 1 执行 —— 已完成，见第 10 节。
+
+---
+
+## 10. Phase 3 交付记录（2026-11-13 · commit `ef1879e`）
+
+**改动范围**：8 files，+665 / −56。
+
+| 项            | 落地内容                                                                                                                                                                                                                                                                           |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 3a 样式文案   | 新建 `styles/shared/style-rail.module.css`（30px 细边条 / 遮罩 / 左滑面板 / 5 主题列表，走 `html[data-style]` 变量，含 astra 霓虹边框、reduced-motion、≥768px 隐藏规则）；`lib/i18n/types.ts` + zh/en 补 `railLabel` / `drawerTitle` / `openMenu` / `closeMenu` / `current` 五个键 |
+| 3b 组件改造   | `StyleRail.tsx` 桌面竖排改 `hidden md:flex`（行为不变）；<768px 只露 30px 左侧细边条，点击 Portal 出左滑抽屉；遮罩 / Esc / 关闭按钮收起、Tab 焦点循环、焦点返回、body 滚动锁定、跨断点自动收起；选中当前主题 `preventDefault`，其他主题走原生 `href` 同标签整页跳转                |
+| 3c 测试与文档 | `StyleRail.test.tsx` 从 1 → 5 用例；`e2e/rails.spec.ts` 新增 390×844 视口的 2 条用例；README 三处描述更新（并修正「项目详情已弹框」的超前表述，该项属 Phase 4）                                                                                                                    |
+
+**两个架构决定**
+
+- **显隐用 CSS 而非 JS 视口分支**：`StyleRail` 挂在 `AppProviders` 内会被 SSR。若首帧按 `window.innerWidth` 分支，服务端默认 mobile 与客户端 desktop 会产生 hydration mismatch，手机还会闪一下桌面竖栏。`useViewport()` 只用于「视口回到桌面时同步收起 state」，不参与渲染决策。
+- **抽屉 Portal 到 `<body>`**：与博客弹框同理，particle 有 snap-scroll 容器、blueprint 绘制态有 transform 层，直接渲染会被裁剪。层级 `80`（遮罩）/ `60`（细边条）高于右侧 `SkillShareRail`（60）与 astra 底部 tab（`--z-panel: 20`），低于博客弹框（9999）。
+
+**验收**
+
+- `npm run typecheck` ✓ ｜ `npm run lint` ✓ 0 warning ｜ `npm run test` ✓ 18 files / **61 tests**（新增 4 个移动端抽屉用例）
+- `GITHUB_PAGES=true PAGES_REPO_NAME= npm run build` ✓ 静态导出 9 页；`out/` 已清空重建，产物 CSS 含 `@media (min-width:768px){.style-rail_handle…,.style-rail_overlay…{display:none}}`
+- dev `:5555` 五主题均 200；atelier / classic / particle / astra 的 SSR HTML 含细边条与 `md:flex`，blueprint 因 `ssr:false` 由客户端 chunk 渲染（已确认 5 个 page chunk 都含新文案）；五主题 SSR 无 `target="_blank"`
+- 提交 hook 通过；提交后复验 typecheck / lint / test 全绿、工作区干净
+
+**未完成 / 风险**
+
+- 390px / 768px 的**真实浏览器视觉走查**未做：本机仍缺 Playwright chromium（Phase 1 遗留），新增 2 条移动端 E2E 与 Phase 2 的 `blog-modal` E2E 一并留到 Phase 6。CSS 断点规则与单测已覆盖逻辑，视觉需人工在 DevTools 设备模拟下确认。
+- 抽屉底部 `JADERAI · STYLES` 为静态品牌字，不随 locale 变化（刻意）。
+- `blueprint` 的 `BuildPhase` / `SettledHome` 与 `app/astra/page.tsx` 各自挂 `StyleRail`（`hideChrome` 跳过全局 chrome），5 主题共用同一实现，无重复挂载。
+
+**下一步**：Phase 4 共享 Demo + 项目详情（4a 扩 `data/projects.ts` 数据模型 → 4b 抽共享 demo 层、验证 `factory-line` 与 R3F 解耦 → 4c 共享详情弹窗 → 4d 四主题作品卡片接入）。
