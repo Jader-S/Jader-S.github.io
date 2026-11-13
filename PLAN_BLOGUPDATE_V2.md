@@ -1,9 +1,10 @@
 # PLAN_BLOGUPDATE_V2 — blogUpdate 改造需求梳理与分期计划
 
-> 状态：**4 项主决策已拍板 · 命名表待确认 · 未改动任何代码**
+> 状态：**Phase 1 已交付（commit `3b238b1`）· Phase 2 待启动**
 > 创建：2026-11-13 ｜ 范围：`E:\Jader\blogUpdate`（Next 15 / React 19 / UnoCSS / 5 主题）
-> 本轮产出只有这份文档，代码一行未动。需求确认后按 Phase 分步执行，每期单独验收。
-> 2026-11-13 更新：Q1/Q2/Q3/Q4 均选方案 1（见 6.1），据此补充「3.2 默认命名总表」与「6.2 默认执行项」。
+> 需求确认后按 Phase 分步执行，每期单独验收、单独提交。
+> 2026-11-13 更新 1：Q1/Q2/Q3/Q4 均选方案 1（见 6.1），补充「3.2 默认命名总表」与「6.2 默认执行项」。
+> 2026-11-13 更新 2：命名表按默认确认；Phase 1 完成并提交，验收结果见第 8 节。
 
 ---
 
@@ -215,15 +216,44 @@
 - **Q8 项目详情内容**：由我从现有 i18n 描述 + 已落地性能数据（配电树 72s→2.1s、跳转 14s→1.2s、JS Heap 4GB OOM 归零等）扩写成「背景 / 职责 / 技术栈 / 成果 / 关联 Demo」；`qa-agent/index.html` 失效产物在 Phase 4 一并处理。
 - **Q9 预览入口**：不再单独追问。Phase 0 用 `npm run dev` 验证并**重建 `out/`**，两种入口都覆盖。
 
-### 6.3 仍需你确认
+### 6.3 已确认
 
-- **3.2 默认命名总表**：回「同意」或标出要改的行 —— 这是动代码前最后一道确认。
-- 四主题是否要新增独立「联系我们」区块：默认**不加**（保持 6 段）；要加请一并说。
+- **3.2 默认命名总表**：用户确认按默认执行（2026-11-13）。
+- 四主题暂不新增独立「联系我们」区块（保持 6 段）。
 
 ---
 
-## 7. 不在本轮范围
+## 7. 分期边界（不在 Phase 1 范围）
 
-- 不改任何代码、不跑构建、不提交；
+- 不做博客弹框化（Phase 2）、移动端抽屉（Phase 3）、共享 Demo 与项目详情（Phase 4）、路由与命名统一（Phase 5）；
 - 不重写 ASTRA 序章叙事 / 15 篇博客正文（`PLAN_INTEGRATE_ASTRA.md` 的 Phase 3）；
-- 不处理 GitHub Pages / Cloudflare 部署链路（除非 Q9 确认需要重建静态产物）。
+- 不处理 GitHub Pages / Cloudflare 部署链路。
+
+---
+
+## 8. Phase 1 交付记录（2026-11-13 · commit `3b238b1`）
+
+**改动范围**：25 files，+324 / −471。
+
+| 项            | 落地内容                                                                                                                                                                                                                                                                   |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1a 主题切换   | `lib/style.ts` 的 `openStyleWindow` → `goToStyle`（整页导航，导航函数可注入以便单测）；`StyleRail` 去掉 `target="_blank"`，改用原生 `<a href>`、仅当前主题阻止默认行为；`StyleProvider` 同步；单测 / E2E / README 断言一并更新                                             |
+| 1b 博客链接   | classic `ContentCard` 按 `href` 是否站内决定是否新标签；blueprint `BuildPhase` 的 `open` 分支改 `location.assign`，顺手删掉死掉的 `csdn` 分支                                                                                                                              |
+| 1c 外链清理   | 删 `data/blogs.ts` 的 `url` 字段与 15 条值、`site-content.yaml` 15 条 `url`、`scripts/fetch-csdn-blogs.mjs`、`npm run fetch:blogs`、停用的 `update-blogs.yml.disabled`、README 3 处 CSDN 描述、i18n 的 `viewCsdn` / `footer.csdn` 键、`PLAN_INTEGRATE_ASTRA.md` 的旧链说明 |
+| 1d 静奢字符雨 | `PageDroplets.tsx` 的 `charset` 与 `GlyphRain.tsx` 的 `DEFAULT_CHARSET` 改为 `JADERAIjaderai0123456789*+-<>·.`                                                                                                                                                             |
+
+**验收**
+
+- `npm run typecheck` ✓（先清掉 `.next-dev/types/app/hmr-probe/` 里昨天 HMR 探针的残留类型，基线从 2 错降到 0）
+- `npm run lint` ✓ 0 warning ｜ `npm run test` ✓ 16 files / 47 tests
+- `GITHUB_PAGES=true PAGES_REPO_NAME= npm run build` ✓ 静态导出 24 页（含 15 篇博客）；`out/` 已重建为**无 basePath** 的根路径产物（面向 jaderai.cn），复验其中无 `jaderai.cn` / CSDN 字样
+- 提交 hook（eslint --fix + prettier --write + commitlint）通过；提交后复验 typecheck / lint / test 全绿，工作区干净
+
+**过渡措施**：4 条 `blog/[slug]` 路由补了 `generateStaticParams()`，否则 `output: "export"` 构建失败。Phase 2 删除这些路由时一并移除。
+
+**未完成 / 风险**
+
+- E2E 未跑通：本机缺 Playwright chromium，两条用例都在 `browserType.launch` 阶段失败（与改动无关，测试文件已正常加载）。装好浏览器后跑 `npm run test:e2e` 验证 `rails.spec.ts` 的同标签导航断言；已列入 Phase 6 全量验收。
+- GitHub 外链仍保留 `target="_blank"`（外站，刻意保留）；站内链接已全部当前页打开。
+
+**下一步**：Phase 2 博客弹框化 —— 删 4 条 `blog/[slug]` 路由、5 主题统一弹框读本地 MDX、astra「日志」不再跳 `/blueprint`。
