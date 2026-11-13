@@ -1,0 +1,53 @@
+/* Neutral "lab" chip — uses html[data-style] tokens so it fits all five themes. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--glass-border, rgba(127, 145, 170, 0.28));
+  border-radius: 999px;
+  background: var(--glass-bg, rgba(127, 145, 170, 0.08));
+  color: var(--text-body, #d8dee8);
+  font-size: 0.8rem;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.button:hover {
+  border-color: var(--theme-accent, #5eb8c6);
+  background: var(--glass-bg-hover, rgba(127, 145, 170, 0.14));
+  color: var(--theme-accent, #5eb8c6);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--theme-accent, #5eb8c6);
+  outline-offset: 2px;
+}
+
+.compact {
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+}
+
+.icon {
+  color: var(--theme-accent, #5eb8c6);
+  font-size: 0.95rem;
+}
+
+.count {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.68rem;
+  opacity: 0.7;
+}
+
+:global(html[data-style="astra"]) .button {
+  border-color: rgba(34, 211, 238, 0.4);
+}

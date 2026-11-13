@@ -160,21 +160,7 @@ export const zh = {
     metricLabel: "关键指标",
     groups: { all: "全部", company: "公司项目", personal: "个人项目" },
     groupEmpty: "该分类下暂无作品",
-    embedTitle: "整项目预览 · 可交互",
-    embedDesc:
-      "下面内嵌的是这个项目的真实构建产物，不是截图或复刻 Demo。默认以 Mock 离线模式运行，不发起任何模型请求，数据只保存在你自己的浏览器里。",
-    embedOpen: "在博客中打开 →",
-    embedCollapse: "收起预览",
-    embedGithub: "在 GitHub 打开 ↗",
-    embedNewTab: "新窗口打开 ↗",
-    embedHint:
-      "提示：文件夹导入、本地自动备份等依赖浏览器本机能力的功能，建议用「全屏」或「新窗口打开」体验。",
-    embedFull: "⤢ 全屏",
-    embedExitFull: "退出全屏 (Esc)",
-    embedLoading: "正在加载外部项目…",
-    embedError: "该外部项目无法在此内嵌展示。",
-    embedErrorLink: "点击在新窗口打开 ↗",
-    embedRetry: "重试",
+    previewDemo: "在当前页预览 →",
     list: [
       {
         id: "p1",
@@ -244,7 +230,6 @@ export const zh = {
         desc: "一个本地优先的学习与面试助手：把课程资料整理成知识点，按章节自测，再用同一份知识库做模拟面试。网页版数据全部落在浏览器（sql.js WASM + IndexedDB），另有 Tauri 2 桌面壳写入本机 SQLite；未配置 API Key 时自动以 Mock 离线模式运行，界面与流程可完整操作。React 18 · TypeScript · Vite · Zustand · pdf.js · 语音作答。",
         kind: "github",
         repoUrl: "https://github.com/Jader-S/skill-qa-agent",
-        embedUrl: "qa-agent/index.html",
       },
     ] as import("./types").ProjectEntry[],
   },

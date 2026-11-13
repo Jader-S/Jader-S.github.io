@@ -164,21 +164,7 @@ export const en: ZhDict = {
     metricLabel: "Key metric",
     groups: { all: "All", company: "Company", personal: "Personal" },
     groupEmpty: "No projects in this group yet",
-    embedTitle: "Live Project · Interactive",
-    embedDesc:
-      "The real production build of this project is embedded below — not a screenshot or a recreated demo. It runs in offline Mock mode by default: no model requests, all data stays in your own browser.",
-    embedOpen: "Open in blog →",
-    embedCollapse: "Collapse preview",
-    embedGithub: "Open on GitHub ↗",
-    embedNewTab: "Open in new tab ↗",
-    embedHint:
-      "Tip: folder import and local auto-backup rely on browser-native capabilities — use Fullscreen or Open in new tab for the complete experience.",
-    embedFull: "⤢ Fullscreen",
-    embedExitFull: "Exit fullscreen (Esc)",
-    embedLoading: "Loading external project…",
-    embedError: "This project cannot be embedded here.",
-    embedErrorLink: "Open in a new tab ↗",
-    embedRetry: "Retry",
+    previewDemo: "Preview in this page →",
     list: [
       {
         id: "p1",
@@ -248,7 +234,6 @@ export const en: ZhDict = {
         desc: "A local-first study and interview assistant: turn course material into knowledge points, quiz by chapter, then run mock interviews over the same knowledge base. The web build keeps everything in the browser (sql.js WASM + IndexedDB); a Tauri 2 desktop shell writes to a local SQLite file. With no API key configured it runs fully offline in Mock mode. React 18 · TypeScript · Vite · Zustand · pdf.js · voice input.",
         kind: "github",
         repoUrl: "https://github.com/Jader-S/skill-qa-agent",
-        embedUrl: "qa-agent/index.html",
       },
     ],
   },

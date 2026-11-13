@@ -5,6 +5,7 @@ import { useTheme } from "@/components/ThemeProvider";
 import { useI18n } from "@/components/I18nProvider";
 import { blogPosts } from "@/data/blogs";
 import { openBlog } from "@/lib/blog-modal";
+import { type ProjectId } from "@/data/project-details";
 import { experienceDomains, type ExperienceDomainId } from "@/data/experience";
 import { profile } from "@/data/profile";
 import {
@@ -14,10 +15,12 @@ import {
   type GithubProjectId,
 } from "@/data/projects";
 import { skillCategories, type SkillCategoryId } from "@/data/skills";
+import { openProject } from "@/lib/project-modal";
 import { ActionType } from "@/styles/blueprint/swarm/interactions/actions.js";
 import { createPortfolioInteractions } from "@/styles/blueprint/swarm/interactions/portfolio-actions.js";
 import { createPortfolioSceneFactory } from "@/styles/blueprint/swarm/scene/create-portfolio-scene.js";
 import { SwarmExperience } from "@/styles/blueprint/swarm/SwarmExperience.jsx";
+import LabButton from "@/styles/shared/chrome/LabButton";
 import LocaleToggle from "@/styles/shared/chrome/LocaleToggle";
 import SkillShareRail from "@/styles/shared/chrome/SkillShareRail";
 import StyleRail from "@/styles/shared/chrome/StyleRail";
@@ -42,6 +45,7 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
       ...enterpriseProjects.slice(0, 3).map((project) => {
         const id = project.id as EnterpriseProjectId;
         return {
+          id,
           title: t.enterprise.projects[id].name,
           body: t.enterprise.projects[id].description,
         };
@@ -49,8 +53,10 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
       ...githubProjects.slice(0, 3).map((project) => {
         const id = project.id as GithubProjectId;
         return {
+          id,
           title: t.github.projects[id].name,
           body: t.github.projects[id].description,
+          link: project.link,
         };
       }),
     ];
@@ -144,6 +150,7 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
         primaryCta: sceneCopy.primaryCta,
         github: sceneCopy.github,
         posts: sceneCopy.blog.posts,
+        projects: sceneCopy.work.items,
         links: sceneCopy.links,
       }),
     [sceneCopy]
@@ -164,10 +171,26 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
   }, [replayKey, locale, resolved]);
 
   const onAction = useCallback((action: object) => {
-    const next = action as { type?: string; id?: string; slug?: string };
+    const next = action as {
+      type?: string;
+      id?: string;
+      slug?: string;
+      projectId?: ProjectId;
+      href?: string;
+    };
     if (next.type !== ActionType.CUSTOM) return false;
     if (next.id === "github") {
       window.open(profile.github, "_blank", "noopener,noreferrer");
+      return true;
+    }
+    if (next.id === "repo" && next.href) {
+      // GitHub repo cards keep the external link in a new tab.
+      window.open(next.href, "_blank", "noopener,noreferrer");
+      return true;
+    }
+    if (next.id === "project" && next.projectId) {
+      // Enterprise projects open the shared detail modal in this page.
+      openProject(next.projectId);
       return true;
     }
     if (next.id === "open" && next.slug) {
@@ -192,6 +215,7 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
         }}
       />
       <div className="pointer-events-auto fixed right-3 top-7 z-[80] flex items-center gap-2 sm:right-4">
+        <LabButton compact />
         <LocaleToggle compact />
         <ThemeToggle compact />
       </div>

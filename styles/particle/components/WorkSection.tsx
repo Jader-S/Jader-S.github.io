@@ -1,15 +1,19 @@
 "use client";
 
 import { useI18n } from "@/components/I18nProvider";
+import { projectModalCopy } from "@/data/project-details";
 import {
   enterpriseProjects,
   githubProjects,
   type EnterpriseProjectId,
   type GithubProjectId,
 } from "@/data/projects";
+import { openProject } from "@/lib/project-modal";
+import LabButton from "@/styles/shared/chrome/LabButton";
 
 export default function WorkSection() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const copy = projectModalCopy[locale];
   const featured = [
     ...enterpriseProjects.slice(0, 4).map((project) => {
       const id = project.id as EnterpriseProjectId;
@@ -42,6 +46,9 @@ export default function WorkSection() {
       <p className="particle-eyebrow">{t.enterprise.index}</p>
       <h2 className="particle-title">{t.enterprise.title}</h2>
       <p className="particle-body">{t.enterprise.subtitle}</p>
+      <div className="mt-4">
+        <LabButton />
+      </div>
       <ul className="mt-8 space-y-0 border-t border-divider">
         {featured.map((project) => {
           const row = (
@@ -55,9 +62,9 @@ export default function WorkSection() {
                   {project.tech.slice(0, 4).join(" · ")}
                 </p>
               </div>
-              {project.link ? (
-                <span className="shrink-0 text-sm text-faint">→</span>
-              ) : null}
+              <span className="shrink-0 text-sm text-faint">
+                {project.link ? "→" : `${copy.viewDetails} →`}
+              </span>
             </>
           );
 
@@ -73,7 +80,14 @@ export default function WorkSection() {
                   {row}
                 </a>
               ) : (
-                <div className="flex items-start justify-between gap-4 py-4">{row}</div>
+                <button
+                  type="button"
+                  onClick={() => openProject(project.id)}
+                  aria-label={`${project.name} · ${copy.viewDetails}`}
+                  className="focus-ring flex w-full items-start justify-between gap-4 py-4 text-left transition-colors hover:bg-[var(--nav-hover)]"
+                >
+                  {row}
+                </button>
               )}
             </li>
           );

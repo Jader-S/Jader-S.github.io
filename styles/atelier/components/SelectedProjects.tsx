@@ -5,7 +5,10 @@ import FlameWrap from "@/styles/atelier/components/canvasui/FlameWrap";
 import SectionHeader from "@/styles/atelier/components/SectionHeader";
 import { useI18n } from "@/components/I18nProvider";
 import { useViewport } from "@/lib/hooks/useViewport";
+import { projectModalCopy } from "@/data/project-details";
 import { enterpriseProjects } from "@/data/projects";
+import { openProject } from "@/lib/project-modal";
+import LabButton from "@/styles/shared/chrome/LabButton";
 
 function usePrefersReducedMotion() {
   return useSyncExternalStore(
@@ -20,7 +23,8 @@ function usePrefersReducedMotion() {
 }
 
 export default function SelectedProjects() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const copy = projectModalCopy[locale];
   const { isMobile } = useViewport();
   const reducedMotion = usePrefersReducedMotion();
   const selected = enterpriseProjects.filter(
@@ -39,11 +43,27 @@ export default function SelectedProjects() {
           subtitle={t.enterprise.subtitle}
         />
 
+        <div className="mb-8">
+          <LabButton />
+        </div>
+
         <div className="flex flex-col gap-8 sm:gap-10">
           {selected.map((project, index) => {
             const text = t.enterprise.projects[project.id];
             const card = (
-              <article className="project-band group relative overflow-hidden rounded-sm border border-divider/80 bg-[var(--band-bg)] px-1 py-10 sm:px-4 sm:py-14 md:px-6">
+              <article
+                role="button"
+                tabIndex={0}
+                aria-label={`${text.name} · ${copy.viewDetails}`}
+                onClick={() => openProject(project.id)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    openProject(project.id);
+                  }
+                }}
+                className="project-band group relative cursor-pointer overflow-hidden rounded-sm border border-divider/80 bg-[var(--band-bg)] px-1 py-10 sm:px-4 sm:py-14 md:px-6"
+              >
                 <div className="mb-6 flex items-baseline justify-between gap-4">
                   <p className="font-mono text-[11px] tracking-[0.2em] text-faint">
                     {String(index + 1).padStart(2, "0")} /{" "}
@@ -69,6 +89,10 @@ export default function SelectedProjects() {
                     </span>
                   ))}
                 </div>
+
+                <p className="mt-6 font-mono text-[11px] tracking-[0.18em] text-theme">
+                  {copy.viewDetails} →
+                </p>
               </article>
             );
 

@@ -1,16 +1,16 @@
 /**
- * V3/4A 作品详情占位页。
+ * ASTRA 作品详情 2D 面板。
  *
- * 设计原则 P4「可供性真实」：卡片现在真的能点进去，但内容尚未成文，
- * 因此这里明确标注「整理中」，用骨架线框占位，绝不编造假正文。
- * t.projects.list 只有 id / title / role / tag / metric，详情页据此还原
- * 已知元数据，其余留白。
+ * 卡片点进来仍走星图自己的飞行状态机；关联 Demo 则交给全局共享弹框
+ * （lib/project-modal.ts），在当前页内联预览，与另外四套主题行为一致。
+ * Phase 4 起不再内嵌外部静态产物：原来的 qa-agent/index.html 早已不存在。
  */
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, type CSSProperties } from "react";
 import Panel from "@astra/ui/Panel";
-import ProjectEmbed from "@astra/ui/ProjectEmbed";
-import { useStore, requestFlyTo } from "@astra/state/useStore";
+import { useStore } from "@astra/state/useStore";
 import { useT } from "@astra/i18n";
+import { openDemo } from "@/lib/project-modal";
+import type { DemoSlug } from "@/data/project-details";
 import "./content.css";
 
 const ACCENTS = ["#22d3ee", "#a855f7", "#f59e0b"];
@@ -37,27 +37,11 @@ export default function ProjectDetailPage({
   const project = index >= 0 ? t.projects.list[index] : null;
   const accent = ACCENTS[(index >= 0 ? index : 0) % ACCENTS.length];
 
-  const onReturn = onBack;
-  const [showEmbed, setShowEmbed] = useState(false);
-  const embedRef = useRef<HTMLElement>(null);
-
-  // 展开预览后把视口带到 iframe，避免用户点了按钮却还在看上方的描述。
-  const toggleEmbed = () => {
-    const next = !showEmbed;
-    setShowEmbed(next);
-    if (next) {
-      window.setTimeout(
-        () => embedRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
-        120
-      );
-    }
-  };
-
   return (
     <Panel
       title={project?.title ?? t.projects.heading}
       sub={project ? project.role : t.projects.sub}
-      onReturn={onReturn}
+      onReturn={onBack}
       returnLabel={t.projects.backToList}
     >
       <div className="project-detail" style={{ "--accent": accent } as CSSProperties}>
@@ -91,12 +75,9 @@ export default function ProjectDetailPage({
                         <button
                           type="button"
                           className="project-detail__demo-btn"
-                          onClick={() => {
-                            // 进入实验室查看 Demo：飞向 demos 星球（无 react-router，走状态机）
-                            requestFlyTo("demos");
-                          }}
+                          onClick={() => openDemo(d.slug as DemoSlug)}
                         >
-                          进入实验室查看 Demo →
+                          {t.projects.previewDemo}
                         </button>
                       </div>
                     ))}
@@ -119,53 +100,6 @@ export default function ProjectDetailPage({
                   <span />
                   <span />
                 </div>
-              </section>
-            )}
-
-            {project.embedUrl && (
-              <section className="project-detail__embed" ref={embedRef}>
-                <div className="project-detail__demos-title">
-                  {t.projects.embedTitle}
-                </div>
-                <p className="project-detail__demo-desc">{t.projects.embedDesc}</p>
-                <div className="project-detail__embed-actions">
-                  <button
-                    type="button"
-                    className="project-detail__demo-btn"
-                    onClick={toggleEmbed}
-                  >
-                    {showEmbed ? t.projects.embedCollapse : t.projects.embedOpen}
-                  </button>
-                  {project.repoUrl && (
-                    <a
-                      className="project-detail__demo-btn project-detail__demo-btn--link"
-                      href={project.repoUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {t.projects.embedGithub}
-                    </a>
-                  )}
-                </div>
-                {showEmbed && (
-                  <>
-                    <p className="project-detail__embed-hint">{t.projects.embedHint}</p>
-                    <ProjectEmbed
-                      src={project.embedUrl}
-                      aspect={project.embedAspect ?? 16 / 10}
-                      title={project.title}
-                      labels={{
-                        full: t.projects.embedFull,
-                        exitFull: t.projects.embedExitFull,
-                        newTab: t.projects.embedNewTab,
-                        loading: t.projects.embedLoading,
-                        error: t.projects.embedError,
-                        errorLink: t.projects.embedErrorLink,
-                        retry: t.projects.embedRetry,
-                      }}
-                    />
-                  </>
-                )}
               </section>
             )}
           </>

@@ -1,0 +1,63 @@
+/* Host for inline demos inside the shared project modal. Palette comes from
+   html[data-style] tokens; the demo components bring their own CSS. */
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.hint {
+  margin: 0;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+.host {
+  position: relative;
+  width: 100%;
+  min-height: 420px;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+  border: 1px solid var(--border-subtle, rgba(127, 145, 170, 0.18));
+  border-radius: 10px;
+  background: var(--glass-bg, rgba(8, 11, 18, 0.35));
+}
+
+/* Wide demos keep their desktop width on narrow screens and scroll instead. */
+.hostWide > * {
+  min-width: 100%;
+}
+
+.loading,
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 260px;
+  margin: 0;
+  padding: 1.5rem;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.error {
+  color: var(--theme-accent, #5eb8c6);
+}
+
+:global(html[data-style="astra"]) .host {
+  border-color: rgba(34, 211, 238, 0.28);
+}
+
+@media (max-width: 640px) {
+  .host {
+    min-height: 320px;
+  }
+}

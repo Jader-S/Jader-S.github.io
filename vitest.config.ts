@@ -35,8 +35,13 @@ export default defineConfig({
     },
   },
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "."),
-    },
+    // Order matters: @astra/* must be resolved before the @/* catch-all.
+    alias: [
+      {
+        find: /^@astra\//,
+        replacement: `${path.resolve(__dirname, "styles/astra/src")}/`,
+      },
+      { find: /^@\//, replacement: `${path.resolve(__dirname, ".")}/` },
+    ],
   },
 });

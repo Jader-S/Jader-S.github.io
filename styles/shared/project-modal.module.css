@@ -1,0 +1,164 @@
+/* Shared project detail / lab modal content. Shell (overlay, panel, bar,
+   scroll, close, back) is reused from blog-modal.module.css so both modals
+   look identical across the five themes. Palette comes from html[data-style]. */
+
+.view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.title {
+  margin: 0;
+  color: var(--text-heading, #fff);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.subtitle {
+  margin: -1rem 0 0;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.85rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  padding: 0.22rem 0.68rem;
+  border: 1px solid var(--glass-border, rgba(127, 145, 170, 0.28));
+  border-radius: 999px;
+  color: var(--text-muted, #9aa5b5);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: var(--theme-accent, #5eb8c6);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.paragraph {
+  margin: 0;
+  color: var(--text-body, #d8dee8);
+  font-size: 0.92rem;
+  line-height: 1.85;
+}
+
+.outcomes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--text-body, #d8dee8);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.outcomes li::marker {
+  color: var(--theme-accent, #5eb8c6);
+}
+
+.demoList {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.demoItem {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--glass-border, rgba(127, 145, 170, 0.28));
+  border-radius: 10px;
+  background: var(--glass-bg, rgba(127, 145, 170, 0.06));
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.demoItem:hover {
+  border-color: var(--theme-accent, #5eb8c6);
+  background: var(--glass-bg-hover, rgba(127, 145, 170, 0.14));
+}
+
+.demoItem:focus-visible,
+.allDemos:focus-visible {
+  outline: 2px solid var(--theme-accent, #5eb8c6);
+  outline-offset: 2px;
+}
+
+.demoTag {
+  color: var(--theme-accent, #5eb8c6);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.demoName {
+  color: var(--text-heading, #fff);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.demoDesc {
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.79rem;
+  line-height: 1.6;
+}
+
+.allDemos {
+  align-self: flex-start;
+  margin-top: 0.35rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--theme-accent, #5eb8c6);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--theme-accent, #5eb8c6);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.allDemos:hover {
+  background: var(--glass-bg-hover, rgba(127, 145, 170, 0.14));
+}
+
+.empty,
+.note {
+  margin: 0;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.83rem;
+  line-height: 1.7;
+}
+
+.note {
+  color: var(--theme-accent, #5eb8c6);
+  font-size: 0.75rem;
+}

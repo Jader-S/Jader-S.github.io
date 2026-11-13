@@ -3,7 +3,7 @@ import { ActionType, InteractionStyle } from "./actions.js";
 /**
  * Click targets for the full drawn portfolio.
  * Scroll targets are scene element ids, so the engine keeps building as the page moves.
- * @param {{nav:string[], primaryCta:string, github:string, posts:{title:string, meta?:string, slug:string}[], links:{id:string, label:string, kind:string, href?:string, target?:string}[]}} copy Nav labels, buttons, blog post slugs, and the footer index.
+ * @param {{nav:string[], primaryCta:string, github:string, posts:{title:string, meta?:string, slug:string}[], projects:{title:string, id:string, link?:string}[], links:{id:string, label:string, kind:string, href?:string, target?:string}[]}} copy Nav labels, buttons, blog post slugs, work items, and the footer index.
  * @returns {object[]} Interaction definitions.
  */
 export function createPortfolioInteractions(copy) {
@@ -34,6 +34,23 @@ export function createPortfolioInteractions(copy) {
     action: { type: ActionType.CUSTOM, id: "open", slug: post.slug },
   }));
 
+  // Work board: item 0 is the source element ("work-t"/"work-b"), items 1..n
+  // are duplicates ("work-t~1" ...). Duplicates only become clickable after
+  // their copy task finishes, so the animation never exposes a dead region.
+  const workItems = copy.projects.slice(0, 6).map((project, index) => {
+    const suffix = index === 0 ? "" : `~${index}`;
+    return {
+      id: `w${index}`,
+      elements: [`work-t${suffix}`, `work-b${suffix}`],
+      after: index === 0 ? ["t:work-t", "t:work-b"] : [`d:work:${index - 1}`],
+      label: project.title,
+      style: InteractionStyle.LINK,
+      action: project.link
+        ? { type: ActionType.CUSTOM, id: "repo", href: project.link }
+        : { type: ActionType.CUSTOM, id: "project", projectId: project.id },
+    };
+  });
+
   return [
     scroll("nav0", "a-title", copy.nav[0]),
     navCopy(1, "w-title", copy.nav[1]),
@@ -57,6 +74,7 @@ export function createPortfolioInteractions(copy) {
       action: { type: ActionType.CUSTOM, id: "github" },
     },
     ...posts,
+    ...workItems,
     ...copy.links.map((link, index) => ({
       id: `f-l${index}`,
       elements: [`f-l${index}`, `f-n${index}`],

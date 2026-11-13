@@ -4,7 +4,7 @@ import Reveal from "@astra/ui/Reveal";
 import CategoryFilter, { type CatNode } from "@astra/ui/CategoryFilter";
 import { useStore } from "@astra/state/useStore";
 import { useT } from "@astra/i18n";
-import { demoRegistry, type DemoCategory } from "@astra/demos/registry";
+import { demoRegistry, type DemoCategory } from "@/styles/shared/demos/registry";
 import ErrorBoundary from "@astra/ui/ErrorBoundary";
 import "./content.css";
 
