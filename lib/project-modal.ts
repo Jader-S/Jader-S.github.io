@@ -10,7 +10,16 @@ import { create } from "zustand";
 import type { DemoSlug, ProjectId } from "@/data/project-details";
 import { useBlogModalStore } from "./blog-modal";
 
-export type ProjectModalReturn = { kind: "project"; id: ProjectId } | { kind: "demos" };
+/**
+ * Where a demo's back button returns to.
+ * - project: the project detail it was opened from
+ * - demos: the in-page demo index (blueprint's drawn page has no #lab section)
+ * - lab: the standalone #lab page section — closing the modal lands right back on it
+ */
+export type ProjectModalReturn =
+  | { kind: "project"; id: ProjectId }
+  | { kind: "demos" }
+  | { kind: "lab" };
 
 export type ProjectModalView =
   | { kind: "closed" }
@@ -57,9 +66,15 @@ export const useProjectModalStore = create<ProjectModalStore>((set) => ({
     }));
   },
   back: () =>
-    set((state) => ({
-      view: state.view.kind === "demo" ? state.view.returnTo : { kind: "closed" },
-    })),
+    set((state) => {
+      if (state.view.kind !== "demo") return { view: { kind: "closed" } };
+      // A demo opened from the #lab section returns to the page itself, not to
+      // another modal — this removes the "project → demo list" detour.
+      if (state.view.returnTo.kind === "lab") {
+        return { view: { kind: "closed" } };
+      }
+      return { view: state.view.returnTo };
+    }),
   close: () => set({ view: { kind: "closed" } }),
 }));
 

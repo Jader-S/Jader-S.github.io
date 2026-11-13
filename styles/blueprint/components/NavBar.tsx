@@ -5,7 +5,15 @@ import { navLabel } from "@/lib/i18n";
 import LocaleToggle from "@/styles/shared/chrome/LocaleToggle";
 import ThemeToggle from "@/styles/shared/chrome/ThemeToggle";
 
-const SECTION_IDS = ["top", "about", "work", "skills", "blog", "experience"] as const;
+const SECTION_IDS = [
+  "top",
+  "about",
+  "work",
+  "lab",
+  "skills",
+  "blog",
+  "experience",
+] as const;
 
 export default function NavBar() {
   const { t } = useI18n();

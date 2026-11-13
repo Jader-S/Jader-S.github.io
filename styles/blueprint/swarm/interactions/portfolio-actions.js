@@ -16,13 +16,29 @@ export function createPortfolioInteractions(copy) {
     action: { type: ActionType.SCROLL, target },
   });
 
-  const navCopy = (index, target, label) => ({
+  // 导航项共用同一套绘制元素 id，只有 action 不同。
+  const navItem = (index, label, action) => ({
     id: `nav0~${index}`,
     elements: [`nav0~${index}`],
     after: [`d:nav:${index - 1}`, `e:nav0~${index}`],
     label,
     style: InteractionStyle.LINK,
-    action: { type: ActionType.SCROLL, target },
+    action,
+  });
+
+  // 5 项是旧布局；6 项时第 3 个菜单是「实验室」，它没有绘制场景段，
+  // 改派发 lab action 打开当前页的 Demo 列表弹框（不跳路由）。
+  const NAV_TARGETS = {
+    5: ["a-title", "w-title", "k-title", "b-title", "d-title"],
+    6: ["a-title", "w-title", null, "k-title", "b-title", "d-title"],
+  };
+  const targets = NAV_TARGETS[copy.nav.length] ?? NAV_TARGETS[5];
+  const navInteractions = copy.nav.map((label, index) => {
+    if (index === 0) return scroll("nav0", targets[0], label);
+    const target = targets[index];
+    return target == null
+      ? navItem(index, label, { type: ActionType.CUSTOM, id: "lab" })
+      : navItem(index, label, { type: ActionType.SCROLL, target });
   });
 
   const posts = copy.posts.slice(0, 4).map((post, index) => ({
@@ -52,11 +68,7 @@ export function createPortfolioInteractions(copy) {
   });
 
   return [
-    scroll("nav0", "a-title", copy.nav[0]),
-    navCopy(1, "w-title", copy.nav[1]),
-    navCopy(2, "k-title", copy.nav[2]),
-    navCopy(3, "b-title", copy.nav[3]),
-    navCopy(4, "d-title", copy.nav[4]),
+    ...navInteractions,
     {
       id: "h-btn1",
       elements: ["h-btn1", "h-btn1-t"],

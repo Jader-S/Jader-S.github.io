@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { projects } from "@/data/projects";
+import { demoCatalog } from "@/data/project-details";
 import { locales } from "@/lib/i18n";
 import { useProjectModalStore } from "@/lib/project-modal";
 import { ActionType } from "@/styles/blueprint/swarm/interactions/actions.js";
@@ -9,6 +10,7 @@ import AtelierSelectedProjects from "@/styles/atelier/components/SelectedProject
 import BlueprintWorkSection from "@/styles/blueprint/components/WorkSection";
 import ClassicProjectsSection from "@/styles/classic/components/ProjectsSection";
 import ParticleWorkSection from "@/styles/particle/components/WorkSection";
+import LabSection from "@/styles/shared/chrome/LabSection";
 import { act, renderWithProviders, screen } from "@/test/render";
 
 const zh = locales.zh;
@@ -79,11 +81,18 @@ describe("project cards open the shared detail modal", () => {
     });
   });
 
-  it("the lab button opens the demo index", async () => {
+  it("the standalone lab section opens a demo straight from the page", async () => {
     const user = userEvent.setup();
-    renderWithProviders(<BlueprintWorkSection />);
-    await user.click(screen.getByRole("button", { name: /实验室/ }));
-    expect(useProjectModalStore.getState().view).toEqual({ kind: "demos" });
+    renderWithProviders(<LabSection style="blueprint" />);
+
+    const cards = screen.getAllByTestId("lab-card");
+    expect(cards).toHaveLength(demoCatalog.length);
+    await user.click(cards[0]);
+    expect(useProjectModalStore.getState().view).toEqual({
+      kind: "demo",
+      slug: demoCatalog[0].slug,
+      returnTo: { kind: "lab" },
+    });
   });
 
   it("every work card renders in a single merged list", () => {
@@ -132,5 +141,44 @@ describe("blueprint build-phase work interactions", () => {
     });
     // 合并后所有作品都走详情弹框，不再有外链 repo action
     expect(work.every((item) => item.action.id === "project")).toBe(true);
+  });
+
+  it("routes the sixth nav item (lab) to the demo list action", () => {
+    const interactions = createPortfolioInteractions({
+      nav: ["a", "b", "c", "d", "e", "f"],
+      primaryCta: "CTA",
+      github: "GitHub",
+      posts: [],
+      projects: [],
+      links: [],
+    }) as unknown as WorkInteraction[];
+
+    // nav0~1..nav0~5；第 3 个菜单没有绘制场景段，派发 CUSTOM lab。
+    const nav = interactions.filter((item) => item.id.startsWith("nav0~"));
+    expect(nav).toHaveLength(5);
+    expect(nav[0].action).toEqual({ type: ActionType.SCROLL, target: "w-title" });
+    expect(nav[1].action).toEqual({ type: ActionType.CUSTOM, id: "lab" });
+    expect(nav[2].action).toEqual({ type: ActionType.SCROLL, target: "k-title" });
+    expect(nav[4].action).toEqual({ type: ActionType.SCROLL, target: "d-title" });
+  });
+
+  it("keeps the five-item nav layout unchanged", () => {
+    const interactions = createPortfolioInteractions({
+      nav: ["a", "b", "c", "d", "e"],
+      primaryCta: "CTA",
+      github: "GitHub",
+      posts: [],
+      projects: [],
+      links: [],
+    }) as unknown as WorkInteraction[];
+
+    const nav = interactions.filter((item) => item.id.startsWith("nav0~"));
+    expect(nav).toHaveLength(4);
+    expect(nav.map((item) => item.action.target)).toEqual([
+      "w-title",
+      "k-title",
+      "b-title",
+      "d-title",
+    ]);
   });
 });

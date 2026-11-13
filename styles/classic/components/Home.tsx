@@ -14,6 +14,7 @@ import ExperienceSection from "@/styles/classic/components/ExperienceSection";
 import FooterSection from "@/styles/classic/components/FooterSection";
 import { useI18n } from "@/components/I18nProvider";
 import { projects } from "@/data/projects";
+import LabSection from "@/styles/shared/chrome/LabSection";
 
 export default function ClassicHome() {
   const { t } = useI18n();
@@ -38,6 +39,7 @@ export default function ClassicHome() {
             texts={t.work.projects}
             frosted
           />
+          <LabSection style="classic" />
           <SkillsSection />
           <BlogSection />
           <ExperienceSection />

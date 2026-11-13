@@ -10,7 +10,7 @@ import { experienceDomains, type ExperienceDomainId } from "@/data/experience";
 import { profile } from "@/data/profile";
 import { projects } from "@/data/projects";
 import { skillCategories, type SkillCategoryId } from "@/data/skills";
-import { openProject } from "@/lib/project-modal";
+import { openDemoIndex, openProject } from "@/lib/project-modal";
 import { ActionType } from "@/styles/blueprint/swarm/interactions/actions.js";
 import { createPortfolioInteractions } from "@/styles/blueprint/swarm/interactions/portfolio-actions.js";
 import { createPortfolioSceneFactory } from "@/styles/blueprint/swarm/scene/create-portfolio-scene.js";
@@ -34,7 +34,7 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
 
   const sceneCopy = useMemo(() => {
     const navItems = t.nav.filter((item) =>
-      ["#about", "#work", "#skills", "#blog", "#experience"].includes(item.href)
+      ["#about", "#work", "#lab", "#skills", "#blog", "#experience"].includes(item.href)
     );
     const workItems = projects.map((project) => ({
       id: project.id as ProjectId,
@@ -169,8 +169,13 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
       window.open(next.href, "_blank", "noopener,noreferrer");
       return true;
     }
+    if (next.id === "lab") {
+      // 绘制页没有独立的 #lab 段，实验室菜单直接打开当前页 Demo 列表弹框。
+      openDemoIndex();
+      return true;
+    }
     if (next.id === "project" && next.projectId) {
-      // Enterprise projects open the shared detail modal in this page.
+      // Work cards open the shared detail modal in this page.
       openProject(next.projectId);
       return true;
     }

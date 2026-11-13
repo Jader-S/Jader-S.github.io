@@ -1,0 +1,111 @@
+/* Shared #lab section. All colors come from html[data-style] tokens so the
+   same grid is legible on light and dark themes (Phase 9 compatible). */
+
+.section {
+  position: relative;
+  padding: clamp(3.5rem, 8vw, 7rem) clamp(1rem, 5vw, 4rem);
+  border-top: 1px solid var(--border-subtle, rgba(127, 145, 170, 0.18));
+}
+
+.header {
+  max-width: 68rem;
+  margin: 0 auto 2.5rem;
+}
+
+.index {
+  margin: 0 0 0.7rem;
+  color: var(--theme-accent, #5eb8c6);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  color: var(--text-heading, #f0f4f8);
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.subtitle {
+  margin: 0.8rem 0 0;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.grid {
+  display: grid;
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 0;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1.1rem 1.15rem;
+  border: 1px solid var(--glass-border, rgba(127, 145, 170, 0.28));
+  border-radius: 12px;
+  background: var(--glass-bg, rgba(127, 145, 170, 0.06));
+  color: var(--text-body, #d8dee8);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.card:hover {
+  border-color: var(--theme-accent, #5eb8c6);
+  background: var(--glass-bg-hover, rgba(127, 145, 170, 0.14));
+  transform: translateY(-2px);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--theme-accent, #5eb8c6);
+  outline-offset: 2px;
+}
+
+.tag {
+  color: var(--theme-accent, #5eb8c6);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.name {
+  color: var(--text-heading, #f0f4f8);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.desc {
+  flex: 1 1 auto;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.8rem;
+  line-height: 1.65;
+}
+
+.hint {
+  margin-top: 0.3rem;
+  color: var(--theme-accent, #5eb8c6);
+  font-size: 0.76rem;
+}
+
+/* astra keeps its own FORGE planet page; this section is not mounted there. */
+:global(html[data-style="astra"]) .section {
+  border-top-color: rgba(34, 211, 238, 0.28);
+}

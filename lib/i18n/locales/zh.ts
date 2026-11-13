@@ -24,10 +24,11 @@ export const zh: LocaleMessages = {
     yearsExpShort: "年经验",
     footerTech: "Next.js · UnoCSS · ASTRA",
   },
-  // 4 主题共用的统一导航：#top 由各主题的品牌链接承担；作品已合并为单一列表。
+  // 4 主题共用的统一导航：#top 由各主题的品牌链接承担；实验室与作品并列。
   nav: [
     { href: "#about", label: "关于我" },
     { href: "#work", label: "作品" },
+    { href: "#lab", label: "实验室" },
     { href: "#skills", label: "技能" },
     { href: "#blog", label: "博客" },
     { href: "#experience", label: "经验领域" },
@@ -69,7 +70,7 @@ export const zh: LocaleMessages = {
     ],
   },
   skills: {
-    index: "03 — SKILLS",
+    index: "04 — SKILLS",
     title: "技术栈",
     subtitle: "从航天产线到智慧配电，沉淀下来的工程能力",
     featuredDesc: "双栈主力，覆盖性能治理、可视化与 AI 工程全链路",
@@ -181,8 +182,14 @@ export const zh: LocaleMessages = {
       },
     },
   },
+  lab: {
+    index: "03 — LAB",
+    title: "实验室",
+    subtitle: "6 个可交互 Demo：性能基准、配电可视化、3D 产线与数据看板",
+    openHint: "在当前页预览 →",
+  },
   blog: {
-    index: "04 — BLOG",
+    index: "05 — BLOG",
     title: "技术日志",
     subtitle: "ASTRA 日志：前端工程化、Agent 运行时与实战复盘",
     allPosts: "全部日志",
@@ -192,7 +199,7 @@ export const zh: LocaleMessages = {
     postCount: (count: number) => `共 ${count} 篇`,
   },
   experience: {
-    index: "05 — DOMAINS",
+    index: "06 — DOMAINS",
     title: "经验领域",
     subtitle: "7 年职业生涯中深耕的业务方向与技术实践",
     domains: {

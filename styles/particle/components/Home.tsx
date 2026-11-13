@@ -23,6 +23,7 @@ import {
   useSnapScrollController,
 } from "@/styles/particle/components/SnapScrollController";
 import WorkSection from "@/styles/particle/components/WorkSection";
+import LabSection from "@/styles/shared/chrome/LabSection";
 
 export default function ParticleHome() {
   const columnRef = useRef<HTMLDivElement>(null);
@@ -98,6 +99,7 @@ export default function ParticleHome() {
             <HeroSection />
             <AboutSection />
             <WorkSection />
+            <LabSection style="particle" />
             <SkillsSection />
             <BlogSection />
             <ExperienceSection />

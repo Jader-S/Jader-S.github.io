@@ -8,7 +8,6 @@ import { useViewport } from "@/lib/hooks/useViewport";
 import { projectModalCopy } from "@/data/project-details";
 import { projects } from "@/data/projects";
 import { openProject } from "@/lib/project-modal";
-import LabButton from "@/styles/shared/chrome/LabButton";
 
 function usePrefersReducedMotion() {
   return useSyncExternalStore(
@@ -37,10 +36,6 @@ export default function SelectedProjects() {
       <span id="work-index" aria-hidden="true" />
       <div className="section-inner">
         <SectionHeader eyebrow="Work" title={t.work.title} subtitle={t.work.subtitle} />
-
-        <div className="mb-8">
-          <LabButton />
-        </div>
 
         <div className="flex flex-col gap-8 sm:gap-10">
           {projects.map((project, index) => {

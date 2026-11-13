@@ -10,7 +10,7 @@
 
 入口：`/` 默认进入 **蓝图** `/blueprint`；若本地记住过上次风格，则跳转到对应路径。左侧竖栏在当前标签页切换风格（整页导航，确保特效引擎干净重建）；<768px 收成左侧 30px 细边条，点击展开抽屉。全站只有 `/` + 5 条主题路径，博客、项目详情与 Demo 预览都在当前页弹框展示，不产生 `/blog/[slug]` 之类的内容路由。
 
-**命名与导航已统一**：4 个锚点主题共用一套 `t.nav`（关于我 / 作品 / 技能 / 博客 / 经验领域）与 6 段顺序 `#top → #about → #work → #skills → #blog → #experience`；太空主题行星改为「关于我 / 作品 / 实验室 / 博客 / 联系我 / 全景」。语言只有一份真源（根 `I18nProvider` / `portfolio-locale`），太空主题与共享 Demo 文案随之切换。
+**命名与导航已统一**：4 个锚点主题共用一套 `t.nav`（关于我 / 作品 / 实验室 / 技能 / 博客 / 经验领域）与 7 段顺序 `#top → #about → #work → #lab → #skills → #blog → #experience`，章节编号 `01 ABOUT · 02 WORK · 03 LAB · 04 SKILLS · 05 BLOG · 06 DOMAINS`；太空主题行星改为「关于我 / 作品 / 实验室 / 博客 / 联系我 / 全景」。语言只有一份真源（根 `I18nProvider` / `portfolio-locale`），太空主题与共享 Demo 文案随之切换。
 
 ---
 
@@ -19,7 +19,7 @@
 - **多风格架构**：蓝图 / 静奢 / 经典 / 粒子拆成独立包（`styles/blueprint` · `styles/atelier` · `styles/classic` · `styles/particle`），共享内容与壳层；默认风格为蓝图
 - **左侧竖栏**：桌面竖排切换 5 套风格（蓝图居首；当前标签页整页跳转，确保特效引擎干净重建）；移动端 <768px 收成 30px 细边条，点击从左侧滑出抽屉（遮罩 / Esc / 关闭按钮收起）
 - **博客弹框**：5 套主题共用 `BlogModalHost`，点博客卡片在当前页弹框读本地 MDX；太空主题点「博客」行星先出全部文章列表，再下钻正文。不产生 `/blog/[slug]` 路由，不新开标签页
-- **项目详情 / 实验室**：5 套主题共用 `ProjectModalHost`（zustand 外部 store + Portal）。点作品卡看「背景 / 职责 / 技术栈 / 成果 / 关联 Demo」，再点 Demo 在当前页内联预览；`LabButton` 可直接打开全部 6 个 Demo。Demo 实现统一放在 `styles/shared/demos/`，含 2 个 R3F 3D 场景，非太空主题也能渲染；GitHub 仓库外链在详情弹框内给出
+- **项目详情 / 实验室**：5 套主题共用 `ProjectModalHost`（zustand 外部 store + Portal）。点作品卡看「背景 / 职责 / 技术栈 / 成果 / 关联 Demo」，再点 Demo 在当前页内联预览；4 个锚点主题另有与「作品」并列的独立 `#lab` 区块（`LabSection`），平铺全部 6 个 Demo，点开后返回直接回到页面区块、不再绕回 demo 列表。Demo 实现统一放在 `styles/shared/demos/`，含 2 个 R3F 3D 场景，非太空主题也能渲染；GitHub 仓库外链在详情弹框内给出
 - **右侧 AI 按钮**：悬停说明用途；点击复制当前风格的 Skill 提示词，粘贴给 AI 即可按本站生成同款项目
 - **中英文 / 主题**：语言与白天·夜晚·自动主题，偏好写入 `localStorage`
 - **内容数据化**：`site-content.yaml`（模板入口）→ `data/`（结构）+ `lib/i18n/`（双语文案），id 类型绑定防漏写
@@ -32,7 +32,7 @@
 - 大留白、衬线标题、氧化铜金强调色
 - Hero 使用 [@fxshelf/card-orbit](https://github.com/Luzhaotian/fxshelf/tree/main/packages/card-orbit) 卡片环绕
 - Canvas：ParticleObject / GlyphRain / FlameWrap / PointerAura（桌面端；减少动效时关闭）
-- 区块：Hero → 关于 → 作品（单一列表）→ 技能 → 博客 → 经验领域；旧锚点 `#selected` / `#work-index` 保留为 `#work` 内的不可见别名
+- 区块：Hero → 关于 → 作品（单一列表）→ 实验室 → 技能 → 博客 → 经验领域；旧锚点 `#selected` / `#work-index` 保留为 `#work` 内的不可见别名
 
 ### 经典（Classic）
 
@@ -46,7 +46,7 @@
 - 全屏 WebGL 粒子云作为背景层，内容全宽叠在上层（轻透 scrim 保证可读）
 - 粒子从章节剪影采样，滚动切换时 GPU morph 过渡；减少动效 / 移动端回退为静态剪影水印
 - 桌面端章节吸附滚动（`prefers-reduced-motion` 时关闭）
-- 区块：Hero → 关于 → 作品 → 技能 → 博客 → 经验领域
+- 区块：Hero → 关于 → 作品 → 实验室 → 技能 → 博客 → 经验领域
 - 公共控件沿用静奢 chrome（左侧竖栏、主题 / 语言按钮）
 
 ### 蓝图（Blueprint）· 默认
@@ -55,7 +55,7 @@
 - 绘制中保留语言 / 主题切换；平板及以上走绘制，手机端直接落成态
 - 收尾：灰色「卢」盖章完稿 + 光标计数旁白 → 大字姓名与编号索引页脚
 - 落成后进入常驻作品集，并恢复左右 chrome
-- 区块：Hero → 关于 → 作品 → 技能 → 博客 → 经验领域
+- 区块：Hero → 关于 → 作品 → 实验室 → 技能 → 博客 → 经验领域
 - 共建引擎源码在 `styles/blueprint/swarm/`（见 `SOURCE.md`）
 
 ---
@@ -263,15 +263,16 @@ uno.config.ts
 
 ## 交互组件
 
-| 组件                           | 位置                            | 说明                                                                            |
-| ------------------------------ | ------------------------------- | ------------------------------------------------------------------------------- |
-| `StyleRail`                    | 桌面左侧中部 / 移动端左侧细边条 | 桌面竖排切换 5 套风格（当前标签页整页跳转）；<768px 收成 30px 细边条 + 左滑抽屉 |
-| `ProjectModalHost`             | 全局 Portal                     | 项目详情 → 关联 Demo → 弹窗内内联预览；另有「实验室」列表视图                   |
-| `LabButton`                    | 四主题作品区 / 蓝图控件区       | 打开全部 6 个 Demo 的列表弹框；`compact` 形态只显图标                           |
-| `SkillShareRail`               | 右侧中部                        | AI 圆形按钮；悬停提示；点击复制 Skill 提示词                                    |
-| `LocaleToggle` / `ThemeToggle` | 导航栏                          | 语言 / 主题                                                                     |
-| `BackToTop`                    | 右下角                          | 滚动超过阈值后显示                                                              |
-| `CookieConsent`                | 底部                            | 同意偏好 `portfolio-cookie-consent`                                             |
+| 组件                           | 位置                            | 说明                                                                              |
+| ------------------------------ | ------------------------------- | --------------------------------------------------------------------------------- |
+| `StyleRail`                    | 桌面左侧中部 / 移动端左侧细边条 | 桌面竖排切换 5 套风格（当前标签页整页跳转）；<768px 收成 30px 细边条 + 左滑抽屉   |
+| `ProjectModalHost`             | 全局 Portal                     | 项目详情 → 关联 Demo → 弹窗内内联预览；蓝图绘制页仍保留「实验室」列表弹框视图     |
+| `LabSection`                   | 四锚点主题 `#lab` 区块          | 与「作品」并列的一级区块，平铺 6 个 Demo 卡片；`returnTo: lab` 返回时直接关闭弹框 |
+| `LabButton`                    | 蓝图绘制页右上角控件区          | 绘制阶段的 compact 入口，打开全部 6 个 Demo 的列表弹框                            |
+| `SkillShareRail`               | 右侧中部                        | AI 圆形按钮；悬停提示；点击复制 Skill 提示词                                      |
+| `LocaleToggle` / `ThemeToggle` | 导航栏                          | 语言 / 主题                                                                       |
+| `BackToTop`                    | 右下角                          | 滚动超过阈值后显示                                                                |
+| `CookieConsent`                | 底部                            | 同意偏好 `portfolio-cookie-consent`                                               |
 
 ---
 

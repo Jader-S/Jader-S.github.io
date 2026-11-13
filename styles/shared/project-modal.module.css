@@ -124,8 +124,7 @@
   background: var(--glass-bg-hover, rgba(127, 145, 170, 0.14));
 }
 
-.demoItem:focus-visible,
-.allDemos:focus-visible {
+.demoItem:focus-visible {
   outline: 2px solid var(--theme-accent, #5eb8c6);
   outline-offset: 2px;
 }
@@ -149,23 +148,6 @@
   color: var(--text-muted, #94a3b8);
   font-size: 0.79rem;
   line-height: 1.6;
-}
-
-.allDemos {
-  align-self: flex-start;
-  margin-top: 0.35rem;
-  padding: 0.55rem 1rem;
-  border: 1px solid var(--theme-accent, #5eb8c6);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--theme-accent, #5eb8c6);
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.allDemos:hover {
-  background: var(--glass-bg-hover, rgba(127, 145, 170, 0.14));
 }
 
 .empty,

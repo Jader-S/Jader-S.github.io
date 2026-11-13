@@ -30,7 +30,7 @@ describe("locales catalog", () => {
 });
 
 describe("unified navigation", () => {
-  const expectedHrefs = ["#about", "#work", "#skills", "#blog", "#experience"];
+  const expectedHrefs = ["#about", "#work", "#lab", "#skills", "#blog", "#experience"];
 
   it("keeps one shared nav dictionary for both locales", () => {
     for (const locale of ["zh", "en"] as const) {
@@ -42,17 +42,38 @@ describe("unified navigation", () => {
     expect(locales.zh.nav.map((item) => item.label)).toEqual([
       "关于我",
       "作品",
+      "实验室",
       "技能",
       "博客",
       "经验领域",
     ]);
   });
 
+  it("numbers the six sections in the agreed order", () => {
+    expect([
+      locales.zh.about.index,
+      locales.zh.work.index,
+      locales.zh.lab.index,
+      locales.zh.skills.index,
+      locales.zh.blog.index,
+      locales.zh.experience.index,
+    ]).toEqual([
+      "01 — ABOUT",
+      "02 — WORK",
+      "03 — LAB",
+      "04 — SKILLS",
+      "05 — BLOG",
+      "06 — DOMAINS",
+    ]);
+  });
+
   it("navLabel resolves section ids consistently for all anchored styles", () => {
     expect(navLabel(locales.zh, "top")).toBe(locales.zh.profile.name);
     expect(navLabel(locales.zh, "work")).toBe("作品");
+    expect(navLabel(locales.zh, "lab")).toBe("实验室");
     expect(navLabel(locales.zh, "experience")).toBe("经验领域");
     expect(navLabel(locales.en, "about")).toBe("About me");
+    expect(navLabel(locales.en, "lab")).toBe("Lab");
     expect(navLabel(locales.en, "blog")).toBe("Blog");
     expect(navLabel(locales.zh, "unknown")).toBe("unknown");
   });

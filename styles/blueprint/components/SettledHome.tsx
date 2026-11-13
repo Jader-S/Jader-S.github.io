@@ -12,6 +12,7 @@ import SkillsSection from "@/styles/blueprint/components/SkillsSection";
 import WorkSection from "@/styles/blueprint/components/WorkSection";
 import SkillShareRail from "@/styles/shared/chrome/SkillShareRail";
 import StyleRail from "@/styles/shared/chrome/StyleRail";
+import LabSection from "@/styles/shared/chrome/LabSection";
 
 interface SettledHomeProps {
   onReplay: () => void;
@@ -25,6 +26,7 @@ export default function SettledHome({ onReplay }: SettledHomeProps) {
         <HeroSection onReplay={onReplay} />
         <AboutSection />
         <WorkSection />
+        <LabSection style="blueprint" />
         <SkillsSection />
         <BlogSection />
         <ExperienceSection />

@@ -18,7 +18,6 @@ import {
   backProjectModal,
   closeProjectModal,
   openDemo,
-  openDemoIndex,
   useProjectModalStore,
 } from "@/lib/project-modal";
 import type { LocaleMessages } from "@/lib/i18n";
@@ -127,9 +126,6 @@ function ProjectView({
             ) : (
               <p className={styles.empty}>{copy.noDemos}</p>
             )}
-            <button type="button" className={styles.allDemos} onClick={openDemoIndex}>
-              {copy.allDemos} →
-            </button>
           </section>
         </>
       ) : (

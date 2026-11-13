@@ -7,7 +7,6 @@ import { projectModalCopy, type ProjectId } from "@/data/project-details";
 import type { Project } from "@/data/projects";
 import { openProject } from "@/lib/project-modal";
 import type { ProjectText } from "@/lib/i18n/types";
-import LabButton from "@/styles/shared/chrome/LabButton";
 
 interface ProjectsSectionProps<Id extends string> {
   id: string;
@@ -51,10 +50,6 @@ export default function ProjectsSection<Id extends string>({
       ))}
       <div className="classic-section-inner">
         <SectionHeader index={sectionIndex} title={title} subtitle={subtitle} />
-
-        <div className="mb-6">
-          <LabButton />
-        </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => {

@@ -4,7 +4,6 @@ import { useI18n } from "@/components/I18nProvider";
 import { projectModalCopy } from "@/data/project-details";
 import { projects } from "@/data/projects";
 import { openProject } from "@/lib/project-modal";
-import LabButton from "@/styles/shared/chrome/LabButton";
 
 export default function WorkSection() {
   const { t, locale } = useI18n();
@@ -15,9 +14,6 @@ export default function WorkSection() {
       <p className="blueprint-eyebrow">{t.work.index}</p>
       <h2 className="blueprint-title">{t.work.title}</h2>
       <p className="blueprint-body">{t.work.subtitle}</p>
-      <div className="mt-4">
-        <LabButton />
-      </div>
       <ul className="mt-8 space-y-0 border-t border-divider">
         {projects.map((project) => {
           const text = t.work.projects[project.id];

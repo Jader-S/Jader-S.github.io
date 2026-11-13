@@ -1,9 +1,10 @@
 # PLAN_BLOGUPDATE_V2 — blogUpdate 改造需求梳理与分期计划
 
-> 状态：**第一轮 Phase 1–6 全部交付（`70acb55`）｜第二轮 Phase 7–9 进行中（作品整合 / 实验室并列 / demo 配色主题化）**
+> 状态：**第一轮 Phase 1–6 全部交付（`70acb55`）｜第二轮 Phase 7 已交付（`ce9f293`）· Phase 8 已验收待提交 · Phase 9 进行中（demo 配色主题化）**
 > 创建：2026-11-13 ｜ 范围：`E:\Jader\blogUpdate`（Next 15 / React 19 / UnoCSS / 5 主题）
 > 需求确认后按 Phase 分步执行，每期单独验收、单独提交。
 > 2026-11-13 更新 7：用户追加 3 项问题，Q1–Q4 均选方案 1（见第 14 节），启动第二轮 Phase 7–9。
+> 2026-11-13 更新 8：Phase 7（作品整合）交付 `ce9f293`；Phase 8（实验室并列）完成实现与全量验收，见 14.2。
 > 2026-11-13 更新 1：Q1/Q2/Q3/Q4 均选方案 1（见 6.1），补充「3.2 默认命名总表」与「6.2 默认执行项」。
 > 2026-11-13 更新 2：命名表按默认确认；Phase 1 完成并提交，验收结果见第 8 节。
 > 2026-11-13 更新 3：Phase 2 完成并提交，路由 10 → 6 条、静态导出 24 → 9 页，验收结果见第 9 节。
@@ -464,3 +465,34 @@
 ### 每期验收基线
 
 `npm run typecheck` ｜ `npm run lint`（0 warning）｜ `npm run test` ｜ `GITHUB_PAGES=true PAGES_REPO_NAME= npm run build`（静态导出 9 页）｜ `npx playwright test` ｜ 改动文件 `prettier --check` ｜ dev 五主题路径 200 ｜ 独立提交。
+
+### 14.1 · Phase 7 交付记录
+
+- 提交：`ce9f293 feat: Phase 7 作品整合 — 移除 ASTRA 卡片，5 主题统一单一作品列表`。
+- 单一 `projects` 数组（4 个作品）、`ProjectId` 联合类型绑定中英文文案；旧锚点 `#selected` / `#work-index` / `#enterprise` / `#github` 保留为不可见别名。
+- GitHub 仓库外链从卡片移入详情弹框；astra 作品页去掉「公司 / 个人」分组筛选。
+
+### 14.2 · Phase 8 交付记录（实验室升为并列菜单）
+
+**实现**
+
+| 项         | 做法                                                                                                                                                                                               |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| 导航       | `t.nav` 5 → 6 项，插入 `#lab`；章节编号重排 `01 ABOUT / 02 WORK / 03 LAB / 04 SKILLS / 05 BLOG / 06 DOMAINS`；四主题 NavBar 均动态读取，无需逐个硬编码                                             |
+| 页面区块   | 新建共享 `LabSection` + `lab-section.module.css`，平铺 `demoCatalog` 6 个 Demo；挂到 atelier / classic / blueprint 静稳态 / particle 的 `#work → #lab → #skills` 位置                              |
+| 主题适配   | particle 的 `ParticleSectionId` / `PARTICLE_SECTION_IDS` / `SECTION_ASSETS.lab` 同步；blueprint `NavBar.SECTION_IDS` 加 `lab`                                                                      |
+| 蓝图绘制页 | 画布固定坐标不改：末项 x≈980 < `FRAME_RIGHT=1200`，直接让第 3 个菜单派发 `CUSTOM id: "lab"` → `openDemoIndex()`；`portfolio-actions.js` 用 `NAV_TARGETS[5                                          | 6]` 兼容两种导航长度 |
+| 返回链路   | `ProjectModalReturn` 新增 `{ kind: "lab" }`；从 `#lab` 进入 Demo 后点「返回实验室」直接关闭弹框回到页面区块，不再绕回 demo 列表弹框                                                                |
+| 绕路清理   | 移除 4 个作品区的 `LabButton`、`ProjectModalHost` 的「查看全部 Demo」按钮及 `allDemos` 文案 / `.allDemos` 样式；仅蓝图绘制页右上角保留 compact `LabButton`                                         |
+| 配色前置   | `LabSection` 全量使用已定义主题 token（`--text-heading` / `--text-body` / `--text-muted` / `--theme-accent` / `--glass-bg` / `--glass-border` / `--border-subtle`），已核对 5 个 `uno.ts` 均有定义 |
+
+**验收**
+
+- `typecheck` ✓ ｜ `lint` 0 warning ✓ ｜ `test` **22 文件 / 90 用例全通过**（新增 4 例：`LabSection` 直达 Demo、6 项导航 lab action、5 项导航回归、lab 返回语义、六段编号）✓
+- `GITHUB_PAGES=true PAGES_REPO_NAME= npm run build` ✓ 静态导出 9 页 / 257 kB。
+- `prettier --check` 改动文件全通过 ✓ ｜ dev `/` + 5 主题路径均 HTTP 200 ✓
+- Playwright 全量 23 例：`lab` 相关 3 例全过；`chrome.spec` 主题切换 1 例因 dev server HMR 会话抖动超时，单 spec 复跑 **2 passed**，判定为非逻辑缺陷（与 Phase 7 同类抖动一致）。
+
+### 14.3 · Phase 9 待办
+
+6 个 demo 的 CSS 与 ECharts / Three 内联色全量映射到主题 token，五主题 × 6 Demo 对比度走查（目标 WCAG AA）。详见「根因定位（第 2 项）」。

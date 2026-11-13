@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { STYLE_ROUTES, gotoStyle } from "./helpers";
+import { STYLE_ROUTES, dismissCookieConsent, gotoStyle } from "./helpers";
 
 test.describe("style pages", () => {
   for (const route of STYLE_ROUTES) {
@@ -18,7 +18,7 @@ test.describe("style pages", () => {
     });
   }
 
-  test("atelier exposes the unified six-section layout", async ({ page }) => {
+  test("atelier exposes the unified seven-section layout", async ({ page }) => {
     await gotoStyle(page, "/atelier");
 
     for (const id of [
@@ -26,6 +26,7 @@ test.describe("style pages", () => {
       "about",
       "work",
       "work-index",
+      "lab",
       "skills",
       "blog",
       "experience",
@@ -36,7 +37,7 @@ test.describe("style pages", () => {
     await expect(page.locator("#selected")).toBeAttached();
   });
 
-  test("classic exposes the unified six-section layout", async ({ page }) => {
+  test("classic exposes the unified seven-section layout", async ({ page }) => {
     await gotoStyle(page, "/classic");
 
     for (const id of [
@@ -44,6 +45,7 @@ test.describe("style pages", () => {
       "about",
       "work",
       "github",
+      "lab",
       "skills",
       "blog",
       "experience",
@@ -76,5 +78,36 @@ test.describe("style pages", () => {
         /近期企业项目|开源项目|Recent Enterprise|Open Source Projects/
       );
     }
+  });
+
+  test("lab is a top-level section with six demo cards across anchored styles", async ({
+    page,
+  }) => {
+    for (const route of ["/atelier", "/classic", "/particle"]) {
+      await gotoStyle(page, route);
+      const lab = page.locator("#lab");
+      await expect(lab).toBeAttached();
+      await expect(lab.getByTestId("lab-card")).toHaveCount(6);
+      // 导航里「实验室」与「作品」并列，不再是作品区里的小 chip。
+      // atelier/classic 用 <a href="#lab">，particle 用 snap-scroll button。
+      await expect(page.locator('#work [data-testid="lab-card"]')).toHaveCount(0);
+      const nav = page.getByRole("navigation", { name: /主导航|Main navigation/ });
+      await expect(nav.getByText(/实验室|Lab/).first()).toBeAttached();
+    }
+  });
+
+  test("a lab demo returns straight to the page section", async ({ page }) => {
+    await gotoStyle(page, "/atelier");
+    await dismissCookieConsent(page);
+
+    await page.locator("#lab").getByTestId("lab-card").first().click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole("heading", { level: 1 })).toBeVisible();
+
+    // Phase 8：从 #lab 进入的 Demo 点返回直接关闭弹框，不绕回 demo 列表。
+    await dialog.getByRole("button", { name: /返回实验室|Back to lab/ }).click();
+    await expect(dialog).toHaveCount(0);
+    await expect(page.locator("#lab")).toBeAttached();
   });
 });

@@ -13,6 +13,7 @@ import CookieConsent from "@/styles/atelier/components/CookieConsent";
 import BlogSection from "@/styles/atelier/components/BlogSection";
 import ExperienceSection from "@/styles/atelier/components/ExperienceSection";
 import FooterSection from "@/styles/atelier/components/FooterSection";
+import LabSection from "@/styles/shared/chrome/LabSection";
 
 export default function AtelierHome() {
   return (
@@ -28,6 +29,7 @@ export default function AtelierHome() {
           <AboutSection />
           {/* 单一「作品」区块：企业项目与开源项目已合并，别名锚点保留在段内。 */}
           <SelectedProjects />
+          <LabSection style="atelier" />
           <SkillsSection />
           <BlogSection />
           <ExperienceSection />

@@ -55,7 +55,7 @@ export interface LocaleMessages {
     yearsExpShort: string;
     footerTech: string;
   };
-  /** 4 主题共用的统一导航（#top 走品牌链接，不占导航项）。 */
+  /** 4 主题共用的统一导航（#top 走品牌链接，不占导航项）：六项含 #lab。 */
   nav: NavItem[];
   navAria: {
     main: string;
@@ -98,6 +98,14 @@ export interface LocaleMessages {
     subtitle: string;
     /** 作品文案查找表，key 与 data/projects.ts 的 projects id 一致 */
     projects: Record<ProjectId, ProjectText>;
+  };
+  /** 独立「实验室」区块（Phase 8）：与作品并列的一级菜单，平铺 6 个 Demo。 */
+  lab: {
+    index: string;
+    title: string;
+    subtitle: string;
+    /** Demo 卡片上的操作提示，例如「在当前页预览」 */
+    openHint: string;
   };
   blog: {
     index: string;

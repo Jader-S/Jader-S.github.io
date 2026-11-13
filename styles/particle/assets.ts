@@ -4,6 +4,7 @@ export type ParticleSectionId =
   | "top"
   | "about"
   | "work"
+  | "lab"
   | "skills"
   | "blog"
   | "experience";
@@ -12,6 +13,7 @@ export const PARTICLE_SECTION_IDS: ParticleSectionId[] = [
   "top",
   "about",
   "work",
+  "lab",
   "skills",
   "blog",
   "experience",
@@ -50,6 +52,13 @@ export const SECTION_ASSETS: Record<ParticleSectionId, SectionAssetConfig> = {
   },
   work: {
     candidates: [asset("/particle/work-grid.svg"), asset("/particle/work-flow.svg")],
+  },
+  lab: {
+    candidates: [
+      asset("/particle/layers-stack.svg"),
+      asset("/particle/work-flow.svg"),
+      asset("/particle/nodes-graph.svg"),
+    ],
   },
   skills: {
     candidates: [

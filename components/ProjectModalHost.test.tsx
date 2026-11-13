@@ -2,7 +2,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 import ProjectModalHost from "@/components/ProjectModalHost";
 import { openBlogIndex, useBlogModalStore } from "@/lib/blog-modal";
-import { openDemoIndex, openProject, useProjectModalStore } from "@/lib/project-modal";
+import {
+  openDemo,
+  openDemoIndex,
+  openProject,
+  useProjectModalStore,
+} from "@/lib/project-modal";
 import { act, fireEvent, renderWithProviders, screen, within } from "@/test/render";
 
 // Real demos pull in echarts / R3F / WebGL; the modal only needs to prove it
@@ -41,9 +46,8 @@ describe("ProjectModalHost", () => {
     expect(
       within(dialog).getByRole("button", { name: /配电树性能基准/ })
     ).toBeInTheDocument();
-    expect(
-      within(dialog).getByRole("button", { name: /查看全部 Demo/ })
-    ).toBeInTheDocument();
+    // Phase 8：实验室已升为并列菜单，作品详情不再提供「查看全部 Demo」绕路入口。
+    expect(within(dialog).queryByRole("button", { name: /查看全部 Demo/ })).toBeNull();
   });
 
   it("switches to an inline demo preview and returns to the project", async () => {
@@ -57,6 +61,17 @@ describe("ProjectModalHost", () => {
 
     await user.click(screen.getByRole("button", { name: /返回项目详情/ }));
     expect(screen.getByRole("heading", { level: 1, name: /氪邦/ })).toBeInTheDocument();
+  });
+
+  it("returns from a lab demo straight to the page section, not to another modal", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<ProjectModalHost />);
+    act(() => openDemo("conference-board", { kind: "lab" }));
+
+    expect(screen.getByTestId("demo-preview")).toHaveTextContent("conference-board");
+    await user.click(screen.getByRole("button", { name: /返回实验室/ }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(useProjectModalStore.getState().view).toEqual({ kind: "closed" });
   });
 
   it("lists all six demos in the lab view", () => {

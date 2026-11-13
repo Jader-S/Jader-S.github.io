@@ -24,10 +24,11 @@ export const en: LocaleMessages = {
     yearsExpShort: "yrs exp",
     footerTech: "Next.js · UnoCSS · ASTRA",
   },
-  // Shared nav for all 4 anchored styles; #top is the brand link, all works live in #work.
+  // Shared nav for all 4 anchored styles; #top is the brand link, lab sits beside work.
   nav: [
     { href: "#about", label: "About me" },
     { href: "#work", label: "Work" },
+    { href: "#lab", label: "Lab" },
     { href: "#skills", label: "Skills" },
     { href: "#blog", label: "Blog" },
     { href: "#experience", label: "Domains" },
@@ -71,7 +72,7 @@ export const en: LocaleMessages = {
     ],
   },
   skills: {
-    index: "03 — SKILLS",
+    index: "04 — SKILLS",
     title: "Tech Stack",
     subtitle:
       "Engineering capabilities forged on production lines and power distribution systems",
@@ -186,8 +187,15 @@ export const en: LocaleMessages = {
       },
     },
   },
+  lab: {
+    index: "03 — LAB",
+    title: "Lab",
+    subtitle:
+      "6 interactive demos: benchmarks, power visualization, 3D lines and dashboards",
+    openHint: "Preview in this page →",
+  },
   blog: {
-    index: "04 — BLOG",
+    index: "05 — BLOG",
     title: "Engineering Notes",
     subtitle:
       "ASTRA log: frontend engineering, agent runtimes and post-mortems from the field",
@@ -198,7 +206,7 @@ export const en: LocaleMessages = {
     postCount: (count: number) => `${count} posts`,
   },
   experience: {
-    index: "05 — DOMAINS",
+    index: "06 — DOMAINS",
     title: "Experience Domains",
     subtitle: "Business domains and technical practices honed over 7 years",
     domains: {
