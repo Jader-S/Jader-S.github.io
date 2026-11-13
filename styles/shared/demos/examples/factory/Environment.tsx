@@ -10,6 +10,7 @@ import {
 } from "three";
 import { RAIL, STATION_LAYOUT } from "./layout";
 import type { StationId } from "./sim";
+import { readDemoPalette } from "@/lib/demo-theme";
 
 /* ── 共享几何 / 材质：静态物件复用，避免为每根栏杆新建对象 ── */
 const POST_GEO = new BoxGeometry(0.09, 1.5, 0.09);
@@ -57,14 +58,15 @@ function along(n: number, from: number, to: number): number[] {
 
 /** 地面 + 网格 + 轨道两侧黄黑警示带 + 工位地面定位标记 */
 function Ground() {
+  const p = readDemoPalette();
   const stripeX = along(14, -12.6, 12.6);
   return (
     <>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.03, 0]}>
         <planeGeometry args={[40, 18]} />
-        <meshStandardMaterial color="#0b1220" roughness={0.94} metalness={0.06} />
+        <meshStandardMaterial color={p.surface} roughness={0.94} metalness={0.06} />
       </mesh>
-      <gridHelper args={[40, 40, "#173544", "#101f2b"]} position={[0, -0.005, 0]} />
+      <gridHelper args={[40, 40, p.border, p.surfaceDeep]} position={[0, -0.005, 0]} />
 
       {[-1, 1].map((s) => (
         <group key={s}>
@@ -111,6 +113,7 @@ function Ground() {
 
 /** 中央地轨：双钢轨 + 枕木 + 拖链线槽 + 两端缓冲器 */
 function RailTrack() {
+  const p = readDemoPalette();
   const sleepers = along(20, -RAIL.halfSpan + 0.4, RAIL.halfSpan - 0.4);
   return (
     <group>
@@ -140,8 +143,8 @@ function RailTrack() {
       <mesh position={[0, 0.122, 0]}>
         <boxGeometry args={[RAIL.halfSpan * 2, 0.012, 0.05]} />
         <meshStandardMaterial
-          color="#22d3ee"
-          emissive="#22d3ee"
+          color={p.accent}
+          emissive={p.accent}
           emissiveIntensity={0.7}
         />
       </mesh>
@@ -155,7 +158,7 @@ function RailTrack() {
           <mesh position={[-s * 0.2, 0.42, 0]}>
             <boxGeometry args={[0.12, 0.34, 1.1]} />
             <meshStandardMaterial
-              color="#f5b301"
+              color={p.warning}
               emissive="#7a5400"
               emissiveIntensity={0.45}
             />

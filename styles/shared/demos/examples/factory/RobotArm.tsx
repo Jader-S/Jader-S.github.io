@@ -11,11 +11,11 @@ import type { Group, Mesh, Object3D } from "three";
 import type { Robot } from "./sim";
 import { ARM, RAIL, ROBOT_HOME_X, ROBOT_Z, fingerOffset } from "./layout";
 import { armRefs, type ViewRuntime } from "./runtime";
+import { readDemoPalette } from "@/lib/demo-theme";
 
 const YELLOW = "#ffc23d";
 const JOINT = "#ffd970";
 const DARK = "#6b5018";
-const ACCENT: Record<Robot["id"], string> = { R1: "#22d3ee", R2: "#ff9a3d" };
 
 const WHEELS: [number, number][] = [
   [-0.5, RAIL.gauge / 2],
@@ -53,7 +53,8 @@ export default function RobotArm({ robot, runtime }: Props) {
     refs.anchor = anchor.current;
   }, [runtime, robot.id]);
 
-  const accent = ACCENT[robot.id];
+  const p = readDemoPalette();
+  const accent = robot.id === "R1" ? p.accent : p.warning;
 
   return (
     <group ref={carriage} position={[ROBOT_HOME_X[robot.id], 0, ROBOT_Z]}>

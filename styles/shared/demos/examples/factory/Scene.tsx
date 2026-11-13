@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { Vector3, type PerspectiveCamera } from "three";
+import { readDemoPalette } from "@/lib/demo-theme";
 import {
   PHASE_DURATION,
   stepSim,
@@ -15,8 +16,8 @@ import {
   type StationId,
 } from "./sim";
 import {
-  LAMP_BUSY,
   LAMP_IDLE,
+  lampBusy,
   cycleGeom,
   fingerOffset,
   liftYAt,
@@ -56,7 +57,15 @@ function resolvePartPos(sim: SimState, part: Part, rt: ViewRuntime): Vector3 {
   return tmpA.copy(gp);
 }
 
-function SimDriver({ sim, runtime }: { sim: SimState; runtime: ViewRuntime }) {
+function SimDriver({
+  sim,
+  runtime,
+  accent,
+}: {
+  sim: SimState;
+  runtime: ViewRuntime;
+  accent: string;
+}) {
   useFrame((_, dt) => {
     stepSim(sim, dt);
 
@@ -85,7 +94,7 @@ function SimDriver({ sim, runtime }: { sim: SimState; runtime: ViewRuntime }) {
     for (const s of sim.stations) {
       const refs = runtime.stations[s.id];
       const busy = s.kind === "process" && s.state === "PROCESSING";
-      const cfg = busy ? LAMP_BUSY : LAMP_IDLE;
+      const cfg = busy ? lampBusy(accent) : LAMP_IDLE;
       if (refs?.lamp) {
         refs.lamp.color.set(cfg.color);
         refs.lamp.emissive.set(cfg.emissive);
@@ -141,15 +150,23 @@ interface Props {
 }
 
 export default function Scene({ sim, runtime, onSelect }: Props) {
+  // 3D 是独立的 R3F reconciler，读一次即可：弹框打开期间主题切换被遮罩挡住。
+  const palette = readDemoPalette();
   return (
     <>
-      <color attach="background" args={["#070b14"]} />
+      {/* 3D 舞台底色跟随当前主题；工业金属材质是物理固有色，不予染色。 */}
+      <color attach="background" args={[palette.page]} />
       <ambientLight intensity={0.78} color="#a8c8ff" />
       <directionalLight position={[8, 16, 12]} intensity={1.9} color="#fff6e8" />
-      <pointLight position={[0, 7, -8]} intensity={1.2} color="#22d3ee" distance={40} />
+      <pointLight
+        position={[0, 7, -8]}
+        intensity={1.2}
+        color={palette.accent}
+        distance={40}
+      />
       <pointLight position={[0, 6, 8]} intensity={0.7} color="#ffd9a0" distance={36} />
 
-      <SimDriver sim={sim} runtime={runtime} />
+      <SimDriver sim={sim} runtime={runtime} accent={palette.accent} />
       <FactoryEnvironment />
       {sim.stations.map((s) => (
         <StationView key={s.id} station={s} runtime={runtime} onSelect={onSelect} />

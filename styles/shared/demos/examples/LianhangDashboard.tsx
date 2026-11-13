@@ -11,6 +11,7 @@
  */
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as echarts from "echarts";
+import { readDemoPalette } from "@/lib/demo-theme";
 import FactoryLine from "./FactoryLine";
 import "./LianhangDashboard.css";
 
@@ -23,19 +24,28 @@ interface Vars {
   ok: string;
   warn: string;
   bad: string;
+  bg: string;
+  accentA: (a: number) => string;
+  pageA: (a: number) => string;
+  mutedA: (a: number) => string;
 }
+
+/** 与 demo-tokens.css 同源，保证 HUD / ECharts / 3D 背景配色一致。 */
 function readVars(): Vars {
-  const s = getComputedStyle(document.documentElement);
-  const g = (k: string, fb: string) => s.getPropertyValue(k).trim() || fb;
+  const p = readDemoPalette();
   return {
-    cyan: g("--neon-cyan", "#22d3ee"),
-    purple: g("--neon-purple", "#a855f7"),
-    dim: g("--text-dim", "#94a3b8"),
-    faint: g("--text-faint", "#64748b"),
-    grid: "rgba(148,163,184,0.12)",
-    ok: "#34d399",
-    warn: "#f59e0b",
-    bad: "#f43f5e",
+    cyan: p.accent,
+    purple: p.violet,
+    dim: p.muted,
+    faint: p.faint,
+    grid: p.mutedA(0.12),
+    ok: p.success,
+    warn: p.warning,
+    bad: p.danger,
+    bg: p.page,
+    accentA: p.accentA,
+    pageA: p.pageA,
+    mutedA: p.mutedA,
   };
 }
 
@@ -245,7 +255,7 @@ function lineOption(d: DashData, v: Vars): echarts.EChartsOption {
     grid: { left: 32, right: 12, top: 14, bottom: 18 },
     tooltip: {
       trigger: "axis",
-      backgroundColor: "rgba(8,12,22,0.92)",
+      backgroundColor: v.pageA(0.92),
       borderColor: v.grid,
       textStyle: { color: v.dim, fontSize: 11 },
     },
@@ -272,8 +282,8 @@ function lineOption(d: DashData, v: Vars): echarts.EChartsOption {
         lineStyle: { color: v.cyan, width: 2 },
         areaStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: "rgba(34,211,238,0.34)" },
-            { offset: 1, color: "rgba(34,211,238,0.02)" },
+            { offset: 0, color: v.accentA(0.34) },
+            { offset: 1, color: v.accentA(0.02) },
           ]),
         },
       },
@@ -295,7 +305,7 @@ function oeeOption(d: DashData, v: Vars): echarts.EChartsOption {
         radius: "94%",
         center: ["50%", "56%"],
         progress: { show: true, width: 8, itemStyle: { color: v.cyan } },
-        axisLine: { lineStyle: { width: 8, color: [[1, "rgba(148,163,184,0.18)"]] } },
+        axisLine: { lineStyle: { width: 8, color: [[1, v.mutedA(0.18)]] } },
         axisTick: { show: false },
         splitLine: { show: false },
         axisLabel: { show: false },
@@ -334,7 +344,7 @@ function dialOption(d: DashData, v: Vars): echarts.EChartsOption {
           roundCap: true,
           itemStyle: { color: v.purple },
         },
-        axisLine: { lineStyle: { width: 7, color: [[1, "rgba(148,163,184,0.16)"]] } },
+        axisLine: { lineStyle: { width: 7, color: [[1, v.mutedA(0.16)]] } },
         axisTick: { distance: -10, length: 3, lineStyle: { color: v.grid, width: 1 } },
         splitLine: { distance: -10, length: 8, lineStyle: { color: v.grid, width: 1 } },
         axisLabel: { distance: -2, color: v.faint, fontSize: 8 },
@@ -368,7 +378,7 @@ function pieOption(
   return {
     tooltip: {
       trigger: "item",
-      backgroundColor: "rgba(8,12,22,0.92)",
+      backgroundColor: v.pageA(0.92),
       borderColor: v.grid,
       textStyle: { color: v.dim, fontSize: 11 },
       formatter: "{b}：{c} ({d}%)",
@@ -387,7 +397,7 @@ function pieOption(
         radius: ["42%", "68%"],
         center: ["50%", "50%"],
         avoidLabelOverlap: true,
-        itemStyle: { borderColor: "rgba(8,12,22,0.55)", borderWidth: 2 },
+        itemStyle: { borderColor: v.pageA(0.55), borderWidth: 2 },
         label: { color: v.dim, fontSize: 10, formatter: "{d}%" },
         labelLine: { length: 6, length2: 6 },
         data: items.map((it) => ({

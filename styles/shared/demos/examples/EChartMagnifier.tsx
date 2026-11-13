@@ -9,11 +9,13 @@
  * 主图支持 dataZoom（inside 滚轮 + slider），放大镜坐标变换自动跟随。
  *
  * 交互：移动光标 → 圆形放大镜跟随；离开 → 隐藏。镜面半径 / 放大倍率可调，模式可切换。
- * 视觉：跟随站点主题（CSS 变量），深色玻璃 + 霓虹青/紫。
+ * 视觉：跟随当前风格的 html[data-style] / data-theme token（demo 语义桥接层），
+ * 浅色与深色主题下文字、网格、坐标轴、放大镜描边都保持可读对比度。
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as echarts from "echarts";
 import { useT } from "@astra/i18n";
+import { readDemoPalette } from "@/lib/demo-theme";
 import "./EChartMagnifier.css";
 
 type Pt = [number, number]; // [index, value]
@@ -32,20 +34,27 @@ interface Vars {
   dim: string;
   faint: string;
   grid: string;
-  bg: string; // 不透明主题底色：放大镜铺底 + ECharts 实心底，杜绝透出主图重叠
+  bg: string; // 不透明主题底色：放大镜铺底，杜绝透出主图重叠
+  accentA: (a: number) => string;
+  inkA: (a: number) => string;
+  pageA: (a: number) => string;
+  mutedA: (a: number) => string;
 }
 
+/** 从当前主题 token 解析出画布 / ECharts 可直接使用的具体色值。 */
 function readVars(): Vars {
-  const s = getComputedStyle(document.documentElement);
-  const g = (k: string, fb: string) => s.getPropertyValue(k).trim() || fb;
+  const p = readDemoPalette();
   return {
-    cyan: g("--neon-cyan", "#22d3ee"),
-    purple: g("--neon-purple", "#a855f7"),
-    dim: g("--text-dim", "#94a3b8"),
-    faint: g("--text-faint", "#64748b"),
-    grid: "rgba(148,163,184,0.12)",
-    // 取不透明实色；--glass-bg 可能为半透明，这里兜底成纯暗底
-    bg: g("--bg", "#0a0e1a") || "#0a0e1a",
+    cyan: p.accent,
+    purple: p.violet,
+    dim: p.muted,
+    faint: p.faint,
+    grid: p.mutedA(0.12),
+    bg: p.page,
+    accentA: p.accentA,
+    inkA: p.inkA,
+    pageA: p.pageA,
+    mutedA: p.mutedA,
   };
 }
 
@@ -64,18 +73,18 @@ function buildOption(data: Pt[], v: Vars): echarts.EChartsOption {
         filterMode: "none",
         bottom: 10,
         height: 20,
-        backgroundColor: "rgba(148,163,184,0.06)",
-        fillerColor: "rgba(34,211,238,0.16)",
-        borderColor: "rgba(148,163,184,0.28)",
+        backgroundColor: v.mutedA(0.06),
+        fillerColor: v.accentA(0.16),
+        borderColor: v.mutedA(0.28),
         handleStyle: { color: v.cyan, borderColor: v.cyan },
         moveHandleStyle: { color: v.cyan },
         dataBackground: {
           lineStyle: { color: v.dim, width: 1 },
-          areaStyle: { color: "rgba(34,211,238,0.10)" },
+          areaStyle: { color: v.accentA(0.1) },
         },
         selectedDataBackground: {
           lineStyle: { color: v.cyan, width: 1 },
-          areaStyle: { color: "rgba(34,211,238,0.18)" },
+          areaStyle: { color: v.accentA(0.18) },
         },
         textStyle: { color: v.faint, fontSize: 10 },
       },
@@ -112,8 +121,8 @@ function buildOption(data: Pt[], v: Vars): echarts.EChartsOption {
         lineStyle: { color: v.cyan, width: 1 },
         areaStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: "rgba(34,211,238,0.28)" },
-            { offset: 1, color: "rgba(34,211,238,0.02)" },
+            { offset: 0, color: v.accentA(0.28) },
+            { offset: 1, color: v.accentA(0.02) },
           ]),
         },
       },
@@ -294,8 +303,8 @@ export default function EChartMagnifier() {
       ctx.lineTo(mapX(data[iHi][0]), cy + R);
       ctx.closePath();
       const ag = ctx.createLinearGradient(0, cy - R, 0, cy + R);
-      ag.addColorStop(0, "rgba(34,211,238,0.22)");
-      ag.addColorStop(1, "rgba(34,211,238,0.02)");
+      ag.addColorStop(0, v.accentA(0.22));
+      ag.addColorStop(1, v.accentA(0.02));
       ctx.fillStyle = ag;
       ctx.fill();
 
@@ -314,8 +323,8 @@ export default function EChartMagnifier() {
     }
 
     const grad = ctx.createRadialGradient(cx, cy, R * 0.25, cx, cy, R);
-    grad.addColorStop(0, "rgba(0,0,0,0)");
-    grad.addColorStop(1, "rgba(0,0,0,0.38)");
+    grad.addColorStop(0, v.pageA(0));
+    grad.addColorStop(1, v.pageA(0.38));
     ctx.fillStyle = grad;
     ctx.fillRect(cx - R, cy - R, R * 2, R * 2);
     ctx.restore();
@@ -339,7 +348,7 @@ export default function EChartMagnifier() {
 
     // —— 原图当前点标记（放大镜之外也展示选中点）——
     ctx.save();
-    ctx.strokeStyle = "rgba(255,255,255,0.85)";
+    ctx.strokeStyle = v.inkA(0.85);
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(pp[0] - 7, pp[1]);
@@ -365,7 +374,7 @@ export default function EChartMagnifier() {
 
     // X 刻度（沿镜底）
     ctx.fillStyle = v.faint;
-    ctx.strokeStyle = "rgba(148,163,184,0.35)";
+    ctx.strokeStyle = v.mutedA(0.35);
     ctx.lineWidth = 1;
     const xStart = Math.ceil(Math.min(wL, wR) / xStep) * xStep;
     for (let tv = xStart; tv <= Math.max(wL, wR); tv += xStep) {
@@ -412,7 +421,7 @@ export default function EChartMagnifier() {
     if (dC <= R) {
       // 交点十字（贯穿镜面，标出当前点的横纵坐标）
       ctx.save();
-      ctx.strokeStyle = "rgba(255,255,255,0.85)";
+      ctx.strokeStyle = v.inkA(0.85);
       ctx.lineWidth = 1;
       ctx.setLineDash([3, 3]);
       ctx.beginPath();
@@ -457,7 +466,7 @@ export default function EChartMagnifier() {
     ctx.arcTo(lx, ly + lh, lx, ly, r);
     ctx.arcTo(lx, ly, lx + lw, ly, r);
     ctx.closePath();
-    ctx.fillStyle = "rgba(10,15,25,0.82)";
+    ctx.fillStyle = v.pageA(0.82);
     ctx.fill();
     ctx.strokeStyle = v.cyan;
     ctx.lineWidth = 1;

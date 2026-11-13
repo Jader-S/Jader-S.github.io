@@ -38,9 +38,9 @@ interface Conf {
 }
 
 const ROOMS = [
-  { name: "会议室 A", color: "#22d3ee" },
-  { name: "会议室 B", color: "#a855f7" },
-  { name: "会议室 C", color: "#f59e0b" },
+  { name: "会议室 A", color: "var(--demo-accent)" },
+  { name: "会议室 B", color: "var(--demo-violet)" },
+  { name: "会议室 C", color: "var(--demo-warning)" },
 ];
 
 const DAY_START = 8 * 60; // 08:00

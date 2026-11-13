@@ -321,9 +321,13 @@ export function poseAt(
 
 /* ───────────────────────── 6. 视觉常量 ───────────────────────── */
 
-/** 两态状态灯配色：空闲灰蓝 / 加工中亮青 */
+/** 两态状态灯配色：空闲灰蓝 / 加工中跟随当前主题强调色 */
 export const LAMP_IDLE = { color: "#53708d", emissive: "#18344d", intensity: 0.55 };
-export const LAMP_BUSY = { color: "#22d3ee", emissive: "#22d3ee", intensity: 1.7 };
+export const lampBusy = (accent: string) => ({
+  color: accent,
+  emissive: accent,
+  intensity: 1.7,
+});
 
 export const PART_POOL_SIZE = 12;
 export const PROGRESS_BAR_W = 1.7;

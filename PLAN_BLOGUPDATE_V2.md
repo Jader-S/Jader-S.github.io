@@ -1,10 +1,11 @@
 # PLAN_BLOGUPDATE_V2 — blogUpdate 改造需求梳理与分期计划
 
-> 状态：**第一轮 Phase 1–6 全部交付（`70acb55`）｜第二轮 Phase 7 已交付（`ce9f293`）· Phase 8 已验收待提交 · Phase 9 进行中（demo 配色主题化）**
+> 状态：**第一轮 Phase 1–6 全部交付（`70acb55`）｜第二轮 Phase 7（`ce9f293`）· Phase 8（`b3d6c47`）已交付 · Phase 9 已验收待提交 · 终检进行中**
 > 创建：2026-11-13 ｜ 范围：`E:\Jader\blogUpdate`（Next 15 / React 19 / UnoCSS / 5 主题）
 > 需求确认后按 Phase 分步执行，每期单独验收、单独提交。
 > 2026-11-13 更新 7：用户追加 3 项问题，Q1–Q4 均选方案 1（见第 14 节），启动第二轮 Phase 7–9。
 > 2026-11-13 更新 8：Phase 7（作品整合）交付 `ce9f293`；Phase 8（实验室并列）完成实现与全量验收，见 14.2。
+> 2026-11-13 更新 9：Phase 8 交付 `b3d6c47`；Phase 9（demo 配色全量主题 token 化）完成实现与五主题走查，见 14.4。
 > 2026-11-13 更新 1：Q1/Q2/Q3/Q4 均选方案 1（见 6.1），补充「3.2 默认命名总表」与「6.2 默认执行项」。
 > 2026-11-13 更新 2：命名表按默认确认；Phase 1 完成并提交，验收结果见第 8 节。
 > 2026-11-13 更新 3：Phase 2 完成并提交，路由 10 → 6 条、静态导出 24 → 9 页，验收结果见第 9 节。
@@ -493,6 +494,29 @@
 - `prettier --check` 改动文件全通过 ✓ ｜ dev `/` + 5 主题路径均 HTTP 200 ✓
 - Playwright 全量 23 例：`lab` 相关 3 例全过；`chrome.spec` 主题切换 1 例因 dev server HMR 会话抖动超时，单 spec 复跑 **2 passed**，判定为非逻辑缺陷（与 Phase 7 同类抖动一致）。
 
-### 14.3 · Phase 9 待办
+### 14.3 · Phase 9 交付记录（demo 配色全量主题 token 化）
 
-6 个 demo 的 CSS 与 ECharts / Three 内联色全量映射到主题 token，五主题 × 6 Demo 对比度走查（目标 WCAG AA）。详见「根因定位（第 2 项）」。
+**根因复盘**
+
+6 个 Demo 从 ASTRA 移植，其 CSS 引用的 `--neon-cyan` / `--neon-purple` / `--text-dim` / `--text-primary` / `--text-bright` / `--font-display` / `--font-body` / `--font-mono` / `--radius-md` / `--radius-sm` / `--ease-out-expo` / `--glass-blur` / `--room` / `--bg` 只在 `.astra-root` 下定义。`ProjectModalHost` 把 Demo Portal 到 `<body>`，变量在 5 套风格中全部失效；无 fallback 的 `var()` 声明变成继承值，而容器背景仍是硬编码深底 `#070b14` / `#0b1220` → 浅色主题下深底叠深字，正是用户反馈的「看不清」。
+
+**实现**
+
+| 层           | 做法                                                                                                                                                                                                                                                                                                                                                                         |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CSS 桥接     | 新建 `styles/shared/demos/demo-tokens.css`，作用域 `[data-demo-theme]`（`DemoPreview` 宿主新增该属性），把整套遗留变量映射到当前风格的 `--theme-accent` / `--text-*` / `--glass-*` / `--color-background`；限定作用域是为了不改动 astra 自身 intro / pages 的霓虹值                                                                                                          |
+| 语义色       | `--demo-accent` / `--demo-ink` / `--demo-page` / `--demo-surface-solid` / `--demo-code-bg` / `--demo-danger` / `--demo-warning` / `--demo-violet` 等；状态色用 `color-mix(…, var(--demo-ink))`，浅色自动变深、深色自动变浅                                                                                                                                                   |
+| CSS 全量替换 | 6 份 Demo CSS 共 **127 行**硬编码色（青 `#22d3ee` / 深底 / 红 / 琥珀 / 白色透明层）替换为 `--demo-*` 与 `color-mix()`；替换后 `*.css` 内裸色值 **0 处**                                                                                                                                                                                                                      |
+| 画布 / 图表  | 新建 `lib/demo-theme.ts`：`readDemoPalette()` 从 html 基础 token 解析出具体 `rgb()` / `rgba()`，`useDemoPalette()` 供 React 订阅。`EChartMagnifier` / `LianhangDashboard` 的 `readVars()` 改为同源，21 + 15 处内联色改为 `v.accentA()` / `v.pageA()` / `v.inkA()` 等；`ConferenceBoard` 会议室色与 `PowerGridFlow` 反向流色改用 `var(--demo-violet)` / `var(--demo-warning)` |
+| 3D           | `factory/Scene` 舞台底色与青色点光源改读 `palette.page` / `palette.accent`；`Environment` 地面 / 网格、`PartPool` / `Station` / `RobotArm` / `layout.ts` 的亮青与琥珀强调色接入 `readDemoPalette()`；工业金属材质属物理固有色，保持不变                                                                                                                                      |
+
+**验收**
+
+- `typecheck` ✓ ｜ `lint` 0 warning ✓ ｜ `test` **23 文件 / 94 用例全通过**（新增 `lib/demo-theme.test.ts` 4 例：token 解析、alpha 派生、状态色明暗自适应、表面层级）✓
+- `prettier --check` ✓ ｜ 静态导出构建 ✓ ｜ Playwright E2E（新增 1 例：Demo 宿主必须解析出 `--neon-cyan` / `--text-dim` / `--radius-md`，且不同风格强调色不同）✓
+- 真机截图走查：静奢浅/深、经典浅、粒子深 + 3D 工厂浅色 + 可视化大屏浅色 + astra token 探测，文字对比度与主题一致性均达标；`astra` 的 `--theme-accent` 仍为 `#22d3ee`，霓虹观感保留。
+- 已知既有问题（非本轮引入）：R3F Canvas 在 dev 下报 `Attempted to synchronously unmount a root while React was already rendering` 与 `Multiple instances of Three.js being imported`。已用 `git stash` 回到 `b3d6c47` 基线复跑控制台，同样复现，判定为既有架构警告，不影响渲染与静态产物。
+
+### 14.4 · 终检待办
+
+全链路终检、五主题 × 明暗走查清单归档、README / PLAN 状态收口、`.workbuddy/memory` 同步、工作区干净。

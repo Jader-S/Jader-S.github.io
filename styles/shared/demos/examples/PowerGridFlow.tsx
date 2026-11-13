@@ -164,7 +164,7 @@ export default function PowerGridFlow() {
               const dur = active
                 ? Math.max(0.5, 2.6 - (Math.abs(c.power) / MAX) * 2.0)
                 : 0;
-              const color = positive ? "var(--neon-cyan)" : "#f59e0b";
+              const color = positive ? "var(--neon-cyan)" : "var(--demo-warning)";
               return (
                 <g key={c.id}>
                   {/* 电线：母线→断路器、断路器→设备 */}
@@ -285,7 +285,7 @@ export default function PowerGridFlow() {
                       sel.power > 0
                         ? "var(--neon-cyan)"
                         : sel.power < 0
-                          ? "#f59e0b"
+                          ? "var(--demo-warning)"
                           : "var(--text-dim)",
                   }}
                 >
@@ -318,7 +318,7 @@ export default function PowerGridFlow() {
               <i style={{ background: "var(--neon-cyan)" }} /> 正向 母线→设备
             </span>
             <span>
-              <i style={{ background: "#f59e0b" }} /> 反向 设备→母线
+              <i style={{ background: "var(--demo-warning)" }} /> 反向 设备→母线
             </span>
             <span>
               <i className="pgf-legend__off" /> 无流

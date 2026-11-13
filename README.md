@@ -259,6 +259,15 @@ uno.config.ts
 
 新增组件样式时，优先写到对应风格的 `uno.ts`，再在根 `uno.config.ts` 中 spread。
 
+### Demo 主题桥接（Phase 9）
+
+6 个共享 Demo 从 ASTRA 移植而来，原本引用只在 `.astra-root` 下定义的变量（`--neon-cyan` / `--text-dim` / `--radius-md` / `--font-mono` …）。弹框 Portal 到 `<body>` 后这些变量在 5 套风格里全部失效，叠加硬编码深色霓虹，浅色主题下出现「深底 + 深字」。
+
+- `styles/shared/demos/demo-tokens.css`：在 `[data-demo-theme]`（`DemoPreview` 宿主）上把整套遗留变量映射到当前风格的 `--theme-accent` / `--text-*` / `--glass-*` / `--color-background`；状态色与 `--demo-ink` 混合，浅色主题自动变深、深色主题自动变浅。
+- 6 份 Demo CSS 的硬编码色已全部替换为 `--demo-*` token 与 `color-mix()`，无残留裸色值。
+- `lib/demo-theme.ts`：ECharts / 2D Canvas / R3F 材质无法解析 `var()`，由 `readDemoPalette()` 读取同一组基础 token 并解析成具体 `rgb()` / `rgba()`，保证 CSS 与画布配色同源。
+- 3D 工厂的舞台底色、状态灯、轨道与机械手强调色跟随主题；工业金属材质是物理固有色（albedo），不随主题染色。
+
 ---
 
 ## 交互组件

@@ -5,7 +5,7 @@
   height: clamp(460px, 78vh, 800px);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
-  background: #070b14;
+  background: var(--demo-surface-solid);
   overflow: hidden;
 }
 .fl-root canvas {
@@ -22,7 +22,7 @@
   padding: 3px 8px;
   border: 1px solid var(--glass-border);
   border-radius: 4px;
-  background: rgba(7, 11, 20, 0.82);
+  background: color-mix(in srgb, var(--demo-page) 82%, transparent);
 }
 
 /* 图例 / 操作提示（不是 KPI 看板） */
@@ -37,7 +37,7 @@
   padding: 7px 11px;
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-sm);
-  background: rgba(7, 11, 20, 0.72);
+  background: color-mix(in srgb, var(--demo-page) 72%, transparent);
   backdrop-filter: blur(var(--glass-blur));
   font-family: var(--font-mono);
   font-size: 10px;
@@ -56,8 +56,8 @@
   display: inline-block;
 }
 .fl-legend__dot--idle {
-  background: #53708d;
-  border: 1px solid #7d97b2;
+  background: var(--demo-muted);
+  border: 1px solid var(--demo-text);
 }
 .fl-legend__dot--busy {
   background: var(--neon-cyan);
@@ -85,7 +85,7 @@
   color: var(--text-dim);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-sm);
-  background: rgba(7, 11, 20, 0.78);
+  background: color-mix(in srgb, var(--demo-page) 78%, transparent);
   backdrop-filter: blur(var(--glass-blur));
   transition: all 0.18s var(--ease-out-expo);
 }
@@ -95,7 +95,7 @@
 }
 .fl-toolbar button[data-active="true"] {
   color: var(--neon-cyan);
-  background: rgba(34, 211, 238, 0.16);
+  background: color-mix(in srgb, var(--demo-accent) 16%, transparent);
   border-color: var(--neon-cyan);
 }
 
@@ -109,9 +109,9 @@
   padding: 14px;
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-sm);
-  background: rgba(9, 15, 26, 0.9);
+  background: color-mix(in srgb, var(--demo-page) 90%, transparent);
   backdrop-filter: blur(var(--glass-blur));
-  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 12px 34px color-mix(in srgb, var(--demo-page) 55%, transparent);
 }
 .fl-panel__head {
   display: flex;
@@ -153,7 +153,7 @@
   height: 5px;
   margin-top: 8px;
   border-radius: 3px;
-  background: rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--demo-ink) 8%, transparent);
   overflow: hidden;
 }
 .fl-progress i {
@@ -193,7 +193,7 @@
   color: var(--text-primary);
   border: 1px solid var(--glass-border);
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in srgb, var(--demo-ink) 5%, transparent);
 }
 .fl-panel__input span {
   font-family: var(--font-mono);

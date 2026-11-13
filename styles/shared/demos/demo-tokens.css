@@ -1,0 +1,64 @@
+/* ============================================================
+   Demo theme bridge (Phase 9)
+
+   The six shared demos were ported from the ASTRA theme. Their CSS
+   references a vocabulary (--neon-cyan / --text-dim / --radius-md / ...)
+   that only exists under `.astra-root`. Demos are rendered by
+   ProjectModalHost into a portal on <body>, outside `.astra-root`, so
+   every one of those var() calls was undefined on ALL five styles.
+   With no fallback the declaration becomes invalid and inherited, while
+   the hard-coded dark neon backgrounds stayed dark -> dark-on-dark text
+   in light themes.
+
+   This bridge maps the whole legacy vocabulary onto the active
+   html[data-style] + data-theme tokens. It is scoped to the demo host
+   (`[data-demo-theme]`) so astra's own intro/pages keep their neon values.
+   ============================================================ */
+
+[data-demo-theme] {
+  /* ---- 当前主题的实色 ---- */
+  --demo-accent: var(--theme-accent, #2f6f7e);
+  --demo-accent-light: var(--theme-accent-light, #67e8f9);
+  --demo-ink: var(--text-heading, #f0f4f8);
+  --demo-text: var(--text-body, #d8dee8);
+  --demo-muted: var(--text-muted, #94a3b8);
+  --demo-faint: var(--text-faint, #64748b);
+  --demo-page: var(--color-background, #0b1018);
+  --demo-border: var(--glass-border, rgba(127, 145, 170, 0.28));
+  --demo-surface: var(--glass-bg, rgba(127, 145, 170, 0.06));
+  --demo-surface-hover: var(--glass-bg-hover, rgba(127, 145, 170, 0.14));
+
+  /* 以页面底色为基准向 ink 方向偏移：浅色主题得到略深的浅灰，
+     深色主题得到略亮的深灰，永远与页面文字保持同向对比。 */
+  --demo-surface-solid: color-mix(in srgb, var(--demo-ink) 6%, var(--demo-page));
+  --demo-surface-deep: color-mix(in srgb, var(--demo-ink) 12%, var(--demo-page));
+  --demo-code-bg: color-mix(in srgb, var(--demo-ink) 9%, var(--demo-page));
+  --demo-code-fg: var(--demo-text);
+  --demo-grid: color-mix(in srgb, var(--demo-muted) 22%, transparent);
+  --demo-stage: color-mix(in srgb, var(--demo-ink) 4%, var(--demo-page));
+
+  /* 状态色与 ink 混合：浅色主题自动变深、深色主题自动变浅，
+     两种底色下都保证可读（比固定 #fca5a5 / #f59e0b 稳）。 */
+  --demo-danger: color-mix(in srgb, #f87171 58%, var(--demo-ink));
+  --demo-warning: color-mix(in srgb, #f59e0b 62%, var(--demo-ink));
+  --demo-success: color-mix(in srgb, #34d399 58%, var(--demo-ink));
+  --demo-violet: color-mix(in srgb, #a855f7 60%, var(--demo-ink));
+
+  /* ---- ASTRA 遗留变量名：一次性补齐 ---- */
+  --neon-cyan: var(--demo-accent);
+  --neon-cyan-glow: color-mix(in srgb, var(--demo-accent) 45%, transparent);
+  --neon-purple: var(--demo-violet);
+  --neon-bad: var(--demo-danger);
+  --text-dim: var(--demo-muted);
+  --text-primary: var(--demo-text);
+  --text-bright: var(--demo-ink);
+  --font-body: var(--font-geist-sans, system-ui), sans-serif;
+  --font-mono: var(--font-geist-mono, ui-monospace), monospace;
+  --font-display: var(--font-noto-serif-sc, var(--font-fraunces, serif)), serif;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --glass-blur: 18px;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --room: var(--demo-border);
+  --bg: var(--demo-page);
+}

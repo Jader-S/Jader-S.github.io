@@ -110,4 +110,35 @@ test.describe("style pages", () => {
     await expect(dialog).toHaveCount(0);
     await expect(page.locator("#lab")).toBeAttached();
   });
+
+  test("demo previews resolve the active theme tokens, not undefined ASTRA vars", async ({
+    page,
+  }) => {
+    const resolved: string[] = [];
+    for (const route of ["/atelier", "/classic", "/particle"]) {
+      await gotoStyle(page, route);
+      await dismissCookieConsent(page);
+      await page.locator("#lab").getByTestId("lab-card").first().click();
+
+      const host = page.locator("[data-demo-theme]");
+      await expect(host).toBeAttached();
+      const values = await host.evaluate((el) => {
+        const s = getComputedStyle(el);
+        return {
+          accent: s.getPropertyValue("--neon-cyan").trim(),
+          muted: s.getPropertyValue("--text-dim").trim(),
+          radius: s.getPropertyValue("--radius-md").trim(),
+          surface: s.getPropertyValue("--demo-surface-solid").trim(),
+        };
+      });
+      // 这些变量原本只在 .astra-root 下定义；弹框 portal 到 body 后全部失效。
+      expect(values.accent).toMatch(/^#/);
+      expect(values.muted).toMatch(/^#/);
+      expect(values.radius).toBe("12px");
+      expect(values.surface).toContain("color-mix");
+      resolved.push(values.accent);
+    }
+    // 不同风格的强调色必须不同，证明 demo 真的跟随当前主题。
+    expect(new Set(resolved).size).toBeGreaterThan(1);
+  });
 });

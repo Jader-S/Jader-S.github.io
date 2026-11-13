@@ -5,6 +5,7 @@ import type { Group, MeshStandardMaterial } from "three";
 import type { Station as StationModel, StationId } from "./sim";
 import { LAMP_IDLE, PROGRESS_BAR_W, STATION_LAYOUT, stationFacing } from "./layout";
 import { stationRefs, type ViewRuntime } from "./runtime";
+import { readDemoPalette } from "@/lib/demo-theme";
 
 export const LABELS: Record<StationId, string> = {
   START: "上线 START",
@@ -21,6 +22,7 @@ interface Props {
 }
 
 export default function StationView({ station, runtime, onSelect }: Props) {
+  const p = readDemoPalette();
   const lamp = useRef<MeshStandardMaterial>(null);
   const progress = useRef<Group>(null);
   const downAt = useRef<{ x: number; y: number } | null>(null);
@@ -93,8 +95,8 @@ export default function StationView({ station, runtime, onSelect }: Props) {
       <mesh position={[1.0, deck + 1.32, -1.05]}>
         <sphereGeometry args={[0.11, 12, 10]} />
         <meshStandardMaterial
-          color="#f5b301"
-          emissive="#f5b301"
+          color={p.warning}
+          emissive={p.warning}
           emissiveIntensity={0.85}
         />
       </mesh>
@@ -113,7 +115,7 @@ export default function StationView({ station, runtime, onSelect }: Props) {
         [-0.28, 0.28].map((z) => (
           <mesh key={`${x}-${z}`} position={[x, deck + 0.03, z]}>
             <boxGeometry args={[0.06, 0.06, 0.06]} />
-            <meshStandardMaterial color="#f5b301" metalness={0.5} roughness={0.45} />
+            <meshStandardMaterial color={p.warning} metalness={0.5} roughness={0.45} />
           </mesh>
         ))
       )}
@@ -127,8 +129,8 @@ export default function StationView({ station, runtime, onSelect }: Props) {
         <mesh position={[PROGRESS_BAR_W / 2, 0, 0]}>
           <boxGeometry args={[PROGRESS_BAR_W, 0.14, 0.09]} />
           <meshStandardMaterial
-            color="#22d3ee"
-            emissive="#22d3ee"
+            color={p.accent}
+            emissive={p.accent}
             emissiveIntensity={1.3}
           />
         </mesh>
@@ -139,7 +141,7 @@ export default function StationView({ station, runtime, onSelect }: Props) {
         <mesh key={`rail-${z}`} position={[0, deck + 0.22, z]}>
           <boxGeometry args={[2.9, 0.07, 0.07]} />
           <meshStandardMaterial
-            color="#f5b301"
+            color={p.warning}
             emissive="#6b4700"
             emissiveIntensity={0.35}
           />
@@ -148,7 +150,7 @@ export default function StationView({ station, runtime, onSelect }: Props) {
       <mesh position={[0, deck - 0.3, 0.95]}>
         <boxGeometry args={[2.9, 0.06, 0.06]} />
         <meshStandardMaterial
-          color="#f5b301"
+          color={p.warning}
           emissive="#6b4700"
           emissiveIntensity={0.3}
         />
@@ -157,7 +159,7 @@ export default function StationView({ station, runtime, onSelect }: Props) {
         [-1.75, -0.35, 0.95].map((z) => (
           <mesh key={`post-${x}-${z}`} position={[x, deck / 2 + 0.05, z]}>
             <boxGeometry args={[0.07, deck + 0.1, 0.07]} />
-            <meshStandardMaterial color="#f5b301" />
+            <meshStandardMaterial color={p.warning} />
           </mesh>
         ))
       )}
@@ -170,8 +172,8 @@ export default function StationView({ station, runtime, onSelect }: Props) {
       <mesh position={[1.62, 0.86, -1.01]}>
         <boxGeometry args={[0.3, 0.18, 0.02]} />
         <meshStandardMaterial
-          color="#22d3ee"
-          emissive="#22d3ee"
+          color={p.accent}
+          emissive={p.accent}
           emissiveIntensity={0.7}
         />
       </mesh>

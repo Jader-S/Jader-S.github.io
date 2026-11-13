@@ -36,19 +36,19 @@
   padding: 8px 14px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--neon-cyan);
-  background: rgba(34, 211, 238, 0.12);
+  background: color-mix(in srgb, var(--demo-accent) 12%, transparent);
   color: var(--neon-cyan);
   cursor: pointer;
   transition: all 0.2s var(--ease-out-expo);
 }
 .pgf-btn:hover {
-  background: rgba(34, 211, 238, 0.22);
-  box-shadow: 0 0 16px rgba(34, 211, 238, 0.4);
+  background: color-mix(in srgb, var(--demo-accent) 22%, transparent);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--demo-accent) 40%, transparent);
 }
 .pgf-btn--danger {
-  border-color: rgba(248, 113, 113, 0.6);
-  background: rgba(248, 113, 113, 0.12);
-  color: #fca5a5;
+  border-color: color-mix(in srgb, var(--demo-danger) 60%, transparent);
+  background: color-mix(in srgb, var(--demo-danger) 12%, transparent);
+  color: var(--demo-danger);
   width: 100%;
   margin-top: 10px;
 }
@@ -71,25 +71,25 @@
 
 /* 进线 / 母线 */
 .pgf-wire-base {
-  stroke: rgba(255, 255, 255, 0.14);
+  stroke: color-mix(in srgb, var(--demo-ink) 14%, transparent);
   stroke-width: 3;
   stroke-linecap: round;
 }
 .pgf-grid-dot {
-  fill: #f59e0b;
-  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.7));
+  fill: var(--demo-warning);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--demo-warning) 70%, transparent));
 }
 .pgf-grid-label {
-  fill: #f59e0b;
+  fill: var(--demo-warning);
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.1em;
 }
 .pgf-bus {
-  fill: rgba(34, 211, 238, 0.18);
+  fill: color-mix(in srgb, var(--demo-accent) 18%, transparent);
   stroke: var(--neon-cyan);
   stroke-width: 1;
-  filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.45));
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--demo-accent) 45%, transparent));
 }
 .pgf-bus-label {
   fill: var(--text-dim);
@@ -129,17 +129,17 @@
   cursor: pointer;
 }
 .pgf-del circle {
-  fill: rgba(248, 113, 113, 0.12);
-  stroke: rgba(248, 113, 113, 0.5);
+  fill: color-mix(in srgb, var(--demo-danger) 12%, transparent);
+  stroke: color-mix(in srgb, var(--demo-danger) 50%, transparent);
   stroke-width: 1;
 }
 .pgf-del text {
-  fill: #fca5a5;
+  fill: var(--demo-danger);
   font-size: 14px;
   pointer-events: none;
 }
 .pgf-del:hover circle {
-  fill: rgba(248, 113, 113, 0.28);
+  fill: color-mix(in srgb, var(--demo-danger) 28%, transparent);
 }
 
 /* 断路器（可拖拽调功率） */
@@ -150,17 +150,17 @@
   touch-action: none;
 }
 .pgf-breaker rect {
-  fill: #0e1726;
+  fill: var(--demo-surface-solid);
   stroke: var(--neon-cyan);
   stroke-width: 1.5;
   transition: all 0.15s var(--ease-out-expo);
 }
 .pgf-breaker.is-sel rect {
   stroke-width: 2.5;
-  filter: drop-shadow(0 0 12px rgba(34, 211, 238, 0.6));
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--demo-accent) 60%, transparent));
 }
 .pgf-breaker:hover rect {
-  filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.45));
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--demo-accent) 45%, transparent));
 }
 .pgf-breaker__name {
   fill: var(--text-primary);
@@ -176,12 +176,12 @@
 
 /* 设备 */
 .pgf-device rect {
-  fill: #0b1220;
-  stroke: rgba(255, 255, 255, 0.18);
+  fill: var(--demo-surface-solid);
+  stroke: color-mix(in srgb, var(--demo-ink) 18%, transparent);
   stroke-width: 1;
 }
 .pgf-device--storage rect {
-  stroke: rgba(245, 158, 11, 0.6);
+  stroke: color-mix(in srgb, var(--demo-warning) 60%, transparent);
 }
 .pgf-device__name {
   fill: var(--text-primary);
@@ -232,7 +232,7 @@
   padding: 9px 10px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--glass-border);
-  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--demo-ink) 3%, transparent);
   color: var(--text-primary);
   font-family: var(--font-mono);
   font-size: 14px;
@@ -291,7 +291,7 @@
   display: inline-block;
 }
 .pgf-legend__off {
-  background: rgba(255, 255, 255, 0.18);
+  background: color-mix(in srgb, var(--demo-ink) 18%, transparent);
 }
 
 /* 与全站断点统一到 768，消除 761–768px 的空档 */

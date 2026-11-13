@@ -55,9 +55,9 @@
   border: 1px solid var(--glass-border);
 }
 .cb-conflict.is-bad {
-  color: #fca5a5;
-  border-color: rgba(248, 113, 113, 0.5);
-  background: rgba(248, 113, 113, 0.1);
+  color: var(--demo-danger);
+  border-color: color-mix(in srgb, var(--demo-danger) 50%, transparent);
+  background: color-mix(in srgb, var(--demo-danger) 10%, transparent);
 }
 
 .cb-hint {
@@ -65,7 +65,7 @@
   color: var(--text-dim);
   padding: 8px 12px;
   border-left: 2px solid var(--neon-cyan);
-  background: rgba(34, 211, 238, 0.06);
+  background: color-mix(in srgb, var(--demo-accent) 6%, transparent);
   border-radius: 4px;
 }
 
@@ -87,10 +87,10 @@
   border-color: var(--neon-cyan);
 }
 .cb-chip.is-on {
-  color: #052e2b;
-  background: linear-gradient(90deg, var(--neon-cyan), #67e8f9);
+  color: var(--demo-page);
+  background: linear-gradient(90deg, var(--neon-cyan), var(--demo-accent-light));
   border-color: var(--neon-cyan);
-  box-shadow: 0 0 14px rgba(34, 211, 238, 0.4);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--demo-accent) 40%, transparent);
 }
 .cb-btn {
   font-family: var(--font-mono);
@@ -99,23 +99,23 @@
   padding: 8px 16px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--neon-cyan);
-  background: rgba(34, 211, 238, 0.12);
+  background: color-mix(in srgb, var(--demo-accent) 12%, transparent);
   color: var(--neon-cyan);
   cursor: pointer;
   transition: all 0.2s var(--ease-out-expo);
 }
 .cb-btn:hover:not(:disabled) {
-  background: rgba(34, 211, 238, 0.22);
-  box-shadow: 0 0 16px rgba(34, 211, 238, 0.4);
+  background: color-mix(in srgb, var(--demo-accent) 22%, transparent);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--demo-accent) 40%, transparent);
 }
 .cb-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
 .cb-btn--danger {
-  border-color: rgba(248, 113, 113, 0.6);
-  background: rgba(248, 113, 113, 0.12);
-  color: #fca5a5;
+  border-color: color-mix(in srgb, var(--demo-danger) 60%, transparent);
+  background: color-mix(in srgb, var(--demo-danger) 12%, transparent);
+  color: var(--demo-danger);
 }
 
 /* ── 看板网格 ────────────────────────── */
@@ -155,7 +155,7 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
-  border-right: 1px solid rgba(255, 255, 255, 0.04);
+  border-right: 1px solid color-mix(in srgb, var(--demo-ink) 4%, transparent);
 }
 .cb-day-head__wd {
   font-family: var(--font-display);
@@ -191,14 +191,14 @@
 }
 .cb-col {
   position: relative;
-  border-right: 1px solid rgba(255, 255, 255, 0.04);
+  border-right: 1px solid color-mix(in srgb, var(--demo-ink) 4%, transparent);
 }
 .cb-col__grid {
   position: absolute;
   left: 0;
   right: 0;
   height: 1px;
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--demo-ink) 4%, transparent);
 }
 
 /* ── 会议卡片 ────────────────────────── */
@@ -213,7 +213,7 @@
   background: color-mix(in srgb, var(--room) 22%, transparent);
   border: 1px solid var(--room);
   border-left: 3px solid var(--room);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--demo-page) 35%, transparent);
   transition:
     transform 0.15s var(--ease-out-expo),
     box-shadow 0.15s var(--ease-out-expo);
@@ -224,10 +224,10 @@
   z-index: 999 !important;
   outline: 2px solid var(--neon-cyan);
   outline-offset: 1px;
-  box-shadow: 0 0 22px rgba(34, 211, 238, 0.55);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--demo-accent) 55%, transparent);
   filter: brightness(1.12);
   /* hover 时背景改为不透明，盖住下层卡片透出的文字，避免视觉重叠 */
-  background: color-mix(in srgb, var(--room) 72%, #0b1220);
+  background: color-mix(in srgb, var(--room) 72%, var(--demo-surface-solid));
 }
 .cb-card.is-dragging {
   opacity: 0.35;
@@ -235,17 +235,17 @@
 .cb-card--ghost {
   background: color-mix(in srgb, var(--neon-cyan) 14%, transparent);
   border: 1px dashed var(--neon-cyan);
-  box-shadow: 0 0 18px rgba(34, 211, 238, 0.35);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--demo-accent) 35%, transparent);
   pointer-events: none;
   z-index: 50;
 }
 .cb-card.is-conflict {
-  border-color: #fca5a5;
-  background: rgba(248, 113, 113, 0.16);
+  border-color: var(--demo-danger);
+  background: color-mix(in srgb, var(--demo-danger) 16%, transparent);
 }
 .cb-card.is-conflict:hover {
   /* 冲突卡 hover 同样改不透明，盖住下层文字 */
-  background: color-mix(in srgb, #f87171 72%, #0b1220);
+  background: color-mix(in srgb, var(--demo-danger) 72%, var(--demo-surface-solid));
 }
 .cb-card__title {
   font-size: 12px;
@@ -276,8 +276,8 @@
   font-size: 9px;
   padding: 1px 6px;
   border-radius: 999px;
-  background: #fca5a5;
-  color: #2a0606;
+  background: var(--demo-danger);
+  color: color-mix(in srgb, var(--demo-danger) 16%, var(--demo-page));
   font-weight: 700;
 }
 
@@ -285,7 +285,7 @@
 .cb-modal {
   position: fixed;
   inset: 0;
-  background: rgba(2, 6, 16, 0.6);
+  background: color-mix(in srgb, var(--demo-page) 60%, transparent);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -297,8 +297,8 @@
   padding: 22px;
   border: 1px solid var(--neon-cyan);
   border-radius: var(--radius-md);
-  background: #0b1220;
-  box-shadow: 0 0 40px rgba(34, 211, 238, 0.2);
+  background: var(--demo-surface-solid);
+  box-shadow: 0 0 40px color-mix(in srgb, var(--demo-accent) 20%, transparent);
   display: grid;
   gap: 14px;
 }
@@ -324,7 +324,7 @@
   padding: 9px 10px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--glass-border);
-  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--demo-ink) 3%, transparent);
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 13px;

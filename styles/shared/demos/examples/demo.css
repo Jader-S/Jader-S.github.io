@@ -11,9 +11,9 @@
 
 .demo-poi__narrative > div {
   padding: 14px 16px;
-  border: 1px solid rgba(34, 211, 238, 0.18);
+  border: 1px solid color-mix(in srgb, var(--demo-accent) 18%, transparent);
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.02);
+  background: color-mix(in srgb, var(--demo-ink) 2%, transparent);
 }
 
 .demo-poi__narrative h4 {
@@ -78,7 +78,11 @@
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
   background:
-    radial-gradient(120% 120% at 100% 0%, rgba(34, 211, 238, 0.1) 0%, transparent 55%),
+    radial-gradient(
+      120% 120% at 100% 0%,
+      color-mix(in srgb, var(--demo-accent) 10%, transparent) 0%,
+      transparent 55%
+    ),
     var(--glass-bg);
   overflow: hidden;
   transition:
@@ -91,7 +95,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--demo-ink) 6%, transparent);
   pointer-events: none;
 }
 
@@ -118,9 +122,9 @@
   font-family: var(--font-mono);
   font-size: 20px;
   font-weight: 600;
-  color: #fca5a5;
+  color: var(--demo-danger);
   text-decoration: line-through;
-  text-decoration-color: rgba(248, 113, 113, 0.5);
+  text-decoration-color: color-mix(in srgb, var(--demo-danger) 50%, transparent);
 }
 
 .demo-poi__metric-arrow {
@@ -134,7 +138,7 @@
   font-size: 24px;
   font-weight: 700;
   color: var(--neon-cyan);
-  text-shadow: 0 0 14px rgba(34, 211, 238, 0.45);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--demo-accent) 45%, transparent);
 }
 
 .demo-poi__metric-mult {
@@ -145,9 +149,9 @@
   letter-spacing: 0.1em;
   padding: 3px 10px;
   border-radius: 999px;
-  color: #052e2b;
-  background: linear-gradient(90deg, var(--neon-cyan), #67e8f9);
-  box-shadow: 0 0 16px rgba(34, 211, 238, 0.5);
+  color: var(--demo-page);
+  background: linear-gradient(90deg, var(--neon-cyan), var(--demo-accent-light));
+  box-shadow: 0 0 16px color-mix(in srgb, var(--demo-accent) 50%, transparent);
 }
 
 .demo-poi__col {
@@ -176,13 +180,13 @@
 }
 
 .demo-poi__chip--before {
-  background: rgba(248, 113, 113, 0.12);
-  color: #fca5a5;
-  border: 1px solid rgba(248, 113, 113, 0.4);
+  background: color-mix(in srgb, var(--demo-danger) 12%, transparent);
+  color: var(--demo-danger);
+  border: 1px solid color-mix(in srgb, var(--demo-danger) 40%, transparent);
 }
 
 .demo-poi__chip--after {
-  background: rgba(34, 211, 238, 0.12);
+  background: color-mix(in srgb, var(--demo-accent) 12%, transparent);
   color: var(--neon-cyan);
   border: 1px solid var(--neon-cyan);
 }
@@ -197,7 +201,7 @@
 .demo-poi__col pre {
   margin: 0;
   padding: 12px;
-  background: rgba(0, 0, 0, 0.45);
+  background: color-mix(in srgb, var(--demo-page) 45%, transparent);
   border-radius: var(--radius-sm);
   overflow-x: auto;
   /* 自己声明 pan-x，否则被 .panel__scroll 的 pan-y 锁死，手指拖不动代码 */
@@ -206,8 +210,8 @@
   font-family: var(--font-mono);
   font-size: 12px;
   line-height: 1.6;
-  color: #e6f1ff;
-  border: 1px solid rgba(34, 211, 238, 0.12);
+  color: var(--demo-code-fg);
+  border: 1px solid color-mix(in srgb, var(--demo-accent) 12%, transparent);
   transition:
     border-color 0.25s var(--ease-out-expo),
     box-shadow 0.25s var(--ease-out-expo);
@@ -219,7 +223,7 @@
   box-shadow:
     inset 2px 0 0 var(--neon-cyan),
     inset -2px 0 0 var(--neon-purple),
-    0 0 18px rgba(34, 211, 238, 0.12);
+    0 0 18px color-mix(in srgb, var(--demo-accent) 12%, transparent);
 }
 
 .demo-poi__col pre code {
@@ -246,14 +250,14 @@
 }
 
 .demo-poi__btn--primary {
-  background: rgba(34, 211, 238, 0.12);
+  background: color-mix(in srgb, var(--demo-accent) 12%, transparent);
   color: var(--neon-cyan);
   border-color: var(--neon-cyan);
 }
 
 .demo-poi__btn--primary:hover:not(:disabled) {
-  background: rgba(34, 211, 238, 0.2);
-  box-shadow: 0 0 16px rgba(34, 211, 238, 0.4);
+  background: color-mix(in srgb, var(--demo-accent) 20%, transparent);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--demo-accent) 40%, transparent);
 }
 
 .demo-poi__btn:disabled {
@@ -269,7 +273,7 @@
   padding: 16px 20px;
   border: 1px solid var(--neon-cyan);
   border-radius: var(--radius-md);
-  background: rgba(34, 211, 238, 0.06);
+  background: color-mix(in srgb, var(--demo-accent) 6%, transparent);
 }
 
 .demo-poi__speedup-label {
@@ -286,17 +290,17 @@
   line-height: 1;
   color: var(--neon-cyan);
   font-weight: 700;
-  text-shadow: 0 0 20px rgba(34, 211, 238, 0.55);
+  text-shadow: 0 0 20px color-mix(in srgb, var(--demo-accent) 55%, transparent);
   animation: speedupPulse 2.4s ease-in-out infinite;
 }
 
 @keyframes speedupPulse {
   0%,
   100% {
-    text-shadow: 0 0 16px rgba(34, 211, 238, 0.4);
+    text-shadow: 0 0 16px color-mix(in srgb, var(--demo-accent) 40%, transparent);
   }
   50% {
-    text-shadow: 0 0 30px rgba(34, 211, 238, 0.8);
+    text-shadow: 0 0 30px color-mix(in srgb, var(--demo-accent) 80%, transparent);
   }
 }
 

@@ -4,6 +4,7 @@ import { Component, Suspense, type ErrorInfo, type ReactNode } from "react";
 import { projectModalCopy, type Locale } from "@/data/project-details";
 import { getDemo } from "@/styles/shared/demos/registry";
 import styles from "@/styles/shared/demo-preview.module.css";
+import "@/styles/shared/demos/demo-tokens.css";
 
 /** A demo must never take down the whole modal (or the page behind it). */
 class DemoErrorBoundary extends Component<
@@ -54,7 +55,10 @@ export default function DemoPreview({
   return (
     <div className={styles.wrap} data-testid="demo-preview">
       {entry.wide ? <p className={styles.hint}>{copy.wideHint}</p> : null}
-      <div className={`${styles.host} ${entry.wide ? styles.hostWide : ""}`}>
+      <div
+        className={`${styles.host} ${entry.wide ? styles.hostWide : ""}`}
+        data-demo-theme
+      >
         <DemoErrorBoundary key={slug} fallback={fallback}>
           <Suspense
             fallback={
