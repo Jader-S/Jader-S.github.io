@@ -149,7 +149,7 @@ export const zh = {
   },
   projects: {
     heading: "作品",
-    sub: "公司项目与个人作品，每个都能点进去看细节。",
+    sub: "从企业实战到个人开源，每个都能点进去看细节。",
     viewDetail: "查看详情",
     detailBadge: "整理中",
     detailTitle: "这篇案例正在归档",
@@ -158,8 +158,6 @@ export const zh = {
     roleLabel: "角色",
     tagLabel: "领域",
     metricLabel: "关键指标",
-    groups: { all: "全部", company: "公司项目", personal: "个人项目" },
-    groupEmpty: "该分类下暂无作品",
     previewDemo: "在当前页预览 →",
     list: [
       {
@@ -168,7 +166,6 @@ export const zh = {
         role: "前端技术负责人",
         tag: "性能治理 / 架构重构",
         metric: "SET_LOW_TREE_DATA 72s → 2.1s（34×）",
-        group: "company",
         desc: "施耐德电气 Power Operation Insight 的核心配置工具，管理变压器→配电柜→回路→设备的万点级中低压配电系统。主导前端性能治理与架构重构：配电树 72s→2.1s、页面跳转 14s→1.2s、OOM 崩溃归零；并落地单线图 SVG 电流动画与 DER 实时方向判定、POAE 看板 Vue→React 迁移、运行时抄表能耗可视化，以及五层 AI 协作体系（Copilot 团队人效 +70%）。下方可进入实验室，直接操作配电回路电流方向的实时动画与 ECharts 像素放大镜 Demo。",
         demos: [
           {
@@ -189,7 +186,6 @@ export const zh = {
         role: "前端工程师",
         tag: "B 端 SaaS",
         metric: "通用组件体系 · 提效 30%+",
-        group: "company",
         desc: "面向多会议室资源的企业级会议全流程管控：会议室资源池与状态屏协同、会议预约智能排期、会中管控（会控屏 / 议题汇报 / 电子笔记）。独立开发待办督办、会议纪要、电子席卡等核心模块，抽离通用组件体系使团队开发效率提升 30%+，并适配大屏 / 中屏 / 小屏多硬件分辨率。下方周视图看板 Demo 可直接拖拽改期、高亮冲突、切换管理员 / 访客角色。",
         demos: [
           {
@@ -205,7 +201,6 @@ export const zh = {
         role: "前端工程师 / 前端负责人（从 0 到 1）",
         tag: "Three.js 数字孪生",
         metric: "数字孪生 · 1:1 实时映射",
-        group: "company",
         desc: "基于 B/S 架构的自动化生产线管控系统，配合机床与机器人实现产线全自动运行，覆盖计划 / 物料 / 工艺全流程。从 0 到 1 搭建前端架构，封装 Axios / WebSocket 通信；用 Three.js 构建三维数字孪生，将物理产线 1:1 实时映射至浏览器（模型轻量化 + LOD + 帧率优化），并落地 SVG / ECharts / WebSocket 全流程可视化与自定义权限体系。下方 3D 工厂 Demo 可查看流水线协同的实时数字孪生。",
         demos: [
           {
@@ -226,7 +221,6 @@ export const zh = {
         role: "独立开发 / 前端架构",
         tag: "本地优先 · AI 应用",
         metric: "资料导入 → 知识点 → 自测 → 模拟面试闭环",
-        group: "personal",
         desc: "一个本地优先的学习与面试助手：把课程资料整理成知识点，按章节自测，再用同一份知识库做模拟面试。网页版数据全部落在浏览器（sql.js WASM + IndexedDB），另有 Tauri 2 桌面壳写入本机 SQLite；未配置 API Key 时自动以 Mock 离线模式运行，界面与流程可完整操作。React 18 · TypeScript · Vite · Zustand · pdf.js · 语音作答。",
         kind: "github",
         repoUrl: "https://github.com/Jader-S/skill-qa-agent",

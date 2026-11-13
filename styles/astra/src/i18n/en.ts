@@ -152,7 +152,7 @@ export const en: ZhDict = {
   },
   projects: {
     heading: "Projects",
-    sub: "Company work and personal builds. Tap one to dive in.",
+    sub: "From production systems to personal open source. Tap one to dive in.",
     viewDetail: "View case study",
     detailBadge: "IN PROGRESS",
     detailTitle: "This case study is being archived",
@@ -162,8 +162,6 @@ export const en: ZhDict = {
     roleLabel: "Role",
     tagLabel: "Domain",
     metricLabel: "Key metric",
-    groups: { all: "All", company: "Company", personal: "Personal" },
-    groupEmpty: "No projects in this group yet",
     previewDemo: "Preview in this page →",
     list: [
       {
@@ -172,7 +170,6 @@ export const en: ZhDict = {
         role: "Frontend Tech Lead",
         tag: "Perf & Architecture",
         metric: "SET_LOW_TREE_DATA 72s → 2.1s (34×)",
-        group: "company",
         desc: "The core config tool of Schneider Electric Power Operation Insight, managing 10k-node MV/LV distribution systems (transformer → switchgear → circuit → device). Led frontend performance governance & architecture rebuild: tree build 72s→2.1s, navigation 14s→1.2s, OOM gone; also shipped single-line SVG current animation & DER real-time direction, POAE dashboard Vue→React migration, runtime metering & energy visualization, and a 5-layer AI collaboration system (Copilot team efficiency +70%). Jump into the lab to operate the live current-direction animation and the ECharts pixel magnifier demos.",
         demos: [
           {
@@ -193,7 +190,6 @@ export const en: ZhDict = {
         role: "Frontend Engineer",
         tag: "B2B SaaS",
         metric: "Reusable components · +30% efficiency",
-        group: "company",
         desc: "An enterprise meeting-lifecycle control suite for multi-room resources: room pool with status-screen sync, smart scheduling, and in-meeting control (control screen / topic report / e-notes). Built core modules (todo/follow-up, minutes, e-nameplate), extracted a reusable component system that lifted team dev efficiency 30%+, and adapted to large/medium/small screens. The week-view board demo supports drag-reschedule, conflict highlighting, and admin/viewer roles.",
         demos: [
           {
@@ -209,7 +205,6 @@ export const en: ZhDict = {
         role: "Frontend Engineer / Lead (0→1)",
         tag: "Three.js digital twin",
         metric: "Digital twin · 1:1 real-time mapping",
-        group: "company",
         desc: "A B/S automation production-line control system that runs the line fully automatically with machine tools and robots, covering planning / material / process end-to-end. Built the frontend 0→1 and encapsulated Axios / WebSocket; used Three.js to build a 3D digital twin that maps the physical line 1:1 into the browser (model lightening + LOD + frame-rate optimization), plus SVG / ECharts / WebSocket visualization and a custom permission system. The 3D factory demo shows the real-time digital twin of line collaboration.",
         demos: [
           {
@@ -230,7 +225,6 @@ export const en: ZhDict = {
         role: "Independent / Frontend Architecture",
         tag: "Local-first · AI app",
         metric: "Import → knowledge → quiz → mock interview",
-        group: "personal",
         desc: "A local-first study and interview assistant: turn course material into knowledge points, quiz by chapter, then run mock interviews over the same knowledge base. The web build keeps everything in the browser (sql.js WASM + IndexedDB); a Tauri 2 desktop shell writes to a local SQLite file. With no API key configured it runs fully offline in Mock mode. React 18 · TypeScript · Vite · Zustand · pdf.js · voice input.",
         kind: "github",
         repoUrl: "https://github.com/Jader-S/skill-qa-agent",

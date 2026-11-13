@@ -63,4 +63,18 @@ test.describe("style pages", () => {
       page.getByRole("button", { name: /跳过动画|Skip animation/i })
     ).toHaveCount(0);
   });
+
+  test("works are a single merged list across anchored styles", async ({ page }) => {
+    for (const route of ["/atelier", "/classic", "/particle"]) {
+      await gotoStyle(page, route);
+      const work = page.locator("#work");
+      await expect(work).toBeAttached();
+      // 4 entries, no enterprise / open-source split, no ASTRA portfolio card.
+      await expect(work.getByTestId("project-card")).toHaveCount(4);
+      await expect(work).not.toContainText(/ASTRA · 3D 星图作品站|ASTRA · 3D Galaxy/);
+      await expect(work).not.toContainText(
+        /近期企业项目|开源项目|Recent Enterprise|Open Source Projects/
+      );
+    }
+  });
 });

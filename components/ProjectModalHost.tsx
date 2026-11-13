@@ -13,12 +13,7 @@ import {
   type Locale,
   type ProjectId,
 } from "@/data/project-details";
-import {
-  enterpriseProjects,
-  githubProjects,
-  type EnterpriseProjectId,
-  type GithubProjectId,
-} from "@/data/projects";
+import { projects } from "@/data/projects";
 import {
   backProjectModal,
   closeProjectModal,
@@ -32,20 +27,18 @@ import styles from "@/styles/shared/project-modal.module.css";
 
 const TITLE_ID = "project-modal-title";
 
-function isEnterprise(id: ProjectId): id is EnterpriseProjectId {
-  return enterpriseProjects.some((project) => project.id === id);
-}
-
 function nameOf(id: ProjectId, t: LocaleMessages): string {
-  return isEnterprise(id)
-    ? t.enterprise.projects[id].name
-    : t.github.projects[id as GithubProjectId].name;
+  return t.work.projects[id].name;
 }
 
 function techOf(id: ProjectId): string[] {
-  return (
-    [...enterpriseProjects, ...githubProjects].find((p) => p.id === id)?.tech ?? []
-  );
+  return projects.find((p) => p.id === id)?.tech ?? [];
+}
+
+/** 仓库外链只在详情弹框里给出；卡片一律在当前页打开详情（不新开标签）。 */
+function repoOf(id: ProjectId): string | undefined {
+  const project = projects.find((p) => p.id === id);
+  return project && "link" in project ? project.link : undefined;
 }
 
 function ProjectView({
@@ -73,6 +66,17 @@ function ProjectView({
           </span>
         ))}
       </div>
+
+      {repoOf(id) ? (
+        <a
+          className={styles.repoLink}
+          href={repoOf(id)}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {t.common.viewRepo} →
+        </a>
+      ) : null}
 
       {body ? (
         <>

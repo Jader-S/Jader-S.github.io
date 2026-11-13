@@ -19,7 +19,7 @@
 - **多风格架构**：蓝图 / 静奢 / 经典 / 粒子拆成独立包（`styles/blueprint` · `styles/atelier` · `styles/classic` · `styles/particle`），共享内容与壳层；默认风格为蓝图
 - **左侧竖栏**：桌面竖排切换 5 套风格（蓝图居首；当前标签页整页跳转，确保特效引擎干净重建）；移动端 <768px 收成 30px 细边条，点击从左侧滑出抽屉（遮罩 / Esc / 关闭按钮收起）
 - **博客弹框**：5 套主题共用 `BlogModalHost`，点博客卡片在当前页弹框读本地 MDX；太空主题点「博客」行星先出全部文章列表，再下钻正文。不产生 `/blog/[slug]` 路由，不新开标签页
-- **项目详情 / 实验室**：5 套主题共用 `ProjectModalHost`（zustand 外部 store + Portal）。点企业项目看「背景 / 职责 / 技术栈 / 成果 / 关联 Demo」，再点 Demo 在当前页内联预览；`LabButton` 可直接打开全部 6 个 Demo。Demo 实现统一放在 `styles/shared/demos/`，含 2 个 R3F 3D 场景，非太空主题也能渲染；GitHub 仓库外链仍保留新标签
+- **项目详情 / 实验室**：5 套主题共用 `ProjectModalHost`（zustand 外部 store + Portal）。点作品卡看「背景 / 职责 / 技术栈 / 成果 / 关联 Demo」，再点 Demo 在当前页内联预览；`LabButton` 可直接打开全部 6 个 Demo。Demo 实现统一放在 `styles/shared/demos/`，含 2 个 R3F 3D 场景，非太空主题也能渲染；GitHub 仓库外链在详情弹框内给出
 - **右侧 AI 按钮**：悬停说明用途；点击复制当前风格的 Skill 提示词，粘贴给 AI 即可按本站生成同款项目
 - **中英文 / 主题**：语言与白天·夜晚·自动主题，偏好写入 `localStorage`
 - **内容数据化**：`site-content.yaml`（模板入口）→ `data/`（结构）+ `lib/i18n/`（双语文案），id 类型绑定防漏写
@@ -32,14 +32,13 @@
 - 大留白、衬线标题、氧化铜金强调色
 - Hero 使用 [@fxshelf/card-orbit](https://github.com/Luzhaotian/fxshelf/tree/main/packages/card-orbit) 卡片环绕
 - Canvas：ParticleObject / GlyphRain / FlameWrap / PointerAura（桌面端；减少动效时关闭）
-- 区块：Hero → 关于 → 作品（精选项目 + 项目索引，同属 `#work`）→ 技能 → 博客 → 经验领域；旧锚点 `#selected` 保留为 `#work` 内的不可见别名
+- 区块：Hero → 关于 → 作品（单一列表）→ 技能 → 博客 → 经验领域；旧锚点 `#selected` / `#work-index` 保留为 `#work` 内的不可见别名
 
 ### 经典（Classic）
 
 - 毛玻璃卡片 + Vanta 全屏背景（白天 **Waves**，夜晚 **Birds**）
 - Hero 同样使用 [@fxshelf/card-orbit](https://github.com/Luzhaotian/fxshelf/tree/main/packages/card-orbit)
-- 区块：Hero → 关于 → 作品（企业项目 + 开源项目两段，同属 `#work`）→ 技能 → 博客 → 经验领域；Hero 补 `#top`，旧锚点 `#enterprise` 保留为别名
-- 章节编号按统一顺序 `01 关于 → 02 作品 → 03 技能 → 04 博客 → 05 经验领域`，开源段用 `02 ·` 子编号
+- 区块：Hero → 关于 → 作品（单一列表）→ 技能 → 博客 → 经验领域；Hero 补 `#top`，旧锚点 `#enterprise` / `#github` 保留为 `#work` 内的不可见别名
 - 部分章节交替「实体毛玻璃 / 透明」节奏
 
 ### 粒子（Particle）
@@ -222,13 +221,13 @@ scripts/
 
 ### 主要数据文件
 
-| 文件            | 说明                |
-| --------------- | ------------------- |
-| `profile.ts`    | GitHub、工作年限    |
-| `projects.ts`   | 企业 / 开源项目结构 |
-| `skills.ts`     | 技能分类            |
-| `experience.ts` | 经验领域            |
-| `blogs.ts`      | 博客列表            |
+| 文件            | 说明                 |
+| --------------- | -------------------- |
+| `profile.ts`    | GitHub、工作年限     |
+| `projects.ts`   | 作品（单一列表）结构 |
+| `skills.ts`     | 技能分类             |
+| `experience.ts` | 经验领域             |
+| `blogs.ts`      | 博客列表             |
 
 企业项目描述建议用通用业务名，避免公开敏感公司名。
 

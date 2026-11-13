@@ -24,7 +24,7 @@ export const zh: LocaleMessages = {
     yearsExpShort: "年经验",
     footerTech: "Next.js · UnoCSS · ASTRA",
   },
-  // 4 主题共用的统一导航：#top 由各主题的品牌链接承担，作品/开源项目并入 #work。
+  // 4 主题共用的统一导航：#top 由各主题的品牌链接承担；作品已合并为单一列表。
   nav: [
     { href: "#about", label: "关于我" },
     { href: "#work", label: "作品" },
@@ -154,10 +154,10 @@ export const zh: LocaleMessages = {
       },
     },
   },
-  enterprise: {
+  work: {
     index: "02 — WORK",
-    title: "近期企业项目",
-    subtitle: "公司实战：性能治理、B 端 SaaS 与航天产线数字孪生",
+    title: "作品",
+    subtitle: "从企业实战到个人开源，点开看技术细节与可交互 Demo",
     projects: {
       poiConfigTools: {
         name: "施耐德 · POI 中低压配电",
@@ -173,18 +173,6 @@ export const zh: LocaleMessages = {
         name: "联夯 · 首都航天机械产线",
         description:
           "B/S 架构自动化产线管控系统，配合机床与机器人实现全自动运行。从 0 到 1 搭建前端架构、封装 Axios / WebSocket 通信；用 Three.js 把物理产线 1:1 实时映射到浏览器（模型轻量化 + LOD + 帧率优化），并落地 SVG / ECharts 全流程可视化与自定义权限体系。",
-      },
-    },
-  },
-  github: {
-    index: "02 · OPEN SOURCE",
-    title: "开源项目",
-    subtitle: "个人开源与作品站，都能点进去看真实实现",
-    projects: {
-      astraPortfolio: {
-        name: "ASTRA · 3D 星图作品站",
-        description:
-          "一个前端工程师的太空站：9 万粒子螺旋星系、飞行式星球导航、可交互 Demo 与 MDX 技术日志。基于 Vite + React + R3F + Zustand 构建的纯静态作品站。",
       },
       skillQaAgent: {
         name: "技能问答 Agent · Skill QA",

@@ -16,8 +16,6 @@ export interface ProjectEntry {
   role: string;
   tag: string;
   metric: string;
-  /** 作品分类：公司项目 / 个人项目（用于作品页分类筛选） */
-  group?: "company" | "personal";
   desc?: string;
   demos?: ProjectDemo[];
   /** 项目来源：local=本站实验室 demo；github=外部仓库 */

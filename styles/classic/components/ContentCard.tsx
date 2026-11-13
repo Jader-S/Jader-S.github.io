@@ -12,6 +12,8 @@ interface ContentCardProps {
   clampDescription?: boolean;
   footer?: ReactNode;
   linkLabel?: string;
+  /** 可选稳定选择器，供 E2E 断言作品卡数量。 */
+  testId?: string;
 }
 
 export default function ContentCard({
@@ -24,6 +26,7 @@ export default function ContentCard({
   clampDescription = false,
   footer,
   linkLabel,
+  testId,
 }: ContentCardProps) {
   // Site-internal links stay in the current tab; external repo links keep the
   // opener tab intact. onClick short-circuits both and opens an in-page modal.
@@ -59,6 +62,7 @@ export default function ContentCard({
 
   return (
     <article
+      data-testid={testId}
       className={`glass-card-interactive group flex h-full flex-col p-5 sm:p-6 ${
         highlight ? "ring-1 ring-theme/20" : ""
       }`}

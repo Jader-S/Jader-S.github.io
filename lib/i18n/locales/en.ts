@@ -24,7 +24,7 @@ export const en: LocaleMessages = {
     yearsExpShort: "yrs exp",
     footerTech: "Next.js · UnoCSS · ASTRA",
   },
-  // Shared nav for all 4 anchored styles; #top is the brand link, work/open-source live in #work.
+  // Shared nav for all 4 anchored styles; #top is the brand link, all works live in #work.
   nav: [
     { href: "#about", label: "About me" },
     { href: "#work", label: "Work" },
@@ -158,11 +158,11 @@ export const en: LocaleMessages = {
       },
     },
   },
-  enterprise: {
+  work: {
     index: "02 — WORK",
-    title: "Recent Enterprise Projects",
+    title: "Work",
     subtitle:
-      "Production work: performance governance, B2B SaaS and an aerospace digital twin",
+      "From production systems to personal open source — open any card for details and live demos",
     projects: {
       poiConfigTools: {
         name: "Schneider · POI ConfigTools",
@@ -178,18 +178,6 @@ export const en: LocaleMessages = {
         name: "Lianhang · Aerospace Production Line",
         description:
           "B/S production-line control system driving CNC machines and robots end to end. Built the frontend from scratch, wrapped Axios / WebSocket comms, mirrored the physical line 1:1 in the browser with Three.js (mesh decimation + LOD + frame tuning), and shipped SVG / ECharts dashboards with a custom permission model.",
-      },
-    },
-  },
-  github: {
-    index: "02 · OPEN SOURCE",
-    title: "Open Source Projects",
-    subtitle: "Personal projects and a portfolio you can actually click through",
-    projects: {
-      astraPortfolio: {
-        name: "ASTRA · 3D Galaxy Portfolio",
-        description:
-          "A frontend engineer's space station: a 90k-particle spiral galaxy, fly-to navigation between planets, interactive demos and MDX engineering notes. A static portfolio built with Vite + React + R3F + Zustand.",
       },
       skillQaAgent: {
         name: "Skill QA Agent",

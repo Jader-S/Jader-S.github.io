@@ -1,4 +1,4 @@
-import type { EnterpriseProjectId, GithubProjectId } from "@/data/projects";
+import type { ProjectId } from "@/data/projects";
 import type { CategorySkillIds, SkillCategoryId } from "@/data/skills";
 import type { ExperienceDomainId } from "@/data/experience";
 
@@ -91,19 +91,13 @@ export interface LocaleMessages {
     featuredDesc: string;
     categories: SkillCategoriesText;
   };
-  enterprise: {
+  /** 单一「作品」区块：企业项目 + 开源项目已合并，不再分区（Phase 7）。 */
+  work: {
     index: string;
     title: string;
     subtitle: string;
-    /** 项目文案查找表，key 与 data/projects.ts 的 enterpriseProjects id 一致 */
-    projects: Record<EnterpriseProjectId, ProjectText>;
-  };
-  github: {
-    index: string;
-    title: string;
-    subtitle: string;
-    /** 项目文案查找表，key 与 data/projects.ts 的 githubProjects id 一致 */
-    projects: Record<GithubProjectId, ProjectText>;
+    /** 作品文案查找表，key 与 data/projects.ts 的 projects id 一致 */
+    projects: Record<ProjectId, ProjectText>;
   };
   blog: {
     index: string;

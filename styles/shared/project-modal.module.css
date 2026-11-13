@@ -39,6 +39,24 @@
   letter-spacing: 0.02em;
 }
 
+.repoLink {
+  align-self: flex-start;
+  margin-top: -0.9rem;
+  color: var(--theme-accent, #5eb8c6);
+  font-size: 0.8rem;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.repoLink:hover {
+  color: var(--theme-accent-light, #67e8f9);
+}
+
+.repoLink:focus-visible {
+  outline: 2px solid var(--theme-accent, #5eb8c6);
+  outline-offset: 3px;
+}
+
 .section {
   display: flex;
   flex-direction: column;

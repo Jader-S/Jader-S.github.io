@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import userEvent from "@testing-library/user-event";
-import { enterpriseProjects, githubProjects } from "@/data/projects";
+import { projects } from "@/data/projects";
 import { locales } from "@/lib/i18n";
 import { useProjectModalStore } from "@/lib/project-modal";
 import { ActionType } from "@/styles/blueprint/swarm/interactions/actions.js";
@@ -50,16 +50,16 @@ describe("project cards open the shared detail modal", () => {
     });
   });
 
-  it("classic enterprise section", async () => {
+  it("classic works section", async () => {
     const user = userEvent.setup();
     renderWithProviders(
       <ClassicProjectsSection
-        id="enterprise"
-        sectionIndex={zh.enterprise.index}
-        title={zh.enterprise.title}
-        subtitle={zh.enterprise.subtitle}
-        projects={enterpriseProjects}
-        texts={zh.enterprise.projects}
+        id="work"
+        sectionIndex={zh.work.index}
+        title={zh.work.title}
+        subtitle={zh.work.subtitle}
+        projects={projects}
+        texts={zh.work.projects}
       />
     );
     await user.click(screen.getByRole("button", { name: TARGET }));
@@ -85,6 +85,21 @@ describe("project cards open the shared detail modal", () => {
     await user.click(screen.getByRole("button", { name: /实验室/ }));
     expect(useProjectModalStore.getState().view).toEqual({ kind: "demos" });
   });
+
+  it("every work card renders in a single merged list", () => {
+    renderWithProviders(<BlueprintWorkSection />);
+    for (const project of projects) {
+      expect(
+        screen.getByRole("button", {
+          name: new RegExp(
+            zh.work.projects[project.id].name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+          ),
+        })
+      ).toBeTruthy();
+    }
+    // ASTRA 作品站卡片已下架，不应再出现
+    expect(screen.queryByText(/ASTRA · 3D 星图作品站/)).toBeNull();
+  });
 });
 
 interface WorkInteraction {
@@ -95,21 +110,18 @@ interface WorkInteraction {
 }
 
 describe("blueprint build-phase work interactions", () => {
-  it("wires every drawn work item to a project modal or repo action", () => {
+  it("wires every drawn work item to a project modal", () => {
     const interactions = createPortfolioInteractions({
       nav: ["a", "b", "c", "d", "e"],
       primaryCta: "CTA",
       github: "GitHub",
       posts: [],
-      projects: [
-        ...enterpriseProjects.map((p) => ({ id: p.id, title: p.id })),
-        ...githubProjects.map((p) => ({ id: p.id, title: p.id, link: p.link })),
-      ],
+      projects: projects.map((p) => ({ id: p.id, title: p.id })),
       links: [],
     }) as unknown as WorkInteraction[];
 
     const work = interactions.filter((item) => item.id.startsWith("w"));
-    expect(work).toHaveLength(5);
+    expect(work).toHaveLength(projects.length);
     expect(work[0].elements).toEqual(["work-t", "work-b"]);
     expect(work[1].elements).toEqual(["work-t~1", "work-b~1"]);
     expect(work[1].after).toEqual(["d:work:0"]);
@@ -118,10 +130,7 @@ describe("blueprint build-phase work interactions", () => {
       id: "project",
       projectId: "poiConfigTools",
     });
-    expect(work[3].action).toEqual({
-      type: ActionType.CUSTOM,
-      id: "repo",
-      href: "https://github.com/Jader-S/Jader-S.github.io",
-    });
+    // 合并后所有作品都走详情弹框，不再有外链 repo action
+    expect(work.every((item) => item.action.id === "project")).toBe(true);
   });
 });

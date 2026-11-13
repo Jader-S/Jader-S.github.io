@@ -161,8 +161,9 @@ skills:
         - { id: unitTesting, zh: "单元测试", en: "Unit Testing" }
         - { id: codeReview, zh: "Code Review", en: "Code Review" }
 
-# 企业/作品项目（结构 + 文案）
-enterpriseProjects:
+# 作品（结构 + 文案）—— Phase 7：企业项目与开源项目已合并为单一列表
+# ASTRA 3D 星图作品站卡片已下架；仓库 link 仅在共享详情弹框里展示。
+works:
   - id: poiConfigTools
     tech: ["React", "TypeScript", "ECharts", "SVG", "SignalR"]
     highlight: true
@@ -190,19 +191,6 @@ enterpriseProjects:
     en:
       name: "Lianhang · Aerospace Production Line"
       description: "B/S production-line control system driving CNC machines and robots end to end. Built the frontend from scratch, wrapped Axios / WebSocket comms, mirrored the physical line 1:1 in the browser with Three.js (mesh decimation + LOD + frame tuning), and shipped SVG / ECharts dashboards with a custom permission model."
-
-# 开源项目（可有 link）
-githubProjects:
-  - id: astraPortfolio
-    tech: ["Vite", "React", "R3F", "MDX", "GSAP"]
-    link: "https://github.com/Jader-S/Jader-S.github.io"
-    highlight: true
-    zh:
-      name: "ASTRA · 3D 星图作品站"
-      description: "一个前端工程师的太空站：9 万粒子螺旋星系、飞行式星球导航、可交互 Demo 与 MDX 技术日志。基于 Vite + React + R3F + Zustand 构建的纯静态作品站。"
-    en:
-      name: "ASTRA · 3D Galaxy Portfolio"
-      description: "A frontend engineer's space station: a 90k-particle spiral galaxy, fly-to navigation between planets, interactive demos and MDX engineering notes. A static portfolio built with Vite + React + R3F + Zustand."
   - id: skillQaAgent
     tech: ["React", "TypeScript", "Vite", "Zustand", "sql.js"]
     link: "https://github.com/Jader-S/skill-qa-agent"

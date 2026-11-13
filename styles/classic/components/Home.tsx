@@ -13,7 +13,7 @@ import BlogSection from "@/styles/classic/components/BlogSection";
 import ExperienceSection from "@/styles/classic/components/ExperienceSection";
 import FooterSection from "@/styles/classic/components/FooterSection";
 import { useI18n } from "@/components/I18nProvider";
-import { enterpriseProjects, githubProjects } from "@/data/projects";
+import { projects } from "@/data/projects";
 
 export default function ClassicHome() {
   const { t } = useI18n();
@@ -27,25 +27,16 @@ export default function ClassicHome() {
         <main id="main-content">
           <HeroSection />
           <AboutSection />
-          {/* #work 包含企业项目 + 开源项目两段，与其余 3 主题的 6 段顺序一致。 */}
+          {/* 单一「作品」区块：企业 + 开源已合并，旧 #enterprise / #github 保留别名锚点。 */}
           <ProjectsSection
             id="work"
-            aliasId="enterprise"
-            sectionIndex={t.enterprise.index}
-            title={t.enterprise.title}
-            subtitle={t.enterprise.subtitle}
-            projects={enterpriseProjects}
-            texts={t.enterprise.projects}
+            aliasIds={["enterprise", "github"]}
+            sectionIndex={t.work.index}
+            title={t.work.title}
+            subtitle={t.work.subtitle}
+            projects={projects}
+            texts={t.work.projects}
             frosted
-          />
-          <ProjectsSection
-            id="github"
-            sectionIndex={t.github.index}
-            title={t.github.title}
-            subtitle={t.github.subtitle}
-            projects={githubProjects}
-            texts={t.github.projects}
-            showLinks
           />
           <SkillsSection />
           <BlogSection />

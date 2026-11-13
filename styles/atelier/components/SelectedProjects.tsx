@@ -6,7 +6,7 @@ import SectionHeader from "@/styles/atelier/components/SectionHeader";
 import { useI18n } from "@/components/I18nProvider";
 import { useViewport } from "@/lib/hooks/useViewport";
 import { projectModalCopy } from "@/data/project-details";
-import { enterpriseProjects } from "@/data/projects";
+import { projects } from "@/data/projects";
 import { openProject } from "@/lib/project-modal";
 import LabButton from "@/styles/shared/chrome/LabButton";
 
@@ -27,31 +27,24 @@ export default function SelectedProjects() {
   const copy = projectModalCopy[locale];
   const { isMobile } = useViewport();
   const reducedMotion = usePrefersReducedMotion();
-  const selected = enterpriseProjects.filter(
-    (p): p is (typeof enterpriseProjects)[number] & { highlight: true } =>
-      "highlight" in p && p.highlight === true
-  );
-  const total = selected.length;
+  const total = projects.length;
   const useFlame = !isMobile && !reducedMotion;
 
   return (
     <section id="work" className="section-shell-mute">
-      {/* 旧链接 #selected 的别名锚点：合并进 #work 后仍可定位，不产生布局。 */}
+      {/* 旧链接的别名锚点：企业/开源合并进 #work 后仍可定位，不产生布局。 */}
       <span id="selected" aria-hidden="true" />
+      <span id="work-index" aria-hidden="true" />
       <div className="section-inner">
-        <SectionHeader
-          eyebrow="Selected"
-          title={t.enterprise.title}
-          subtitle={t.enterprise.subtitle}
-        />
+        <SectionHeader eyebrow="Work" title={t.work.title} subtitle={t.work.subtitle} />
 
         <div className="mb-8">
           <LabButton />
         </div>
 
         <div className="flex flex-col gap-8 sm:gap-10">
-          {selected.map((project, index) => {
-            const text = t.enterprise.projects[project.id];
+          {projects.map((project, index) => {
+            const text = t.work.projects[project.id];
             const card = (
               <article
                 role="button"

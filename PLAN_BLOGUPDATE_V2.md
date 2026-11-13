@@ -1,8 +1,9 @@
 # PLAN_BLOGUPDATE_V2 — blogUpdate 改造需求梳理与分期计划
 
-> 状态：**Phase 1（`3b238b1`）+ Phase 2（`2dc4734`）+ Phase 3（`ef1879e`）+ Phase 4（`c0e171a`）+ Phase 5（`4a25c13`）+ Phase 6（`70acb55`）已交付 · 全部分期完成**
+> 状态：**第一轮 Phase 1–6 全部交付（`70acb55`）｜第二轮 Phase 7–9 进行中（作品整合 / 实验室并列 / demo 配色主题化）**
 > 创建：2026-11-13 ｜ 范围：`E:\Jader\blogUpdate`（Next 15 / React 19 / UnoCSS / 5 主题）
 > 需求确认后按 Phase 分步执行，每期单独验收、单独提交。
+> 2026-11-13 更新 7：用户追加 3 项问题，Q1–Q4 均选方案 1（见第 14 节），启动第二轮 Phase 7–9。
 > 2026-11-13 更新 1：Q1/Q2/Q3/Q4 均选方案 1（见 6.1），补充「3.2 默认命名总表」与「6.2 默认执行项」。
 > 2026-11-13 更新 2：命名表按默认确认；Phase 1 完成并提交，验收结果见第 8 节。
 > 2026-11-13 更新 3：Phase 2 完成并提交，路由 10 → 6 条、静态导出 24 → 9 页，验收结果见第 9 节。
@@ -430,3 +431,36 @@
 - ASTRA 作品详情保留 2D 面板（主题特色，关联 Demo 已走共享弹框），四主题用共享弹框，形态未强行统一。
 - `lib/skillShare.ts` 里 `scripts/sync-astra.mjs` 历史失效路径未处理。
 - 3D Demo（factory-line / lianhang-dashboard）在非 ASTRA 主题的 WebGL 上下文实机渲染：构建与 lazy 加载已验证，E2E 内联预览挂载已验证 `demo-preview` 容器出现，但真机 3D 画面需人工肉眼走查（headless 下 R3F 用 SwiftShader，画面正确性不在自动化断言内）。
+
+---
+
+## 14 · 第二轮改造：作品整合 / 实验室并列 / demo 配色（进行中）
+
+用户 2026-11-13 复看后追加 3 项问题，Q1–Q4 拍板**均选方案 1**：
+
+| #   | 问题                                                     | 拍板结论                                                                                                                                                 |
+| --- | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | 作品中不要展示 astra 项目；不分企业/开源，整合为「作品」 | 仅移除 `astraPortfolio`（ASTRA 3D 星图作品站）卡片，保留 `skillQaAgent`；5 主题统一为单一作品列表；astra 内部作品页同步去掉「公司/个人」分组             |
+| 2   | demo 详情页文字对比度不足、demo 主题与当前主题不统一     | 全量主题 token 化：6 个 demo 的 CSS 硬编码深色 + 未定义变量 + ECharts/Three 内联色，全部改用各主题已有 `--text-*` / `--theme-accent` / `--glass-*` token |
+| 3   | 实验室在非太空主题没体现，只能从作品详情绕回 demo 列表   | 新增独立 `#lab` 页面区块平铺 6 个 demo，导航与「作品」并列；移除作品详情弹框里的「查看全部 Demo / 返回实验室」绕路                                       |
+| 4   | 命名与编号                                               | 导航 6 项：关于我 / 作品 / 实验室 / 技能 / 博客 / 经验领域；编号 `01 ABOUT · 02 WORK · 03 LAB · 04 SKILLS · 05 BLOG · 06 DOMAINS`                        |
+
+### 根因定位（第 2 项）
+
+- 6 个 demo 的 CSS 由 ASTRA 主题搬来，硬编码深色霓虹：`#070b14` / `#0b1220` 深底 + `#22d3ee` 青色发光。
+- **致命点**：它们引用的 `--neon-cyan` / `--neon-purple` / `--text-dim` / `--text-bright` / `--font-display` / `--radius-md` 这批变量，5 个主题的 `uno.ts` **一个都没定义**；无 fallback 的 `var()` 直接失效，文字颜色退回继承值 → 浅色主题下对比度崩坏。
+- 弹框外壳（`blog-modal` / `project-modal`）用的是有定义的 `--text-body` / `--theme-accent`，故仅 demo 内容区异常，与用户观察一致。
+- 另有约 42 行 ECharts / Three 内联配色（`EChartMagnifier.tsx` 21、`LianhangDashboard.tsx` 15、其余 6）。
+- 现状「实验室」在 4 个锚点主题只是 `#work` 内一个 `LabButton` chip；astra 有独立 FORGE 星球，故仅太空主题体现。
+
+### 分期（每期单独验收 + 单独提交）
+
+| 期          | 内容                                                                                                                                                                                                                      | 主要文件                                                                                                                                            |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Phase 7** | 数据层合并 `enterpriseProjects` + `githubProjects` → 单一 `projects`（移除 `astraPortfolio`）；i18n `enterprise`/`github` → `work`；5 主题统一单一作品列表；旧 `#github`/`#work-index` 保留不可见别名；astra 作品页去分组 | `data/projects.ts`、`lib/i18n/*`、`data/project-details.ts`、`components/ProjectModalHost.tsx`、`styles/*/components/*`、`e2e/styles.spec.ts`、单测 |
+| **Phase 8** | `t.nav` 加 `#lab`；4 主题新增 `#lab` 区块（共享 6 demo 卡片）；particle 段落表 + `SECTION_ASSETS`、blueprint 绘制/静稳态同步；章节编号重排；移除弹框里的 demo 列表绕路                                                    | `lib/i18n/*`、`styles/shared/chrome/*`、`styles/*/components/Home.tsx`、`styles/particle/assets.ts`、`components/ProjectModalHost.tsx`              |
+| **Phase 9** | 新建 demo 语义 token 映射；6 个 demo CSS + 图表内联色全量替换；对比度达 WCAG AA                                                                                                                                           | `styles/shared/demos/examples/*`、`demo-preview.module.css`、各 `uno.ts`                                                                            |
+
+### 每期验收基线
+
+`npm run typecheck` ｜ `npm run lint`（0 warning）｜ `npm run test` ｜ `GITHUB_PAGES=true PAGES_REPO_NAME= npm run build`（静态导出 9 页）｜ `npx playwright test` ｜ 改动文件 `prettier --check` ｜ dev 五主题路径 200 ｜ 独立提交。

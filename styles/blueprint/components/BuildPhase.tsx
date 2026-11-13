@@ -8,12 +8,7 @@ import { openBlog } from "@/lib/blog-modal";
 import { type ProjectId } from "@/data/project-details";
 import { experienceDomains, type ExperienceDomainId } from "@/data/experience";
 import { profile } from "@/data/profile";
-import {
-  enterpriseProjects,
-  githubProjects,
-  type EnterpriseProjectId,
-  type GithubProjectId,
-} from "@/data/projects";
+import { projects } from "@/data/projects";
 import { skillCategories, type SkillCategoryId } from "@/data/skills";
 import { openProject } from "@/lib/project-modal";
 import { ActionType } from "@/styles/blueprint/swarm/interactions/actions.js";
@@ -41,25 +36,11 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
     const navItems = t.nav.filter((item) =>
       ["#about", "#work", "#skills", "#blog", "#experience"].includes(item.href)
     );
-    const projects = [
-      ...enterpriseProjects.slice(0, 3).map((project) => {
-        const id = project.id as EnterpriseProjectId;
-        return {
-          id,
-          title: t.enterprise.projects[id].name,
-          body: t.enterprise.projects[id].description,
-        };
-      }),
-      ...githubProjects.slice(0, 3).map((project) => {
-        const id = project.id as GithubProjectId;
-        return {
-          id,
-          title: t.github.projects[id].name,
-          body: t.github.projects[id].description,
-          link: project.link,
-        };
-      }),
-    ];
+    const workItems = projects.map((project) => ({
+      id: project.id as ProjectId,
+      title: t.work.projects[project.id].name,
+      body: t.work.projects[project.id].description,
+    }));
     const skills = skillCategories.slice(0, 6).map((category) => {
       const id = category.id as SkillCategoryId;
       const categoryCopy = t.skills.categories[id];
@@ -104,10 +85,10 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
         paragraphs: t.about.summary,
       },
       work: {
-        index: t.enterprise.index,
-        title: t.enterprise.title,
-        subtitle: t.enterprise.subtitle,
-        items: projects,
+        index: t.work.index,
+        title: t.work.title,
+        subtitle: t.work.subtitle,
+        items: workItems,
       },
       skills: {
         index: t.skills.index,

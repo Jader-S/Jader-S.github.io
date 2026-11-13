@@ -8,7 +8,6 @@ import HeroSection from "@/styles/atelier/components/HeroSection";
 import AboutSection from "@/styles/atelier/components/AboutSection";
 import SkillsSection from "@/styles/atelier/components/SkillsSection";
 import SelectedProjects from "@/styles/atelier/components/SelectedProjects";
-import WorkIndex from "@/styles/atelier/components/WorkIndex";
 import BackToTop from "@/styles/atelier/components/BackToTop";
 import CookieConsent from "@/styles/atelier/components/CookieConsent";
 import BlogSection from "@/styles/atelier/components/BlogSection";
@@ -27,9 +26,8 @@ export default function AtelierHome() {
         <main id="main-content">
           <HeroSection />
           <AboutSection />
-          {/* #work 由 SelectedProjects 打头，WorkIndex 紧随其后，两段同属「作品」。 */}
+          {/* 单一「作品」区块：企业项目与开源项目已合并，别名锚点保留在段内。 */}
           <SelectedProjects />
-          <WorkIndex />
           <SkillsSection />
           <BlogSection />
           <ExperienceSection />

@@ -10,11 +10,10 @@
  */
 
 import type { Locale } from "@/lib/i18n";
-import type { EnterpriseProjectId, GithubProjectId } from "./projects";
+import type { ProjectId } from "./projects";
 
-export type { Locale };
+export type { Locale, ProjectId };
 export type Localized = Record<Locale, string>;
-
 export type DemoSlug =
   | "schneider-poi-perf"
   | "conference-board"
@@ -105,8 +104,6 @@ export function getDemoMeta(slug: string): DemoMeta | undefined {
   return demoCatalog.find((demo) => demo.slug === slug);
 }
 
-export type ProjectId = EnterpriseProjectId | GithubProjectId;
-
 export interface ProjectDetailText {
   background: string;
   role: string;
@@ -119,7 +116,7 @@ export interface ProjectDetailEntry {
   text: Record<Locale, ProjectDetailText>;
 }
 
-/** 点开卡片后的详情。3 个企业项目都带关联 Demo；开源项目保留外链，详情里说明实现位置。 */
+/** 点开作品卡片后的详情：背景 / 职责 / 成果 / 关联 Demo。 */
 export const projectDetails: ProjectDetailEntry[] = [
   {
     id: "poiConfigTools",
@@ -199,32 +196,6 @@ export const projectDetails: ProjectDetailEntry[] = [
           "Five stations and two rail robots coordinated in real time",
           "Cycle time and WIP state mapped 1:1",
           "KPI / OEE / alarm HUD synced to the 3D scene",
-        ],
-      },
-    },
-  },
-  {
-    id: "astraPortfolio",
-    demos: [],
-    text: {
-      zh: {
-        background:
-          "个人 3D 星图作品站，把履历与作品组织成可飞行的星系，本站即它的多形态演进版。",
-        role: "独立设计并开发：叙事结构、视觉规范、R3F 场景、MDX 内容链路与静态构建部署。",
-        outcomes: [
-          "5 套视觉主题共用一套内容层",
-          "博客 / 项目 / Demo 全部站内可交互",
-          "纯静态导出，无服务端依赖",
-        ],
-      },
-      en: {
-        background:
-          "A personal 3D galaxy portfolio that turns a résumé into a flyable star system; this site is its multi-style evolution.",
-        role: "Designed and built solo: narrative, visual spec, R3F scene, MDX content pipeline and static export.",
-        outcomes: [
-          "5 visual themes over one shared content layer",
-          "Blog, projects and demos all interactive in-site",
-          "Fully static export, no server required",
         ],
       },
     },
