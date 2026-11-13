@@ -1,21 +1,10 @@
 "use client";
 
 import { useI18n } from "@/components/I18nProvider";
+import { navLabel } from "@/lib/i18n";
 import LocaleToggle from "@/styles/shared/chrome/LocaleToggle";
 import ThemeToggle from "@/styles/shared/chrome/ThemeToggle";
 import { PARTICLE_SECTION_IDS, type ParticleSectionId } from "@/styles/particle/assets";
-
-const LABELS: Record<
-  ParticleSectionId,
-  (t: ReturnType<typeof useI18n>["t"]) => string
-> = {
-  top: (t) => t.profile.name,
-  about: (t) => t.about.title,
-  work: (t) => t.enterprise.title,
-  skills: (t) => t.skills.title,
-  blog: (t) => t.blog.title,
-  experience: (t) => t.experience.title,
-};
 
 interface NavBarProps {
   activeId: ParticleSectionId;
@@ -54,7 +43,7 @@ export default function NavBar({ activeId, onNavigate, locked }: NavBarProps) {
               disabled={locked}
               onClick={() => onNavigate(id)}
             >
-              {LABELS[id](t)}
+              {navLabel(t, id)}
             </button>
           ))}
         </div>

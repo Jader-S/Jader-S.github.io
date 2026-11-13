@@ -5,10 +5,12 @@
 import { requestFlyTo } from "@astra/state/useStore";
 import { PLANETS } from "@astra/config/site";
 import { useT } from "@astra/i18n";
+import { useI18n } from "@/components/I18nProvider";
 import { openBlogIndex } from "@/lib/blog-modal";
 
 export default function FallbackRoute() {
   const t = useT();
+  const { locale } = useI18n();
   return (
     <main className="fallback">
       <h1 className="fallback__title">{t.fallback.title}</h1>
@@ -29,8 +31,8 @@ export default function FallbackRoute() {
             }}
           >
             <span className="fallback__card-name">{p.name}</span>
-            <span className="fallback__card-label">{p.label.zh}</span>
-            <span className="fallback__card-desc">{p.description.zh}</span>
+            <span className="fallback__card-label">{p.label[locale]}</span>
+            <span className="fallback__card-desc">{p.description[locale]}</span>
           </button>
         ))}
       </div>

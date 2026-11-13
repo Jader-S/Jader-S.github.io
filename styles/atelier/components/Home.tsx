@@ -26,8 +26,9 @@ export default function AtelierHome() {
         <NavBar />
         <main id="main-content">
           <HeroSection />
-          <SelectedProjects />
           <AboutSection />
+          {/* #work 由 SelectedProjects 打头，WorkIndex 紧随其后，两段同属「作品」。 */}
+          <SelectedProjects />
           <WorkIndex />
           <SkillsSection />
           <BlogSection />

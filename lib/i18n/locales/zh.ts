@@ -24,19 +24,11 @@ export const zh: LocaleMessages = {
     yearsExpShort: "年经验",
     footerTech: "Next.js · UnoCSS · ASTRA",
   },
+  // 4 主题共用的统一导航：#top 由各主题的品牌链接承担，作品/开源项目并入 #work。
   nav: [
-    { href: "#selected", label: "精选" },
-    { href: "#about", label: "关于" },
+    { href: "#about", label: "关于我" },
     { href: "#work", label: "作品" },
     { href: "#skills", label: "技能" },
-    { href: "#blog", label: "博客" },
-    { href: "#experience", label: "领域" },
-  ],
-  navClassic: [
-    { href: "#about", label: "关于" },
-    { href: "#skills", label: "技能" },
-    { href: "#enterprise", label: "企业精选" },
-    { href: "#github", label: "开源项目" },
     { href: "#blog", label: "博客" },
     { href: "#experience", label: "经验领域" },
   ],
@@ -77,7 +69,7 @@ export const zh: LocaleMessages = {
     ],
   },
   skills: {
-    index: "02 — SKILLS",
+    index: "03 — SKILLS",
     title: "技术栈",
     subtitle: "从航天产线到智慧配电，沉淀下来的工程能力",
     featuredDesc: "双栈主力，覆盖性能治理、可视化与 AI 工程全链路",
@@ -163,7 +155,7 @@ export const zh: LocaleMessages = {
     },
   },
   enterprise: {
-    index: "03 — ENTERPRISE",
+    index: "02 — WORK",
     title: "近期企业项目",
     subtitle: "公司实战：性能治理、B 端 SaaS 与航天产线数字孪生",
     projects: {
@@ -185,7 +177,7 @@ export const zh: LocaleMessages = {
     },
   },
   github: {
-    index: "04 — OPEN SOURCE",
+    index: "02 · OPEN SOURCE",
     title: "开源项目",
     subtitle: "个人开源与作品站，都能点进去看真实实现",
     projects: {
@@ -202,7 +194,7 @@ export const zh: LocaleMessages = {
     },
   },
   blog: {
-    index: "05 — BLOG",
+    index: "04 — BLOG",
     title: "技术日志",
     subtitle: "ASTRA 日志：前端工程化、Agent 运行时与实战复盘",
     allPosts: "全部日志",
@@ -212,7 +204,7 @@ export const zh: LocaleMessages = {
     postCount: (count: number) => `共 ${count} 篇`,
   },
   experience: {
-    index: "06 — DOMAINS",
+    index: "05 — DOMAINS",
     title: "经验领域",
     subtitle: "7 年职业生涯中深耕的业务方向与技术实践",
     domains: {

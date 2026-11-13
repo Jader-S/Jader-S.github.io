@@ -55,9 +55,8 @@ export interface LocaleMessages {
     yearsExpShort: string;
     footerTech: string;
   };
+  /** 4 主题共用的统一导航（#top 走品牌链接，不占导航项）。 */
   nav: NavItem[];
-  /** Classic (v1) 风格导航 */
-  navClassic: NavItem[];
   navAria: {
     main: string;
     footer: string;

@@ -21,6 +21,11 @@ export type Language = "zh" | "en";
 export type QualityTier = "ultra" | "high" | "med" | "low";
 
 interface PersistedPrefs {
+  /**
+   * @deprecated 仅为兼容旧 `astra:prefs` 持久化数据保留的镜像字段，不参与渲染。
+   * 语言唯一真源是根 I18nProvider（`portfolio-locale`）；见 `@astra/i18n`。
+   * NavRail 切换语言时会同时写这里，避免残留值被未来代码误读。
+   */
   language: Language;
   quality: QualityTier;
   introSeen: boolean;

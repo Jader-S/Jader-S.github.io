@@ -73,7 +73,7 @@ export default function WorkIndex() {
   );
 
   return (
-    <section id="work" className="section-shell">
+    <section id="work-index" className="section-shell">
       <div className="section-inner">
         <SectionHeader
           eyebrow="Index"

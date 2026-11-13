@@ -7,7 +7,7 @@ import type { PlanetId } from "@astra/state/useStore";
 export const BRAND = "ASTRA";
 
 /**
- * 联络方式集中配置（「ECHO 联络星」使用）。
+ * 联络方式集中配置（「ECHO · 联系我」星使用）。
  *
  * 微信添加好友统一走「官方二维码原图 + 微信号」两条 100% 可用的路径：
  *  - wechatQrImage：微信「我 → 我的二维码」保存的图片，放 public/textures/。
@@ -79,7 +79,7 @@ export const PLANETS: PlanetConfig[] = [
   {
     id: "about",
     name: "ORIGO",
-    label: { zh: "起源", en: "About" },
+    label: { zh: "关于我", en: "About me" },
     description: {
       zh: "关于本站主人、他的履历与坐标。",
       en: "About the station\u2019s operator and coordinates.",
@@ -124,7 +124,7 @@ export const PLANETS: PlanetConfig[] = [
   {
     id: "blog",
     name: "LOGOS",
-    label: { zh: "日志", en: "Log" },
+    label: { zh: "博客", en: "Blog" },
     description: {
       zh: "思考、笔记、阶段性复盘。",
       en: "Notes, musings, post-mortems.",
@@ -133,14 +133,14 @@ export const PLANETS: PlanetConfig[] = [
     radius: 0.21,
     color: "#10b981",
     unlocked: true,
-    // 日志由全局博客弹框承载，不产生页面跳转；route 仅作元数据保留。
+    // 博客由全局弹框承载，不产生页面跳转；route 仅作元数据保留。
     route: "/astra",
     angle: 320,
   },
   {
     id: "contact",
     name: "ECHO",
-    label: { zh: "联络", en: "Contact" },
+    label: { zh: "联系我", en: "Contact me" },
     description: {
       zh: "微信 / 电话，直接连上我。",
       en: "WeChat / phone — reach me directly.",
@@ -155,7 +155,7 @@ export const PLANETS: PlanetConfig[] = [
   {
     id: "home",
     name: "ASTRA PRIME",
-    label: { zh: "母星", en: "Prime" },
+    label: { zh: "全景", en: "Overview" },
     description: {
       zh: "回到全景视图。",
       en: "Return to the overview.",

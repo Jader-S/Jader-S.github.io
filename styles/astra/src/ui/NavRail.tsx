@@ -8,12 +8,14 @@ import { useStore, requestFlyTo, type PlanetId } from "@astra/state/useStore";
 import { PLANETS } from "@astra/config/site";
 import { useT } from "@astra/i18n";
 import { detectMobile } from "@astra/utils/device";
+import { useI18n } from "@/components/I18nProvider";
 import { openBlogIndex } from "@/lib/blog-modal";
 import GlitchLabel from "./GlitchLabel";
 
 export default function NavRail() {
   const t = useT();
-  const lang = useStore((s) => s.prefs.language);
+  const { locale, setLocale } = useI18n();
+  // astra:prefs 里的旧 language 字段只作镜像写入，不再参与渲染（见 astra i18n/index.ts）。
   const setLanguage = useStore((s) => s.setLanguage);
   const activeId = useStore((s) => s.activePlanet);
 
@@ -58,17 +60,21 @@ export default function NavRail() {
           >
             <span className="nav-rail__dot" style={{ background: p.color }} />
             <span className="nav-rail__name">{p.name}</span>
-            <span className="nav-rail__label">{p.label[lang as "zh" | "en"]}</span>
+            <span className="nav-rail__label">{p.label[locale]}</span>
           </button>
         ))}
       </div>
       <button
         type="button"
         className="nav-rail__lang"
-        onClick={() => setLanguage(lang === "zh" ? "en" : "zh")}
+        onClick={() => {
+          const next = locale === "zh" ? "en" : "zh";
+          setLocale(next);
+          setLanguage(next);
+        }}
         aria-label={t.nav.language}
       >
-        {lang === "zh" ? "EN" : "ZH"}
+        {locale === "zh" ? "EN" : "ZH"}
       </button>
     </nav>
   );

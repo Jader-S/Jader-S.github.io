@@ -10,7 +10,10 @@ export default function HeroSection() {
   const { t } = useI18n();
 
   return (
-    <section className="relative flex min-h-[80vh] items-center overflow-hidden px-4 pb-12 pt-24 sm:min-h-[88vh] sm:px-6 sm:pb-16 sm:pt-28 md:min-h-[92vh] lg:min-h-[100dvh] lg:items-stretch lg:pb-10 lg:pt-24">
+    <section
+      id="top"
+      className="relative flex min-h-[80vh] items-center overflow-hidden px-4 pb-12 pt-24 sm:min-h-[88vh] sm:px-6 sm:pb-16 sm:pt-28 md:min-h-[92vh] lg:min-h-[100dvh] lg:items-stretch lg:pb-10 lg:pt-24"
+    >
       <div className="relative z-10 mx-auto w-full max-w-6xl lg:h-full lg:min-h-0 lg:flex lg:items-center xl:max-w-7xl">
         <div className="min-w-0 lg:py-4">
           <p

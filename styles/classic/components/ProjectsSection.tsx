@@ -11,6 +11,8 @@ import LabButton from "@/styles/shared/chrome/LabButton";
 
 interface ProjectsSectionProps<Id extends string> {
   id: string;
+  /** 合并前的旧锚点，渲染成不可见别名节点，保证旧链接不失效。 */
+  aliasId?: string;
   sectionIndex: string;
   title: string;
   subtitle: string;
@@ -25,6 +27,7 @@ interface ProjectsSectionProps<Id extends string> {
 
 export default function ProjectsSection<Id extends string>({
   id,
+  aliasId,
   sectionIndex,
   title,
   subtitle,
@@ -43,6 +46,7 @@ export default function ProjectsSection<Id extends string>({
       id={id}
       className={frosted ? "classic-section-shell-frost" : "classic-section-shell"}
     >
+      {aliasId ? <span id={aliasId} aria-hidden="true" /> : null}
       <div className="classic-section-inner">
         <SectionHeader index={sectionIndex} title={title} subtitle={subtitle} />
 

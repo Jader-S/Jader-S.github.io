@@ -5,11 +5,11 @@ export const en: ZhDict = {
   brand: "ASTRA",
   nav: {
     home: "Overview",
-    about: "About",
+    about: "About me",
     projects: "Projects",
     demos: "Forge",
-    blog: "Log",
-    contact: "Contact",
+    blog: "Blog",
+    contact: "Contact me",
     language: "Language",
     quality: "Quality",
     qualityLevels: { ultra: "Ultra", high: "High", med: "Med", low: "Low" },
@@ -33,7 +33,7 @@ export const en: ZhDict = {
     clickToLaunch: "Click to launch",
   },
   home: {
-    heading: "ASTRA · Prime",
+    heading: "ASTRA · Overview",
     sub: "Tap a planet to dock with its content.",
     visitCount: (n: number) => `${n} visited`,
     kicker: "PORTFOLIO",
@@ -41,7 +41,7 @@ export const en: ZhDict = {
     navHint: "Tap a planet to explore",
   },
   about: {
-    heading: "About",
+    heading: "About me",
     intro:
       "A frontend engineer and his trajectory — from a factory line to smart distribution, then writing AI into the engineering flow.",
     bio: {
@@ -299,14 +299,14 @@ export const en: ZhDict = {
     },
   },
   blog: {
-    heading: "Log",
+    heading: "Blog",
     sub: "Notes, musings, post-mortems.",
     readMore: "Read post",
     empty: "No posts yet",
     postCount: (n: number) => `${n} posts`,
   },
   contact: {
-    heading: "Contact · ECHO",
+    heading: "Contact me · ECHO",
     sub: "Reach me on WeChat or by phone.",
     wechat: "WeChat",
     phone: "Phone",

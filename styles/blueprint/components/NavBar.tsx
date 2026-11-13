@@ -1,21 +1,11 @@
 "use client";
 
 import { useI18n } from "@/components/I18nProvider";
+import { navLabel } from "@/lib/i18n";
 import LocaleToggle from "@/styles/shared/chrome/LocaleToggle";
 import ThemeToggle from "@/styles/shared/chrome/ThemeToggle";
 
 const SECTION_IDS = ["top", "about", "work", "skills", "blog", "experience"] as const;
-
-type SectionId = (typeof SECTION_IDS)[number];
-
-const LABELS: Record<SectionId, (t: ReturnType<typeof useI18n>["t"]) => string> = {
-  top: (t) => t.profile.name,
-  about: (t) => t.about.title,
-  work: (t) => t.enterprise.title,
-  skills: (t) => t.skills.title,
-  blog: (t) => t.blog.title,
-  experience: (t) => t.experience.title,
-};
 
 export default function NavBar() {
   const { t } = useI18n();
@@ -41,7 +31,7 @@ export default function NavBar() {
               href={`#${id}`}
               className="blueprint-nav-link whitespace-nowrap"
             >
-              {LABELS[id](t)}
+              {navLabel(t, id)}
             </a>
           ))}
         </div>

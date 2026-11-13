@@ -3,7 +3,7 @@
  * FPS readout. Functional: clicking cycles quality.
  */
 import { useStore } from "@astra/state/useStore";
-import { useT } from "@astra/i18n";
+import { useT, useAstraLocale } from "@astra/i18n";
 import { QUALITY_TIERS } from "@astra/config/site";
 import { useEffect, useState } from "react";
 
@@ -11,7 +11,7 @@ export default function CornerGauge() {
   const t = useT();
   const quality = useStore((s) => s.prefs.quality);
   const setQuality = useStore((s) => s.setQuality);
-  const lang = useStore((s) => s.prefs.language);
+  const lang = useAstraLocale();
   const [fps, setFps] = useState(60);
 
   useEffect(() => {

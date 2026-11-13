@@ -2,11 +2,11 @@ export const zh = {
   brand: "ASTRA",
   nav: {
     home: "全景",
-    about: "起源",
+    about: "关于我",
     projects: "作品",
     demos: "实验室",
-    blog: "日志",
-    contact: "联络",
+    blog: "博客",
+    contact: "联系我",
     language: "语言",
     quality: "画质",
     qualityLevels: { ultra: "旗舰", high: "高", med: "中", low: "低" },
@@ -30,7 +30,7 @@ export const zh = {
     clickToLaunch: "点击屏幕启动",
   },
   home: {
-    heading: "ASTRA · 母星",
+    heading: "ASTRA · 全景",
     sub: "点击任一星球，进入对应内容。",
     visitCount: (n: number) => `已访问 ${n} 颗`,
     kicker: "作品集 · PORTFOLIO",
@@ -38,7 +38,7 @@ export const zh = {
     navHint: "点击行星进入 · 选择目的地",
   },
   about: {
-    heading: "关于",
+    heading: "关于我",
     intro:
       "这里站着一个前端工程师和他的轨迹——从航天产线到智慧配电，再到把 AI 写进工程流。",
     bio: {
@@ -293,14 +293,14 @@ export const zh = {
     },
   },
   blog: {
-    heading: "日志",
+    heading: "博客",
     sub: "思考、笔记、阶段性复盘。",
     readMore: "阅读全文",
-    empty: "暂无日志",
+    empty: "暂无博客",
     postCount: (n: number) => `共 ${n} 篇`,
   },
   contact: {
-    heading: "联络 · ECHO",
+    heading: "联系我 · ECHO",
     sub: "微信或电话，直接连上我。",
     wechat: "微信",
     phone: "电话",

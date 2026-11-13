@@ -24,19 +24,11 @@ export const en: LocaleMessages = {
     yearsExpShort: "yrs exp",
     footerTech: "Next.js · UnoCSS · ASTRA",
   },
+  // Shared nav for all 4 anchored styles; #top is the brand link, work/open-source live in #work.
   nav: [
-    { href: "#selected", label: "Selected" },
-    { href: "#about", label: "About" },
+    { href: "#about", label: "About me" },
     { href: "#work", label: "Work" },
     { href: "#skills", label: "Skills" },
-    { href: "#blog", label: "Notes" },
-    { href: "#experience", label: "Fields" },
-  ],
-  navClassic: [
-    { href: "#about", label: "About" },
-    { href: "#skills", label: "Skills" },
-    { href: "#enterprise", label: "Enterprise" },
-    { href: "#github", label: "Open Source" },
     { href: "#blog", label: "Blog" },
     { href: "#experience", label: "Domains" },
   ],
@@ -79,7 +71,7 @@ export const en: LocaleMessages = {
     ],
   },
   skills: {
-    index: "02 — SKILLS",
+    index: "03 — SKILLS",
     title: "Tech Stack",
     subtitle:
       "Engineering capabilities forged on production lines and power distribution systems",
@@ -167,7 +159,7 @@ export const en: LocaleMessages = {
     },
   },
   enterprise: {
-    index: "03 — ENTERPRISE",
+    index: "02 — WORK",
     title: "Recent Enterprise Projects",
     subtitle:
       "Production work: performance governance, B2B SaaS and an aerospace digital twin",
@@ -190,7 +182,7 @@ export const en: LocaleMessages = {
     },
   },
   github: {
-    index: "04 — OPEN SOURCE",
+    index: "02 · OPEN SOURCE",
     title: "Open Source Projects",
     subtitle: "Personal projects and a portfolio you can actually click through",
     projects: {
@@ -207,7 +199,7 @@ export const en: LocaleMessages = {
     },
   },
   blog: {
-    index: "05 — BLOG",
+    index: "04 — BLOG",
     title: "Engineering Notes",
     subtitle:
       "ASTRA log: frontend engineering, agent runtimes and post-mortems from the field",
@@ -218,7 +210,7 @@ export const en: LocaleMessages = {
     postCount: (count: number) => `${count} posts`,
   },
   experience: {
-    index: "06 — DOMAINS",
+    index: "05 — DOMAINS",
     title: "Experience Domains",
     subtitle: "Business domains and technical practices honed over 7 years",
     domains: {

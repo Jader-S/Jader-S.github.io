@@ -11,7 +11,7 @@ export default function NavBar() {
   const { isMobile } = useViewport();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("selected");
+  const [activeSection, setActiveSection] = useState("about");
 
   const sectionIds = useMemo(() => t.nav.map((link) => link.href.slice(1)), [t.nav]);
 

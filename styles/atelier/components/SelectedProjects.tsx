@@ -35,7 +35,9 @@ export default function SelectedProjects() {
   const useFlame = !isMobile && !reducedMotion;
 
   return (
-    <section id="selected" className="section-shell-mute">
+    <section id="work" className="section-shell-mute">
+      {/* 旧链接 #selected 的别名锚点：合并进 #work 后仍可定位，不产生布局。 */}
+      <span id="selected" aria-hidden="true" />
       <div className="section-inner">
         <SectionHeader
           eyebrow="Selected"

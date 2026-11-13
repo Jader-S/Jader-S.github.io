@@ -18,20 +18,40 @@ test.describe("style pages", () => {
     });
   }
 
-  test("atelier exposes core sections", async ({ page }) => {
+  test("atelier exposes the unified six-section layout", async ({ page }) => {
     await gotoStyle(page, "/atelier");
 
-    for (const id of ["selected", "about", "skills", "blog", "experience"]) {
+    for (const id of [
+      "top",
+      "about",
+      "work",
+      "work-index",
+      "skills",
+      "blog",
+      "experience",
+    ]) {
       await expect(page.locator(`#${id}`)).toBeAttached();
     }
+    // 合并前的 #selected 仍保留不可见别名锚点，旧链接不会失效。
+    await expect(page.locator("#selected")).toBeAttached();
   });
 
-  test("classic exposes classic sections", async ({ page }) => {
+  test("classic exposes the unified six-section layout", async ({ page }) => {
     await gotoStyle(page, "/classic");
 
-    for (const id of ["about", "skills", "blog", "experience"]) {
+    for (const id of [
+      "top",
+      "about",
+      "work",
+      "github",
+      "skills",
+      "blog",
+      "experience",
+    ]) {
       await expect(page.locator(`#${id}`)).toBeAttached();
     }
+    // 企业项目段的旧 #enterprise 锚点保留为 #work 内的别名。
+    await expect(page.locator("#enterprise")).toBeAttached();
   });
 
   test("blueprint keeps the drawn page and has no skip control", async ({ page }) => {

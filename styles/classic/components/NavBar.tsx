@@ -14,7 +14,7 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("about");
 
-  const navLinks = t.navClassic;
+  const navLinks = t.nav;
   const sectionIds = useMemo(
     () => navLinks.map((link) => link.href.slice(1)),
     [navLinks]

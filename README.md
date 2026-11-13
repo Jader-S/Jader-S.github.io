@@ -10,13 +10,15 @@
 
 入口：`/` 默认进入 **蓝图** `/blueprint`；若本地记住过上次风格，则跳转到对应路径。左侧竖栏在当前标签页切换风格（整页导航，确保特效引擎干净重建）；<768px 收成左侧 30px 细边条，点击展开抽屉。全站只有 `/` + 5 条主题路径，博客、项目详情与 Demo 预览都在当前页弹框展示，不产生 `/blog/[slug]` 之类的内容路由。
 
+**命名与导航已统一**：4 个锚点主题共用一套 `t.nav`（关于我 / 作品 / 技能 / 博客 / 经验领域）与 6 段顺序 `#top → #about → #work → #skills → #blog → #experience`；太空主题行星改为「关于我 / 作品 / 实验室 / 博客 / 联系我 / 全景」。语言只有一份真源（根 `I18nProvider` / `portfolio-locale`），太空主题与共享 Demo 文案随之切换。
+
 ---
 
 ## 功能特性
 
 - **多风格架构**：蓝图 / 静奢 / 经典 / 粒子拆成独立包（`styles/blueprint` · `styles/atelier` · `styles/classic` · `styles/particle`），共享内容与壳层；默认风格为蓝图
 - **左侧竖栏**：桌面竖排切换 5 套风格（蓝图居首；当前标签页整页跳转，确保特效引擎干净重建）；移动端 <768px 收成 30px 细边条，点击从左侧滑出抽屉（遮罩 / Esc / 关闭按钮收起）
-- **博客弹框**：5 套主题共用 `BlogModalHost`，点日志卡片在当前页弹框读本地 MDX；太空主题点「日志」行星先出全部文章列表，再下钻正文。不产生 `/blog/[slug]` 路由，不新开标签页
+- **博客弹框**：5 套主题共用 `BlogModalHost`，点博客卡片在当前页弹框读本地 MDX；太空主题点「博客」行星先出全部文章列表，再下钻正文。不产生 `/blog/[slug]` 路由，不新开标签页
 - **项目详情 / 实验室**：5 套主题共用 `ProjectModalHost`（zustand 外部 store + Portal）。点企业项目看「背景 / 职责 / 技术栈 / 成果 / 关联 Demo」，再点 Demo 在当前页内联预览；`LabButton` 可直接打开全部 6 个 Demo。Demo 实现统一放在 `styles/shared/demos/`，含 2 个 R3F 3D 场景，非太空主题也能渲染；GitHub 仓库外链仍保留新标签
 - **右侧 AI 按钮**：悬停说明用途；点击复制当前风格的 Skill 提示词，粘贴给 AI 即可按本站生成同款项目
 - **中英文 / 主题**：语言与白天·夜晚·自动主题，偏好写入 `localStorage`
@@ -30,13 +32,14 @@
 - 大留白、衬线标题、氧化铜金强调色
 - Hero 使用 [@fxshelf/card-orbit](https://github.com/Luzhaotian/fxshelf/tree/main/packages/card-orbit) 卡片环绕
 - Canvas：ParticleObject / GlyphRain / FlameWrap / PointerAura（桌面端；减少动效时关闭）
-- 区块：Hero → 精选 → 关于 → 作品索引 → 技能 → 博客 → 经验领域
+- 区块：Hero → 关于 → 作品（精选项目 + 项目索引，同属 `#work`）→ 技能 → 博客 → 经验领域；旧锚点 `#selected` 保留为 `#work` 内的不可见别名
 
 ### 经典（Classic）
 
 - 毛玻璃卡片 + Vanta 全屏背景（白天 **Waves**，夜晚 **Birds**）
 - Hero 同样使用 [@fxshelf/card-orbit](https://github.com/Luzhaotian/fxshelf/tree/main/packages/card-orbit)
-- 区块：Hero → 关于 → 技能 → 企业精选 / 开源 → 博客 → 经验领域
+- 区块：Hero → 关于 → 作品（企业项目 + 开源项目两段，同属 `#work`）→ 技能 → 博客 → 经验领域；Hero 补 `#top`，旧锚点 `#enterprise` 保留为别名
+- 章节编号按统一顺序 `01 关于 → 02 作品 → 03 技能 → 04 博客 → 05 经验领域`，开源段用 `02 ·` 子编号
 - 部分章节交替「实体毛玻璃 / 透明」节奏
 
 ### 粒子（Particle）

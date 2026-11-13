@@ -27,9 +27,10 @@ export default function ClassicHome() {
         <main id="main-content">
           <HeroSection />
           <AboutSection />
-          <SkillsSection />
+          {/* #work 包含企业项目 + 开源项目两段，与其余 3 主题的 6 段顺序一致。 */}
           <ProjectsSection
-            id="enterprise"
+            id="work"
+            aliasId="enterprise"
             sectionIndex={t.enterprise.index}
             title={t.enterprise.title}
             subtitle={t.enterprise.subtitle}
@@ -46,6 +47,7 @@ export default function ClassicHome() {
             texts={t.github.projects}
             showLinks
           />
+          <SkillsSection />
           <BlogSection />
           <ExperienceSection />
         </main>

@@ -18,7 +18,7 @@ import {
   planetWorldPos,
   type PlanetId,
 } from "@astra/state/useStore";
-import { useT } from "@astra/i18n";
+import { useT, useAstraLocale } from "@astra/i18n";
 import { Html } from "@react-three/drei";
 import { getPlanetTexture } from "./planetTextures";
 
@@ -67,7 +67,7 @@ export default function Planet({ planet }: Props) {
   const matRef = useRef<THREE.ShaderMaterial>(null!);
   const fadeRef = useRef(1); // 可见性渐变（0=隐藏）
   const t = useT();
-  const lang = useStore((s) => s.prefs.language);
+  const lang = useAstraLocale();
 
   const hoveredId = useStore((s) => s.hoveredPlanet);
   const flight = useStore((s) => s.flight);
