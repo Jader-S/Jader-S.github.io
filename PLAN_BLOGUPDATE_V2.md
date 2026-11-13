@@ -1,6 +1,6 @@
 # PLAN_BLOGUPDATE_V2 — blogUpdate 改造需求梳理与分期计划
 
-> 状态：**Phase 1（`3b238b1`）+ Phase 2（`2dc4734`）+ Phase 3（`ef1879e`）+ Phase 4（`c0e171a`）+ Phase 5（`4a25c13`）+ Phase 6（`d4289a1`）已交付 · 全部分期完成**
+> 状态：**Phase 1（`3b238b1`）+ Phase 2（`2dc4734`）+ Phase 3（`ef1879e`）+ Phase 4（`c0e171a`）+ Phase 5（`4a25c13`）+ Phase 6（`70acb55`）已交付 · 全部分期完成**
 > 创建：2026-11-13 ｜ 范围：`E:\Jader\blogUpdate`（Next 15 / React 19 / UnoCSS / 5 主题）
 > 需求确认后按 Phase 分步执行，每期单独验收、单独提交。
 > 2026-11-13 更新 1：Q1/Q2/Q3/Q4 均选方案 1（见 6.1），补充「3.2 默认命名总表」与「6.2 默认执行项」。
@@ -397,7 +397,7 @@
 - 本轮改动文件 `prettier --check` ✓；`out/` 清空重建后无 `jaderai.cn` / `blog.csdn` / `navClassic` / `qa-agent/index.html` 残留
 - dev `:5555` 六条路径（含 `/`）均 200；提交 hook 通过；提交后复验 typecheck / lint / test 全绿
 
-## 13 · Phase 6 全量验收（已交付 `d4289a1`）
+## 13 · Phase 6 全量验收（已交付 `70acb55`）
 
 ### 改动
 
