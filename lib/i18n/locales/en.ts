@@ -278,6 +278,11 @@ export const en: LocaleMessages = {
     blueprint: "Blueprint",
     astra: "ASTRA",
     ariaLabel: "Page style",
+    railLabel: "Style",
+    drawerTitle: "Switch page style",
+    openMenu: "Open style switcher",
+    closeMenu: "Close style switcher",
+    current: "Now",
   },
   skillShare: {
     ariaLabel: "Copy skill prompt",

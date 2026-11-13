@@ -146,6 +146,11 @@ export interface LocaleMessages {
     blueprint: string;
     astra: string;
     ariaLabel: string;
+    railLabel: string;
+    drawerTitle: string;
+    openMenu: string;
+    closeMenu: string;
+    current: string;
   };
   skillShare: {
     ariaLabel: string;

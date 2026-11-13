@@ -272,6 +272,11 @@ export const zh: LocaleMessages = {
     blueprint: "蓝图",
     astra: "太空",
     ariaLabel: "页面风格",
+    railLabel: "风格",
+    drawerTitle: "切换页面风格",
+    openMenu: "展开风格切换",
+    closeMenu: "收起风格切换",
+    current: "当前",
   },
   skillShare: {
     ariaLabel: "复制 Skill 提示词",
