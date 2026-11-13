@@ -49,8 +49,6 @@ export interface GlyphRainOptions {
   stirRadius?: number;
   /** Seconds the stirred wake takes to settle back to its own rhythm. */
   settle?: number;
-  /** When true the falling glyphs follow the charset in fixed order (readable) instead of random. */
-  sequence?: boolean;
 }
 
 export interface GlyphRainElements {
@@ -71,7 +69,7 @@ export interface GlyphRainInstance {
   destroy: () => void;
 }
 
-const DEFAULT_CHARSET = "JaderAI.cn";
+const DEFAULT_CHARSET = "JaderAI.cn ";
 
 const DEFAULTS: Required<GlyphRainOptions> = {
   charset: DEFAULT_CHARSET,
@@ -94,7 +92,6 @@ const DEFAULTS: Required<GlyphRainOptions> = {
   stir: 0.7,
   stirRadius: 260,
   settle: 0.9,
-  sequence: false,
 };
 
 type PaintableCanvas = HTMLCanvasElement & {
@@ -135,7 +132,6 @@ uniform float uDensity;
 uniform float uTrail;
 uniform float uGlow;
 uniform float uMutate;
-uniform float uSeq;
 uniform float uFlicker;
 uniform float uLayers;
 uniform float uDim;
@@ -161,22 +157,12 @@ float hash21(vec2 p) {
   return fract((q.x + q.y) * q.z);
 }
 
-float glyphMask(vec2 px, float cell, float seed) {
+float glyphMask(vec2 px, float cell) {
   vec2 id = floor(px / cell);
   vec2 f = fract(px / cell);
   f = f * 0.74 + 0.13;
-  float idx;
-  if (uSeq > 0.5) {
-    // 固定顺序：沿列从上到下依次展示字符集，并随时间向下流动，使文字可辨识
-    float seqSpeed = max(uMutate, 0.4);
-    float flow = uTime * seqSpeed * 5.0;
-    idx = mod(floor(id.y + flow), uGlyphCount);
-  } else {
-    float tick = floor(uTime * uMutate * 1.6 + hash21(id + seed) * 9.0);
-    idx = floor(
-      hash21(id * 1.71 + vec2(seed + tick * 7.31, tick * 0.613)) * uGlyphCount
-    );
-  }
+  // 沿列按字符集固定顺序取字（含末尾空格作为字符串分隔），随原有 mutate 节奏缓慢滚动
+  float idx = mod(floor(id.y + uTime * uMutate * 1.6), uGlyphCount);
   float gx = mod(idx, uAtlasGrid);
   float gy = floor(idx / uAtlasGrid);
   vec2 auv = (vec2(gx, gy) + f) / uAtlasGrid;
@@ -223,18 +209,12 @@ void main () {
     float T = uTime * sp + off + sp * wk.x;
     float phase = fract(yn + T);
     float cyc = floor(yn + T);
-    // 固定顺序模式：按列整体点亮，使每列连续显示可辨识的字符序列
-    float gate = uSeq > 0.5
-      ? step(hash21(vec2(col, 7.3) + seeds[l]), uDensity)
-      : step(hash21(vec2(col, cyc) + seeds[l]), uDensity);
-    // 固定顺序模式：整列均匀点亮，字符序列稳定可读，不被拖尾淡出打断
-    float b = uSeq > 0.5
-      ? 0.85
-      : clamp(uTrail / (phase * 22.0), 0.0, 1.3) - 0.04;
+    float gate = step(hash21(vec2(col, cyc) + seeds[l]), uDensity);
+    float b = clamp(uTrail / (phase * 22.0), 0.0, 1.3) - 0.04;
     if (b <= 0.0 || gate < 0.5) continue;
     float flick = 1.0 + uFlicker * 0.6 *
       sin(uTime * 14.0 + hash21(vec2(col, cyc)) * 40.0 + phase * 30.0);
-    float m = glyphMask(frag, cell, seeds[l] + cyc * 0.173);
+    float m = glyphMask(frag, cell);
     float cellYn = cell / uResolution.y;
     float head = 1.0 - smoothstep(0.0, cellYn * 1.2, phase);
     g += m * b * flick * weights[l] * (1.0 + head * uGlow * 1.4) *
@@ -345,8 +325,9 @@ function buildAtlas(charset: string): {
   count: number;
   grid: number;
 } {
+  // 空格保留为一个空字形，用作固定顺序里多个字符串之间的分隔符
   const glyphs = Array.from(new Set(Array.from(charset))).filter(
-    (g) => g.trim().length > 0
+    (g) => g === " " || g.trim().length > 0
   );
   if (glyphs.length === 0) glyphs.push("0", "1");
   const count = glyphs.length;
@@ -648,7 +629,6 @@ export function createGlyphRain(
     gl!.uniform1f(uniforms.uTrail, Math.min(Math.max(config.trail, 0.2), 3));
     gl!.uniform1f(uniforms.uGlow, Math.min(Math.max(config.glow, 0), 3));
     gl!.uniform1f(uniforms.uMutate, Math.min(Math.max(config.mutate, 0), 4));
-    gl!.uniform1f(uniforms.uSeq, config.sequence ? 1 : 0);
     gl!.uniform1f(uniforms.uFlicker, Math.min(Math.max(config.flicker, 0), 1));
     gl!.uniform1f(
       uniforms.uLayers,

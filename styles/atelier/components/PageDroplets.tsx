@@ -30,8 +30,7 @@ export default function PageDroplets() {
     <div className="pointer-events-none fixed inset-0 z-[25]" aria-hidden>
       <GlyphRain
         className="h-full w-full"
-        charset="JaderAI.cn"
-        sequence
+        charset="JaderAI.cn "
         cell={14}
         color={dark ? [0.62, 0.5, 0.36] : [0.45, 0.36, 0.26]}
         headColor={dark ? [0.86, 0.74, 0.54] : [0.56, 0.45, 0.33]}
