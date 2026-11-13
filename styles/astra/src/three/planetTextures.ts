@@ -11,6 +11,9 @@ import * as THREE from "three";
 const loader = new THREE.TextureLoader();
 const cache = new Map<string, THREE.Texture>();
 
+/** 已提供的真实星球贴图（public/textures/planets/）。未列出的 id 直接走程序化兜底，避免无谓的 404 请求。 */
+const KNOWN_TEXTURES = new Set(["about", "blog", "demos", "home", "projects"]);
+
 function shade(hex: string, factor: number): string {
   const c = new THREE.Color(hex);
   c.multiplyScalar(factor);
@@ -63,22 +66,25 @@ export function getPlanetTexture(
   const fallback = makeMottle(color, 0.45, 1.35, 180);
   cache.set(id, fallback);
 
-  const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-  const url = `${base}/textures/planets/${id}.jpg`;
-  loader.load(
-    url,
-    (tex) => {
-      tex.colorSpace = THREE.SRGBColorSpace;
-      tex.anisotropy = 8;
-      cache.set(id, tex);
-      fallback.dispose();
-      onReal?.(tex);
-    },
-    undefined,
-    () => {
-      /* 加载失败：保留程序化兜底 */
-    }
-  );
+  // 仅对已知存在的贴图发起网络加载；缺失的 id 直接保留程序化兜底，不发 404 请求。
+  if (KNOWN_TEXTURES.has(id)) {
+    const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+    const url = `${base}/textures/planets/${id}.jpg`;
+    loader.load(
+      url,
+      (tex) => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = 8;
+        cache.set(id, tex);
+        fallback.dispose();
+        onReal?.(tex);
+      },
+      undefined,
+      () => {
+        /* 加载失败：保留程序化兜底 */
+      }
+    );
+  }
 
   return fallback;
 }
