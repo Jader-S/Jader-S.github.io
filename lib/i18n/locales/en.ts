@@ -52,7 +52,7 @@ export const en: LocaleMessages = {
     highlights: [
       { label: "Experience", value: "7 yrs" },
       { label: "Core Projects", value: "3" },
-      { label: "Articles", value: "15" },
+      { label: "Articles", value: "18" },
       { label: "Dual Stack", value: "Vue + React" },
     ],
   },

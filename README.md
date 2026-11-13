@@ -23,7 +23,7 @@
 - **右侧 AI 按钮**：悬停说明用途；点击复制当前风格的 Skill 提示词，粘贴给 AI 即可按本站生成同款项目
 - **中英文 / 主题**：语言与白天·夜晚·自动主题，偏好写入 `localStorage`
 - **内容数据化**：`site-content.yaml`（模板入口）→ `data/`（结构）+ `lib/i18n/`（双语文案），id 类型绑定防漏写
-- **博客**：15 篇本地 MDX 技术日志，按主题在站内渲染，不依赖任何外部博客平台
+- **博客**：18 篇本地 MDX 技术日志，按主题在站内渲染，不依赖任何外部博客平台
 - **质量门禁**：Vitest 单元测试 · Playwright E2E · CI（lint / typecheck / test）
 - Cookie 提示、回到顶部、SEO（Metadata / OpenGraph / 跳过导航）
 
@@ -345,7 +345,7 @@ GITHUB_PAGES=true npm run build   # 产物在 out/；basePath 一般为 /portfol
 
 - 本仓库：[Jader-S/astra-portfolio](https://github.com/Jader-S/astra-portfolio)（private）
 - 本地运行：`npm run dev` 后访问 `/astra`、`/blueprint`、`/atelier`、`/classic`、`/particle` 等主题路由
-- 技术日志：15 篇 MDX 在 `content/blog/`，由 `npm run gen:blog-content`（`predev` / `prebuild` 自动执行）生成 `data/blog-content.generated.json`，5 主题点击卡片在当前页弹框阅读；改动 MDX 后重跑该命令即可
+- 技术日志：18 篇 MDX 在 `content/blog/`，由 `npm run gen:blog-content`（`predev` / `prebuild` 自动执行）生成 `data/blog-content.generated.json`，5 主题点击卡片在当前页弹框阅读；改动 MDX 后重跑该命令即可
 - 模板来源：[Luzhaotian/portfolio](https://github.com/Luzhaotian/portfolio)（MIT，`LICENSE` 保留原作者版权）
 - Hero 卡片环绕：[@fxshelf/card-orbit](https://github.com/Luzhaotian/fxshelf/tree/main/packages/card-orbit)
 - 风格扩展说明：[`styles/README.md`](./styles/README.md)

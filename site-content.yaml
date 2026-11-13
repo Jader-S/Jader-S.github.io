@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 # 内容全部来自 E:\Jader\blog 已发布的内容：
 #   - 履历 / 作品 / 技术栈 / 领域 → src/i18n/zh.ts
-#   - 博客 15 篇 → src/content/blog/*.mdx 的 frontmatter
+#   - 博客 18 篇 → src/content/blog/*.mdx 的 frontmatter
 # 改这里的字段后，按 .cursor/skills/*/references/apply-content.md 的映射
 # 同步到 data/ + lib/i18n/locales/{zh,en}.ts（两语言必须同时改）。
 # 不编造私人事实；id 用驼峰英文，删掉某个数组项 = 下架该条目。
@@ -29,7 +29,7 @@ profile:
     highlights:
       - { label: "前端经验", value: "7 年" }
       - { label: "核心项目", value: "3 段实战" }
-      - { label: "技术文章", value: "15 篇" }
+      - { label: "技术文章", value: "18 篇" }
       - { label: "双栈主力", value: "Vue + React" }
   en:
     name: "Jader Sun"
@@ -257,6 +257,15 @@ experience:
 # 正文统一在站内本地渲染，不关联任何外部博客平台、不留外部文章链接
 # likes / views 没有对应数据源，统一为 0
 blogs:
+  - title: "Portal 之后，颜色全失效了：给 6 个 Demo 做一次主题收敛"
+    description: "同一个 Demo，在太空主题下发着霓虹蓝，切到浅色主题连字都看不清。根因不是哪几个色值写错，是变量作用域在 Portal 之后断了。"
+    date: "2026-11-13"
+  - title: "我为了「让字看得清」，把刚做好的功能改坏了"
+    description: "本来只想把字符集换成 JaderAI.cn，我顺手加了固定顺序、整列常亮、加密提亮。回头看，我动的根本不是字符串，是整套效果。"
+    date: "2026-11-13"
+  - title: "切个主题页面就空了：几台没杀干净的 dev server"
+    description: "五个主题里四个白屏，路由级 page.js / page.css 全 404。清了缓存重跑还是复现——因为真正占着端口的那台服务器，根本没被杀掉。"
+    date: "2026-11-13"
   - title: "在浏览器里复原一条航天产线"
     description: "用 Three.js + ECharts 把七八年前做过的数字孪生重做一遍：主题变量桥接、资源清理、让模拟数据活起来，以及我特意没做的事。"
     date: "2026-11-12"

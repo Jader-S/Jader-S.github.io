@@ -3,7 +3,7 @@ import type { LocaleMessages } from "../types";
 /**
  * 中英文文案。内容源：site-content.yaml
  * 同步自 E:\Jader\blog\src\i18n\zh.ts 的履历 / 作品 / 技术栈，
- * 以及 src\content\blog\*.mdx 的 15 篇日志。
+ * 以及 src\content\blog\*.mdx 的 18 篇日志。
  * data/* 里的每个 id 都必须在 zh.ts 与 en.ts 各有一份文案。
  */
 export const zh: LocaleMessages = {
@@ -51,7 +51,7 @@ export const zh: LocaleMessages = {
     highlights: [
       { label: "前端经验", value: "7 年" },
       { label: "核心项目", value: "3 段实战" },
-      { label: "技术文章", value: "15 篇" },
+      { label: "技术文章", value: "18 篇" },
       { label: "双栈主力", value: "Vue + React" },
     ],
   },

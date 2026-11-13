@@ -1,0 +1,70 @@
+---
+title: "Portal 之后，颜色全失效了：给 6 个 Demo 做一次主题收敛"
+date: "2026-11-13"
+tags: ["CSS 变量", "设计系统", "无障碍"]
+excerpt: "同一个 Demo，在太空主题下发着霓虹蓝，切到浅色主题连字都看不清。根因不是哪几个色值写错，是变量作用域在 Portal 之后断了。"
+---
+
+> 2026 年 11 月 13 日。我这个作品站有五套主题、六个能点开的 Demo。这几天复看时发现一个挺尴尬的问题：Demo 是从 ASTRA 那套深色太空站里搬过来的，只在太空主题下好看；切到静奢、经典、粒子的浅色模式，深色霓虹字压在浅底上，标题勉强能认，状态标签基本糊成一片。
+
+最难的不是「把颜色改对」，是「改完五套主题都得对」。
+
+## 先看根因，别急着调色值
+
+六个 Demo 的 CSS 里散着一批硬编码色：`#22d3ee`、`rgba(34,211,238,0.12)` 之类，还有一堆 `--neon-cyan` / `--text-dim` / `--radius-md`。前一批是 ASTRA 的品牌霓虹，写死在文件里；后一批更麻烦——它们**只在 `.astra-root` 下定义**。
+
+而 Demo 是用 `createPortal(..., document.body)` 挂到 body 上的。Portal 一出去，节点就脱离了 `.astra-root` 作用域，这些变量全部取不到值。CSS 自定义属性没有「兜底告警」，取不到就静默继承或回退，于是同一段样式在太空主题下有一套完整配色，在别处只剩半套。
+
+所以这不是「某个颜色太浅」，是**变量的作用域和消费方式都错了**。逐个把色值改深，改完下一套主题又会坏。
+
+## 加一层语义桥，而不是改六份 CSS
+
+我的做法是在中间插一层，让 Demo 和站点主题互不认识：
+
+- 新建 `styles/shared/demos/demo-tokens.css`，作用域挂在 `[data-demo-theme]` 上。Demo 内部**只认 `--demo-*` 语义变量**：`--demo-ink` / `--demo-muted` / `--demo-accent` / `--demo-danger` / `--demo-warning` / `--demo-surface-solid`……
+- 桥接层负责把这些语义变量映射到当前 `html[data-style]` + `[data-theme]` 的真实 token，顺手把 `--neon-cyan` / `--text-dim` 这批 ASTRA 遗留变量名也桥过去。
+- 状态色用 `color-mix(in srgb, 彩色 X%, var(--demo-ink))` 生成，浅色和深色各自往 ink 靠，不用手写两套色板。
+
+关键是**桥接层不动 ASTRA 自己的样式**：太空主题该霓虹还是霓虹，只是别的主题下 Demo 也能取到合法的值。六个 Demo 的 CSS 里所有硬编码色则用脚本批量换成语义变量，替换完 CSS 里的硬编码色清零。
+
+## Canvas / ECharts / Three 读不懂 `var()`
+
+改完 CSS 只解决了一半。图表和 3D 场景的颜色是 JS 传进去的：`fillStyle`、`ECharts` 的 `itemStyle`、`Three` 的 `material.color`。这些 API 要的是具体色值，`var(--demo-accent)` 和 `color-mix(...)` 对它们就是一串无效字符串。
+
+于是补了 `lib/demo-theme.ts`：用 `getComputedStyle` 在运行时把根上的语义 token 解析成具体 `rgb()`，再派生出 `accentA(alpha)` / `pageA(alpha)` / `inkA(alpha)` 这类 `rgba()` 工具；`useDemoPalette()` 负责主题切换时重新读。ECharts 放大镜、单线图、会议室看板、产线 3D 场景里二十多处内联色统一改走这套调色板。
+
+有一处我**特意没改**：3D 工厂里机械和厂房的金属 albedo 是物体的固有色，跟着主题变会变成塑料感。只有状态灯、强调线、这类「界面语义」才接调色板。
+
+## 用数字收口，而不是「看着差不多」
+
+「看不清」得变成可测量的数字才收得住。我写了个脚本，对 **5 套主题 × 明暗 2 态 = 10 个组合**，逐项算正文 / 次级 / 标题 / 强调 / 危险 / 警示 / Demo 表面文字共 9 项的 WCAG 对比度。
+
+首轮结果挺难看：
+
+<table>
+<thead>
+<tr><th>组合</th><th>最低值</th><th>未达标项</th></tr>
+</thead>
+<tbody>
+<tr><td>静奢 light</td><td>3.61</td><td>demoWarning、demoAccent</td></tr>
+<tr><td>经典 light</td><td>3.13</td><td>demoWarning、demoDanger、accent</td></tr>
+<tr><td>粒子 light</td><td>3.30</td><td>demoWarning、demoDanger</td></tr>
+<tr><td>蓝图 light</td><td>3.28</td><td>demoWarning、demoDanger、demoMuted</td></tr>
+</tbody>
+</table>
+
+收口时只动 `[data-demo-theme]` 作用域内的语义色，把它们朝 `--demo-ink` 压一档，**站点级 `--theme-accent` 一个不动**——否则为了 Demo 去改全站品牌色，属于拆东墙补西墙。CSS 和 JS 调色板的混合权重必须同步，不然画布和 DOM 会出现两种颜色。
+
+复测：**10 个组合 × 9 项全部 ≥ 4.5:1**，最差是经典 light 的 4.66:1；深色主题最低 5.98:1，太空主题 11.14:1。
+
+顺带踩了个测试坑：E2E 里原来断言 `--demo-accent` 解析出来是 `#` 开头的十六进制，桥接层升级成 `color-mix()` 之后断言直接挂了。断言该验证「变量被正确解析成可用色」，而不是「变量长什么样」。
+
+## 收敛
+
+这次真正值得复用的不是某个色值，是三条判断顺序：
+
+1. **主题不一致先查变量作用域**（节点在哪、变量挂在哪、Portal 之后还在不在），不要先改色值；
+2. **画布类消费者和 CSS 消费者必须分开处理**，一个读语义变量，一个读解析后的具体色值；
+3. **对比度要量化到组合级别**，五套主题 × 明暗 × 九项指标，靠肉眼看截图总会漏掉浅色主题的某个状态色。
+
+改完之后，六个 Demo 不再属于某一套主题，而是任何主题下的客人。

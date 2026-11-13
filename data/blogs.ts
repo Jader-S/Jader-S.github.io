@@ -13,13 +13,43 @@ export interface BlogPost {
 }
 
 /**
- * 15 篇技术日志，来自 E:\Jader\blog\src\content\blog\*.mdx 的 frontmatter。
+ * 18 篇技术日志，来自 E:\Jader\blog\src\content\blog\*.mdx 的 frontmatter。
  * 正文统一落在 content/blog/<slug>.mdx，站内本地渲染，不依赖任何外部博客平台。
  * 没有公开的点赞 / 浏览数据，likes / views 统一为 0。
  * 每篇按内容打了一个 theme 标签，归入对应主题页（blueprint/atelier/classic/particle）。
  * 内容源：site-content.yaml → blogs。
  */
 export const blogPosts: BlogPost[] = [
+  {
+    slug: "demo-theme-tokens-and-contrast",
+    title: "Portal 之后，颜色全失效了：给 6 个 Demo 做一次主题收敛",
+    description:
+      "同一个 Demo，在太空主题下发着霓虹蓝，切到浅色主题连字都看不清。根因不是哪几个色值写错，是变量作用域在 Portal 之后断了。",
+    likes: 0,
+    views: 0,
+    date: "2026-11-13",
+    theme: "classic",
+  },
+  {
+    slug: "minimal-change-and-the-meteor-rain",
+    title: "我为了「让字看得清」，把刚做好的功能改坏了",
+    description:
+      "本来只想把字符集换成 JaderAI.cn，我顺手加了固定顺序、整列常亮、加密提亮。回头看，我动的根本不是字符串，是整套效果。",
+    likes: 0,
+    views: 0,
+    date: "2026-11-13",
+    theme: "atelier",
+  },
+  {
+    slug: "blank-themes-and-stale-dev-servers",
+    title: "切个主题页面就空了：几台没杀干净的 dev server",
+    description:
+      "五个主题里四个白屏，路由级 page.js / page.css 全 404。清了缓存重跑还是复现——因为真正占着端口的那台服务器，根本没被杀掉。",
+    likes: 0,
+    views: 0,
+    date: "2026-11-13",
+    theme: "particle",
+  },
   {
     slug: "rebuilding-a-production-line-in-the-browser",
     title: "在浏览器里复原一条航天产线",
