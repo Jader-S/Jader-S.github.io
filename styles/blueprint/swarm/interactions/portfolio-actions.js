@@ -3,7 +3,7 @@ import { ActionType, InteractionStyle } from "./actions.js";
 /**
  * Click targets for the full drawn portfolio.
  * Scroll targets are scene element ids, so the engine keeps building as the page moves.
- * @param {{nav:string[], primaryCta:string, github:string, posts:{title:string, href:string}[], links:{id:string, label:string, kind:string, href?:string, target?:string}[]}} copy Nav labels, buttons, blog links, and the footer index.
+ * @param {{nav:string[], primaryCta:string, github:string, posts:{title:string, meta?:string, slug:string}[], links:{id:string, label:string, kind:string, href?:string, target?:string}[]}} copy Nav labels, buttons, blog post slugs, and the footer index.
  * @returns {object[]} Interaction definitions.
  */
 export function createPortfolioInteractions(copy) {
@@ -31,7 +31,7 @@ export function createPortfolioInteractions(copy) {
     after: [`t:b${index}`, `t:b${index}m`],
     label: post.title,
     style: InteractionStyle.LINK,
-    action: { type: ActionType.CUSTOM, id: "open", href: post.href },
+    action: { type: ActionType.CUSTOM, id: "open", slug: post.slug },
   }));
 
   return [

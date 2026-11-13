@@ -110,6 +110,11 @@ export interface LocaleMessages {
     index: string;
     title: string;
     subtitle: string;
+    allPosts: string;
+    close: string;
+    notFound: string;
+    emptyBody: string;
+    postCount: (count: number) => string;
   };
   experience: {
     index: string;

@@ -1,22 +1,8 @@
+/* 正文由 BlogModalHost 的面板提供内边距；这里只负责阅读行宽。 */
 .post {
   max-width: 46rem;
   margin: 0 auto;
-  padding: clamp(2.5rem, 6vw, 5rem) 1.25rem 6rem;
   color: var(--text-body);
-}
-
-.back {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-bottom: 2.25rem;
-  color: var(--theme-accent);
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-.back:hover {
-  color: var(--theme-accent-light);
 }
 
 .title {

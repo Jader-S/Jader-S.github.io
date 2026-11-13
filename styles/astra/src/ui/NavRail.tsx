@@ -8,6 +8,7 @@ import { useStore, requestFlyTo, type PlanetId } from "@astra/state/useStore";
 import { PLANETS } from "@astra/config/site";
 import { useT } from "@astra/i18n";
 import { detectMobile } from "@astra/utils/device";
+import { openBlogIndex } from "@/lib/blog-modal";
 import GlitchLabel from "./GlitchLabel";
 
 export default function NavRail() {
@@ -24,9 +25,9 @@ export default function NavRail() {
   const planets = PLANETS.filter((p) => p.id !== "home");
 
   const handlePlanetClick = (planetId: PlanetId) => {
-    // blog 迁出 ASTRA：点击离开太空主题，跳到默认主题页（日志在对应主题内本地展示）
+    // blog 用全局弹框承载，不离开 /astra
     if (planetId === "blog") {
-      window.location.href = "/blueprint";
+      openBlogIndex();
       return;
     }
     // 统一走 requestFlyTo：IDLE 直接俯冲；VIEWING（已在某星球）先回退全景再飞向目标

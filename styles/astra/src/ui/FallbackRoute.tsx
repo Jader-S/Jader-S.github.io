@@ -5,6 +5,7 @@
 import { requestFlyTo } from "@astra/state/useStore";
 import { PLANETS } from "@astra/config/site";
 import { useT } from "@astra/i18n";
+import { openBlogIndex } from "@/lib/blog-modal";
 
 export default function FallbackRoute() {
   const t = useT();
@@ -19,9 +20,9 @@ export default function FallbackRoute() {
             type="button"
             className="fallback__card"
             onClick={() => {
-              // blog 迁出 ASTRA：点击离开太空主题，跳到默认主题页
+              // blog 用全局弹框承载，不离开 /astra
               if (p.id === "blog") {
-                window.location.href = "/blueprint";
+                openBlogIndex();
                 return;
               }
               requestFlyTo(p.id);

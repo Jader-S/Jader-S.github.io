@@ -11,3 +11,5 @@ pnpm-lock.yaml
 *.min.js
 # generated embedded sub-app — keep byte-identical to sync-astra.mjs output
 public/embed/
+# generated MDX body table — byte-identical to gen-blog-content.mjs output
+data/blog-content.generated.json

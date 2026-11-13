@@ -8,7 +8,7 @@
  * - home（activePlanet === null）：HomePage hero 叠加层（pointer-events:none，不挡 3D）
  * - about / projects / demos / contact：对应详情页（内容走 ASTRA 内部 i18n，Phase 3 统一进 data/i18n）
  * - projects 下钻：局部 selectedProjectId 状态，列表 → 详情 → 返回列表
- * - blog：Phase 2 才迁入 MDX，此处先给占位面板
+ * - blog：由全局 BlogModalHost 弹框承载（列表 → 正文），不在此渲染 2D 面板
  */
 import { useEffect, useState } from "react";
 import { useStore } from "@astra/state/useStore";

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 import { useI18n } from "@/components/I18nProvider";
 import { blogPosts } from "@/data/blogs";
+import { openBlog } from "@/lib/blog-modal";
 import { experienceDomains, type ExperienceDomainId } from "@/data/experience";
 import { profile } from "@/data/profile";
 import {
@@ -70,7 +71,7 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
       .map((post) => ({
         title: post.title,
         meta: `${post.date} · ${post.likes}`,
-        href: `/blueprint/blog/${post.slug}`,
+        slug: post.slug,
       }));
     const domains = experienceDomains.map((domain) => {
       const id = domain.id as ExperienceDomainId;
@@ -163,15 +164,15 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
   }, [replayKey, locale, resolved]);
 
   const onAction = useCallback((action: object) => {
-    const next = action as { type?: string; id?: string; href?: string };
+    const next = action as { type?: string; id?: string; slug?: string };
     if (next.type !== ActionType.CUSTOM) return false;
     if (next.id === "github") {
       window.open(profile.github, "_blank", "noopener,noreferrer");
       return true;
     }
-    if (next.id === "open" && next.href) {
-      // Local blog posts open in the same tab.
-      window.location.assign(next.href);
+    if (next.id === "open" && next.slug) {
+      // Blog posts open in an in-page modal, no route and no new tab.
+      openBlog(next.slug);
       return true;
     }
     return false;

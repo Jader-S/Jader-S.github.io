@@ -67,7 +67,12 @@
 - `npm run dev` 下 `/astra` 原生渲染太空站，StyleRail 可在五主题间切换，WebGL 无冲突、无黑屏
 - `public/embed/astra/` 与 `sync-astra.mjs` 已删除
 
-## 3. Phase 2 —— `/blog` 路由（后做）
+## 3. Phase 2 —— 博客呈现在当前页弹框（已按 `PLAN_BLOGUPDATE_V2.md` Q1 调整）
+
+> **方案变更（2026-11-13）**：原计划的 `app/blog/page.tsx` + `app/blog/[slug]/page.tsx` **未实施**。
+> 最终定案为「全改弹框并删路由」：MDX 正文由 `scripts/gen-blog-content.mjs` 固化为静态数据，
+> 5 主题共用 `components/BlogModalHost.tsx` 在当前页弹框阅读，`app/<theme>/blog/[slug]/` 全部删除。
+> 以下是当时的设想，保留作决策记录。
 
 - 新增 `app/blog/page.tsx`（列表）+ `app/blog/[slug]/page.tsx`（详情）
 - 补 MDX 工具链：`gray-matter` + 渲染（倾向 `next-mdx-remote` RSC，或 `@next/mdx`）；blogUpdate 当前无 MDX 依赖

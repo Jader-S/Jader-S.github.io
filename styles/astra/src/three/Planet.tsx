@@ -10,6 +10,7 @@
 import { useMemo, useRef, type CSSProperties } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { openBlogIndex } from "@/lib/blog-modal";
 import { PLANETS, type PlanetConfig } from "@astra/config/site";
 import {
   useStore,
@@ -144,10 +145,10 @@ export default function Planet({ planet }: Props) {
     const st = useStore.getState();
     if (st.flight === "FLYING_IN" || st.flight === "FLYING_OUT") return;
     if (!planet.unlocked) return;
-    // blog 已迁出 ASTRA：点击不再在 3D 空间里叠 stub，而是离开太空主题、
-    // 跳到默认主题页（日志在对应主题内本地展示）。
+    // blog 不再离开太空主题：直接打开全局博客弹框（列表 → 正文）。
+    // 用外部 store 而非 Context —— Canvas 走 R3F 独立 reconciler，Context 穿透不可靠。
     if (planet.id === "blog") {
-      window.location.href = "/blueprint";
+      openBlogIndex();
       return;
     }
     requestFlyTo(planet.id as PlanetId);

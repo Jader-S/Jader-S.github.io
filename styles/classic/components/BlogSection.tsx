@@ -4,6 +4,7 @@ import ContentCard from "@/styles/classic/components/ContentCard";
 import SectionHeader from "@/styles/classic/components/SectionHeader";
 import { useI18n } from "@/components/I18nProvider";
 import { blogPosts } from "@/data/blogs";
+import { openBlog } from "@/lib/blog-modal";
 import { formatCount } from "@/lib/format";
 
 export default function BlogSection() {
@@ -26,7 +27,7 @@ export default function BlogSection() {
                 key={post.slug}
                 title={post.title}
                 description={post.description}
-                href={`/classic/blog/${post.slug}`}
+                onClick={() => openBlog(post.slug)}
                 badge={index === 0 ? t.common.hot : undefined}
                 highlight={index === 0}
                 clampDescription

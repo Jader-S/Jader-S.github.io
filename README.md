@@ -1,6 +1,6 @@
 # Jader · ASTRA Portfolio（多风格作品站）
 
-孙珺宇（Jader）的个人作品站 — 基于 [Luzhaotian/portfolio](https://github.com/Luzhaotian/portfolio)（MIT）的 **Next.js 15** 单页模板，五套可切换视觉风格：默认 **蓝图（Blueprint）**，另有 **静奢（Atelier）**、**经典（Classic）**、**粒子（Particle）**，以及通过 iframe 内嵌原 ASTRA 太空站的 **太空（ASTRA）**。
+孙珺宇（Jader）的个人作品站 — 基于 [Luzhaotian/portfolio](https://github.com/Luzhaotian/portfolio)（MIT）的 **Next.js 15** 单页模板，五套可切换视觉风格：默认 **蓝图（Blueprint）**，另有 **静奢（Atelier）**、**经典（Classic）**、**粒子（Particle）**，以及用 R3F 原生渲染的 **太空（ASTRA）** 星图站。
 
 内容唯一数据源是根目录 `site-content.yaml`（同步自 `E:\Jader\blog`）。改动后按 `.cursor/skills/*/references/apply-content.md` 的映射同步到 `data/` 与 `lib/i18n/locales/{zh,en}.ts`；嵌入产物的同步与实测见 [`ASTRA_EMBED.md`](./ASTRA_EMBED.md)。
 
@@ -8,7 +8,7 @@
 
 **在线地址：** [https://luzhaotian.github.io/portfolio/](https://luzhaotian.github.io/portfolio/)
 
-入口：`/` 默认进入 **蓝图** `/blueprint`；若本地记住过上次风格，则跳转到对应路径（新窗口切换风格，互不影响）。左侧竖栏顺序：蓝图 → 静奢 → 经典 → 粒子。
+入口：`/` 默认进入 **蓝图** `/blueprint`；若本地记住过上次风格，则跳转到对应路径。左侧竖栏在当前标签页切换风格（整页导航，确保特效引擎干净重建）。全站只有 `/` + 5 条主题路径，博客、项目详情在当前页弹框展示。
 
 ---
 
@@ -16,6 +16,7 @@
 
 - **多风格架构**：蓝图 / 静奢 / 经典 / 粒子拆成独立包（`styles/blueprint` · `styles/atelier` · `styles/classic` · `styles/particle`），共享内容与壳层；默认风格为蓝图
 - **左侧竖栏**：切换风格（蓝图居首；在当前标签页整页跳转，确保特效引擎干净重建）
+- **博客弹框**：5 套主题共用 `BlogModalHost`，点日志卡片在当前页弹框读本地 MDX；太空主题点「日志」行星先出全部文章列表，再下钻正文。不产生 `/blog/[slug]` 路由，不新开标签页
 - **右侧 AI 按钮**：悬停说明用途；点击复制当前风格的 Skill 提示词，粘贴给 AI 即可按本站生成同款项目
 - **中英文 / 主题**：语言与白天·夜晚·自动主题，偏好写入 `localStorage`
 - **内容数据化**：`site-content.yaml`（模板入口）→ `data/`（结构）+ `lib/i18n/`（双语文案），id 类型绑定防漏写
@@ -328,7 +329,7 @@ GITHUB_PAGES=true npm run build   # 产物在 out/；basePath 一般为 /portfol
 
 - 本仓库：[Jader-S/astra-portfolio](https://github.com/Jader-S/astra-portfolio)（private）
 - 本地运行：`npm run dev` 后访问 `/astra`、`/blueprint`、`/atelier`、`/classic`、`/particle` 等主题路由
-- 技术日志：见仓库 `content/blog/` 与各主题页 `/<theme>/blog`
+- 技术日志：15 篇 MDX 在 `content/blog/`，由 `npm run gen:blog-content`（`predev` / `prebuild` 自动执行）生成 `data/blog-content.generated.json`，5 主题点击卡片在当前页弹框阅读；改动 MDX 后重跑该命令即可
 - 模板来源：[Luzhaotian/portfolio](https://github.com/Luzhaotian/portfolio)（MIT，`LICENSE` 保留原作者版权）
 - Hero 卡片环绕：[@fxshelf/card-orbit](https://github.com/Luzhaotian/fxshelf/tree/main/packages/card-orbit)
 - 风格扩展说明：[`styles/README.md`](./styles/README.md)

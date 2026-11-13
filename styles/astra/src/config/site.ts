@@ -133,7 +133,8 @@ export const PLANETS: PlanetConfig[] = [
     radius: 0.21,
     color: "#10b981",
     unlocked: true,
-    route: "/blueprint",
+    // 日志由全局博客弹框承载，不产生页面跳转；route 仅作元数据保留。
+    route: "/astra",
     angle: 320,
   },
   {

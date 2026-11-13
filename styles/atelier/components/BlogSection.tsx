@@ -3,6 +3,7 @@
 import SectionHeader from "@/styles/atelier/components/SectionHeader";
 import { useI18n } from "@/components/I18nProvider";
 import { blogPosts } from "@/data/blogs";
+import { openBlog } from "@/lib/blog-modal";
 import { formatCount } from "@/lib/format";
 
 export default function BlogSection() {
@@ -22,9 +23,10 @@ export default function BlogSection() {
             .filter((p) => p.theme === "atelier")
             .map((post) => (
               <li key={post.slug} className="group border-t border-divider">
-                <a
-                  href={`/atelier/blog/${post.slug}`}
-                  className="focus-ring group grid grid-cols-1 gap-2 py-6 pl-0 transition-[padding,background-color,colors] duration-300 hover:bg-[var(--row-hover)] hover:pl-3 sm:grid-cols-[5.5rem_minmax(0,1fr)_auto] sm:items-baseline sm:gap-8 sm:py-7 sm:hover:pl-4"
+                <button
+                  type="button"
+                  onClick={() => openBlog(post.slug)}
+                  className="focus-ring group grid w-full grid-cols-1 gap-2 py-6 pl-0 text-left transition-[padding,background-color,colors] duration-300 hover:bg-[var(--row-hover)] hover:pl-3 sm:grid-cols-[5.5rem_minmax(0,1fr)_auto] sm:items-baseline sm:gap-8 sm:py-7 sm:hover:pl-4"
                 >
                   <time
                     dateTime={post.date || undefined}
@@ -47,7 +49,7 @@ export default function BlogSection() {
                   <span className="text-sm text-faint transition-all duration-300 group-hover:translate-x-1 group-hover:text-theme">
                     {t.common.readMore} →
                   </span>
-                </a>
+                </button>
               </li>
             ))}
         </ul>

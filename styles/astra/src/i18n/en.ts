@@ -316,7 +316,6 @@ export const en: ZhDict = {
   blog: {
     heading: "Log",
     sub: "Notes, musings, post-mortems.",
-    coming: "Blog posts land in M4. Stub for now.",
     readMore: "Read post",
     empty: "No posts yet",
     postCount: (n: number) => `${n} posts`,

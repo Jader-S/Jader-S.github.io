@@ -15,10 +15,9 @@ export default function BlogPostReader({
 }) {
   return (
     <article className={styles.post}>
-      <a className={styles.back} href={`/${post.theme}`}>
-        ← {post.theme}
-      </a>
-      <h1 className={styles.title}>{post.title}</h1>
+      <h1 className={styles.title} id="blog-modal-title">
+        {post.title}
+      </h1>
       <p className={styles.date}>{post.date}</p>
       <div className={styles.body}>
         <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>

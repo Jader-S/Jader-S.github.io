@@ -7,8 +7,11 @@
     "npm": ">=9"
   },
   "scripts": {
+    "gen:blog-content": "node scripts/gen-blog-content.mjs",
+    "predev": "npm run gen:blog-content",
     "dev": "node --env-file=.env ./node_modules/next/dist/bin/next dev",
     "dev:clean": "npm run clean && node --env-file=.env ./node_modules/next/dist/bin/next dev",
+    "prebuild": "npm run gen:blog-content",
     "build": "next build",
     "preview": "GITHUB_PAGES=true npm run build && npx --yes serve out -p 3000",
     "start": "node --env-file=.env ./node_modules/next/dist/bin/next start",

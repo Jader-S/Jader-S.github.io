@@ -310,7 +310,6 @@ export const zh = {
   blog: {
     heading: "日志",
     sub: "思考、笔记、阶段性复盘。",
-    coming: "博客全文 M4 接入，先放个占位。",
     readMore: "阅读全文",
     empty: "暂无日志",
     postCount: (n: number) => `共 ${n} 篇`,
