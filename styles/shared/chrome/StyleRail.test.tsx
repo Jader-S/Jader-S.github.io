@@ -8,7 +8,7 @@ describe("StyleRail", () => {
     vi.restoreAllMocks();
   });
 
-  it("marks the current style and opens another style in a new window", async () => {
+  it("marks the current style and links to another style in the same tab", async () => {
     const user = userEvent.setup();
     const open = vi.spyOn(window, "open").mockReturnValue(null);
     renderWithProviders(<StyleRail />, { style: "atelier" });
@@ -19,7 +19,13 @@ describe("StyleRail", () => {
       "page"
     );
 
-    await user.click(screen.getByRole("link", { name: "经典" }));
-    expect(open).toHaveBeenCalledWith("/classic", "_blank", "noopener,noreferrer");
+    const classicLink = screen.getByRole("link", { name: "经典" });
+    expect(classicLink).toHaveAttribute("href", "/classic");
+    expect(classicLink).not.toHaveAttribute("target");
+
+    // The active tab must not reload/navigate; real cross-style navigation is
+    // covered by e2e (rails.spec.ts) since jsdom cannot follow a document load.
+    await user.click(screen.getByRole("link", { name: "静奢" }));
+    expect(open).not.toHaveBeenCalled();
   });
 });

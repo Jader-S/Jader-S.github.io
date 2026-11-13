@@ -20,7 +20,6 @@ export const zh: LocaleMessages = {
     featured: "精选",
     hot: "热门",
     visitGithub: "访问 GitHub",
-    viewCsdn: "查看博客",
     yearsExp: "年前端开发经验",
     yearsExpShort: "年经验",
     footerTech: "Next.js · UnoCSS · ASTRA",
@@ -247,7 +246,6 @@ export const zh: LocaleMessages = {
   footer: {
     about: "关于",
     blog: "博客",
-    csdn: "博客",
   },
   cookie: {
     title: "我们使用 Cookie",

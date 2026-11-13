@@ -15,11 +15,11 @@
 ## 功能特性
 
 - **多风格架构**：蓝图 / 静奢 / 经典 / 粒子拆成独立包（`styles/blueprint` · `styles/atelier` · `styles/classic` · `styles/particle`），共享内容与壳层；默认风格为蓝图
-- **左侧竖栏**：切换风格（蓝图居首；新标签打开另一套）
+- **左侧竖栏**：切换风格（蓝图居首；在当前标签页整页跳转，确保特效引擎干净重建）
 - **右侧 AI 按钮**：悬停说明用途；点击复制当前风格的 Skill 提示词，粘贴给 AI 即可按本站生成同款项目
 - **中英文 / 主题**：语言与白天·夜晚·自动主题，偏好写入 `localStorage`
 - **内容数据化**：`site-content.yaml`（模板入口）→ `data/`（结构）+ `lib/i18n/`（双语文案），id 类型绑定防漏写
-- **博客**：CSDN 点赞文（`npm run fetch:blogs`）；GitHub Actions 可定时更新
+- **博客**：15 篇本地 MDX 技术日志，按主题在站内渲染，不依赖任何外部博客平台
 - **质量门禁**：Vitest 单元测试 · Playwright E2E · CI（lint / typecheck / test）
 - Cookie 提示、回到顶部、SEO（Metadata / OpenGraph / 跳过导航）
 
@@ -154,7 +154,6 @@ npm run dev
 | `npm run build`                    | 生产构建                                  |
 | `npm run preview`                  | 模拟 GitHub Pages 静态预览                |
 | `npm start`                        | Next.js 生产服务（非静态导出）            |
-| `npm run fetch:blogs`              | 抓取 CSDN 博客数据                        |
 | `npm run lint` / `lint:fix`        | ESLint                                    |
 | `npm run format` / `format:check`  | Prettier                                  |
 | `npm run typecheck`                | TypeScript 类型检查（`tsc --noEmit`）     |
@@ -260,13 +259,13 @@ uno.config.ts
 
 ## 交互组件
 
-| 组件                           | 位置     | 说明                                               |
-| ------------------------------ | -------- | -------------------------------------------------- |
-| `StyleRail`                    | 左侧中部 | 竖排切换蓝图 / 静奢 / 经典 / 粒子（`window.open`） |
-| `SkillShareRail`               | 右侧中部 | AI 圆形按钮；悬停提示；点击复制 Skill 提示词       |
-| `LocaleToggle` / `ThemeToggle` | 导航栏   | 语言 / 主题                                        |
-| `BackToTop`                    | 右下角   | 滚动超过阈值后显示                                 |
-| `CookieConsent`                | 底部     | 同意偏好 `portfolio-cookie-consent`                |
+| 组件                           | 位置     | 说明                                                           |
+| ------------------------------ | -------- | -------------------------------------------------------------- |
+| `StyleRail`                    | 左侧中部 | 竖排切换蓝图 / 静奢 / 经典 / 粒子 / 太空（当前标签页整页跳转） |
+| `SkillShareRail`               | 右侧中部 | AI 圆形按钮；悬停提示；点击复制 Skill 提示词                   |
+| `LocaleToggle` / `ThemeToggle` | 导航栏   | 语言 / 主题                                                    |
+| `BackToTop`                    | 右下角   | 滚动超过阈值后显示                                             |
+| `CookieConsent`                | 底部     | 同意偏好 `portfolio-cookie-consent`                            |
 
 ---
 
@@ -304,11 +303,10 @@ npm run build && npm start   # 标准 Next.js
 npm run preview              # 模拟 GitHub Pages 静态站（推荐）
 ```
 
-| Workflow                             | 触发                    | 作用                                         |
-| ------------------------------------ | ----------------------- | -------------------------------------------- |
-| `.github/workflows/ci.yml`           | PR / 推送 `main`        | lint · typecheck · 单元测试 · E2E（Node 22） |
-| `.github/workflows/deploy.yml`       | 推送 `main` / 手动      | `GITHUB_PAGES=true` 构建并部署 GitHub Pages  |
-| `.github/workflows/update-blogs.yml` | 每周一 UTC 02:00 / 手动 | 抓取 CSDN 博客数据并提交                     |
+| Workflow                       | 触发               | 作用                                         |
+| ------------------------------ | ------------------ | -------------------------------------------- |
+| `.github/workflows/ci.yml`     | PR / 推送 `main`   | lint · typecheck · 单元测试 · E2E（Node 22） |
+| `.github/workflows/deploy.yml` | 推送 `main` / 手动 | `GITHUB_PAGES=true` 构建并部署 GitHub Pages  |
 
 ```bash
 GITHUB_PAGES=true npm run build   # 产物在 out/；basePath 一般为 /portfolio

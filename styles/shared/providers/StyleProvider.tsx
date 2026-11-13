@@ -9,7 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { applyStyle, openStyleWindow, type StyleMode } from "@/lib/style";
+import { applyStyle, goToStyle, type StyleMode } from "@/lib/style";
 import { getStyleDefinition, STYLE_IDS } from "@/styles/registry";
 import type { ChromeVariant, StyleDefinition } from "@/styles/types";
 
@@ -41,7 +41,7 @@ export function StyleProvider({ style: routeStyle, children }: StyleProviderProp
   const setStyle = useCallback(
     (next: StyleMode) => {
       if (next === routeStyle) return;
-      openStyleWindow(next);
+      goToStyle(next);
     },
     [routeStyle]
   );
@@ -49,7 +49,7 @@ export function StyleProvider({ style: routeStyle, children }: StyleProviderProp
   const toggleStyle = useCallback(() => {
     const idx = STYLE_IDS.indexOf(routeStyle);
     const next = STYLE_IDS[(idx + 1) % STYLE_IDS.length] ?? routeStyle;
-    if (next !== routeStyle) openStyleWindow(next);
+    if (next !== routeStyle) goToStyle(next);
   }, [routeStyle]);
 
   const value = useMemo(

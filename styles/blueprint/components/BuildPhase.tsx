@@ -169,8 +169,9 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
       window.open(profile.github, "_blank", "noopener,noreferrer");
       return true;
     }
-    if ((next.id === "open" || next.id === "csdn") && next.href) {
-      window.open(next.href, "_blank", "noopener,noreferrer");
+    if (next.id === "open" && next.href) {
+      // Local blog posts open in the same tab.
+      window.location.assign(next.href);
       return true;
     }
     return false;

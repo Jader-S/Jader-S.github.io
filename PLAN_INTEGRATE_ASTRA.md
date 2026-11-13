@@ -73,7 +73,7 @@
 - 补 MDX 工具链：`gray-matter` + 渲染（倾向 `next-mdx-remote` RSC，或 `@next/mdx`）；blogUpdate 当前无 MDX 依赖
 - 迁 15 篇 MDX（frontmatter：`title/date/tags/excerpt`）从 `E:\Jader\blog\src\content\blog` 进 `content/blog/`
 - **只迁移不改写**；所有五主题加 `/blog` 入口链接
-- 原文站的 `jaderai.cn/blog` 深链：因新站本地自用，可加 301/说明或保留外部旧链
+- 原文站博客已全部迁入 `content/blog/*.mdx`，站内本地渲染；不保留任何外部文章链接
 
 ## 4. Phase 3 —— 内容重写并进统一层（另排期）
 

@@ -51,7 +51,6 @@ export interface LocaleMessages {
     featured: string;
     hot: string;
     visitGithub: string;
-    viewCsdn: string;
     yearsExp: string;
     yearsExpShort: string;
     footerTech: string;
@@ -122,7 +121,6 @@ export interface LocaleMessages {
   footer: {
     about: string;
     blog: string;
-    csdn: string;
   };
   cookie: {
     title: string;

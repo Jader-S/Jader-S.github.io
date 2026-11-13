@@ -21,6 +21,10 @@ export default function ContentCard({
   footer,
   linkLabel,
 }: ContentCardProps) {
+  // Site-internal links (e.g. blog posts) stay in the current tab; external
+  // repo links keep the opener tab intact.
+  const isInternal = href?.startsWith("/") ?? false;
+  const linkProps = isInternal ? {} : { target: "_blank", rel: "noopener noreferrer" };
   return (
     <article
       className={`glass-card-interactive group flex h-full flex-col p-5 sm:p-6 ${
@@ -36,8 +40,7 @@ export default function ContentCard({
           {href ? (
             <a
               href={href}
-              target="_blank"
-              rel="noopener noreferrer"
+              {...linkProps}
               className={`focus-ring rounded-sm hover:underline ${
                 clampDescription ? "line-clamp-2" : ""
               }`}
@@ -68,8 +71,7 @@ export default function ContentCard({
       {href && linkLabel && (
         <a
           href={href}
-          target="_blank"
-          rel="noopener noreferrer"
+          {...linkProps}
           className="focus-ring mt-4 inline-flex items-center gap-1 text-sm text-theme transition-colors hover:text-theme-light"
         >
           {linkLabel}

@@ -20,7 +20,6 @@ export const en: LocaleMessages = {
     featured: "Featured",
     hot: "Popular",
     visitGithub: "Visit GitHub",
-    viewCsdn: "Visit blog",
     yearsExp: "years of frontend experience",
     yearsExpShort: "yrs exp",
     footerTech: "Next.js · UnoCSS · ASTRA",
@@ -253,7 +252,6 @@ export const en: LocaleMessages = {
   footer: {
     about: "About",
     blog: "Blog",
-    csdn: "Blog",
   },
   cookie: {
     title: "We Use Cookies",

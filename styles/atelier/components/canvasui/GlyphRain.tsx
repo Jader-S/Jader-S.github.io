@@ -69,8 +69,7 @@ export interface GlyphRainInstance {
   destroy: () => void;
 }
 
-const DEFAULT_CHARSET =
-  "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789Z*+-<>¦=:.";
+const DEFAULT_CHARSET = "JADERAIjaderai0123456789*+-<>·.";
 
 const DEFAULTS: Required<GlyphRainOptions> = {
   charset: DEFAULT_CHARSET,

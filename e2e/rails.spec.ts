@@ -7,20 +7,16 @@ test.describe("style rail and skill share", () => {
     await dismissCookieConsent(page);
   });
 
-  test("style rail opens another style in a new tab", async ({ page, context }) => {
+  test("style rail switches style in the same tab", async ({ page }) => {
     const styleNav = page.getByRole("navigation", { name: /页面风格|Page style/ });
     await expect(styleNav.getByRole("link", { name: "静奢" })).toHaveAttribute(
       "aria-current",
       "page"
     );
 
-    const popupPromise = context.waitForEvent("page");
     await styleNav.getByRole("link", { name: "经典" }).click();
-    const popup = await popupPromise;
-    await popup.waitForLoadState("domcontentloaded");
-    await expect(popup).toHaveURL(/\/classic\/?$/);
-    await expect(popup.locator("html")).toHaveAttribute("data-style", "classic");
-    await popup.close();
+    await expect(page).toHaveURL(/\/classic\/?$/);
+    await expect(page.locator("html")).toHaveAttribute("data-style", "classic");
   });
 
   test("skill share copies prompt to clipboard", async ({ page, context }) => {

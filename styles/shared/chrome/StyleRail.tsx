@@ -2,10 +2,10 @@
 
 import { useI18n } from "@/components/I18nProvider";
 import { useStyle } from "@/styles/shared/providers/StyleProvider";
-import { getStyleHref, openStyleWindow } from "@/lib/style";
+import { getStyleHref } from "@/lib/style";
 import { STYLE_IDS, STYLE_REGISTRY, type StyleMode } from "@/styles/registry";
 
-/** Left floating vertical style tabs — opens another style via window.open. */
+/** Left floating vertical style tabs — switches style in the current tab. */
 export default function StyleRail() {
   const { style, chrome } = useStyle();
   const { t } = useI18n();
@@ -32,8 +32,6 @@ export default function StyleRail() {
           <a
             key={item}
             href={getStyleHref(item)}
-            target="_blank"
-            rel="noopener noreferrer"
             aria-current={active ? "page" : undefined}
             aria-label={label}
             title={label}
@@ -48,8 +46,9 @@ export default function StyleRail() {
             }
             style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
             onClick={(event) => {
-              event.preventDefault();
-              if (!active) openStyleWindow(item);
+              // Same-tab full navigation via the native href; only the active
+              // style is prevented so the page does not reload on itself.
+              if (active) event.preventDefault();
             }}
           >
             {label}

@@ -24,7 +24,6 @@
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:install": "playwright install chromium",
     "clean": "rm -rf .next .next-dev",
-    "fetch:blogs": "node scripts/fetch-csdn-blogs.mjs && prettier --write data/blogs.ts",
     "prepare": "husky"
   },
   "dependencies": {

@@ -44,9 +44,20 @@ export function applyStyle(mode: StyleMode) {
   localStorage.setItem(STYLE_STORAGE_KEY, mode);
 }
 
-/** Open the target style in a new window/tab so plugins load in a fresh page. */
-export function openStyleWindow(mode: StyleMode) {
-  window.open(getStyleHref(mode), "_blank", "noopener,noreferrer");
+/**
+ * Switch style in the current tab.
+ * A full navigation (rather than client-side routing) is intentional: each
+ * style owns global effect engines (p5 / vanta / R3F / WebGL glyph rain) with
+ * animation loops and WebGL contexts that must be torn down on page unload.
+ *
+ * `navigate` is injectable so unit tests can assert the target href without
+ * fighting jsdom's non-configurable Location.assign. Production callers omit it.
+ */
+export function goToStyle(
+  mode: StyleMode,
+  navigate: (href: string) => void = (href) => window.location.assign(href)
+) {
+  navigate(getStyleHref(mode));
 }
 
 /** FOUC-safe init: prefer route path, else last stored style. */

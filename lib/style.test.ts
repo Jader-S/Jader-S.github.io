@@ -5,7 +5,7 @@ import {
   applyStyle,
   getStoredStyle,
   getStyleHref,
-  openStyleWindow,
+  goToStyle,
   styleFromPathname,
 } from "./style";
 
@@ -68,15 +68,13 @@ describe("applyStyle", () => {
   });
 });
 
-describe("openStyleWindow", () => {
-  it("opens the style href in a new tab", () => {
+describe("goToStyle", () => {
+  it("navigates to the style href in the current tab", () => {
+    const navigate = vi.fn();
     const open = vi.spyOn(window, "open").mockReturnValue(null);
-    openStyleWindow("atelier");
-    expect(open).toHaveBeenCalledWith(
-      STYLE_PATHS.atelier,
-      "_blank",
-      "noopener,noreferrer"
-    );
+    goToStyle("atelier", navigate);
+    expect(navigate).toHaveBeenCalledWith(STYLE_PATHS.atelier);
+    expect(open).not.toHaveBeenCalled();
     open.mockRestore();
   });
 });
