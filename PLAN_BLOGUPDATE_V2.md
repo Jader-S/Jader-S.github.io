@@ -538,3 +538,26 @@
 - 提交链：`ce9f293`（Phase 7）→ `b3d6c47`（Phase 8）→ `da84561`（Phase 9）→ 本次对比度收口。
 - 全链路门禁：`typecheck` ｜ `lint` 0 warning ｜ `test` 23 文件 / 94 用例 ｜ `prettier --check` ｜ `GITHUB_PAGES=true PAGES_REPO_NAME= npm run build`（9 页 / 257 kB）｜ Playwright 全量 E2E 24 例（dev HMR 抖动单 spec 复跑通过）。
 - dev `/` + 5 主题路径均 HTTP 200；README / PLAN 状态与实现一致；`.workbuddy/memory` 已同步；工作区干净。
+
+---
+
+## 15 · 后续补充：Phase 10–13（2026-11-13 晚间）
+
+> 以下四期是用户复看后的追加调整，均已单独验收 + 单独提交。详细改动与踩坑见 `.workbuddy/memory/2026-11-13.md`；跨期约定见 `.workbuddy/memory/MEMORY.md`。
+
+| 期       | Commit    | 内容                                                                                                                                                                                                                                                                                                     |
+| -------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Phase 10 | `db77eb8` | 蓝图桌面端「自构建画布」新增 `drawLab()`，把实验室插在作品与技能之间成为主页模块（3×2 Demo 卡片板）；导航由 `openDemoIndex()` 弹窗改为 `SCROLL l-title`；场景高度 5160→5880、后续区块整体 +720 下移；卡片点击走 `openDemo(slug, {kind:"lab"})`。                                                         |
+| Phase 11 | `0ef4070` | 排查「切换主题看不到内容」：根因是僵尸 dev server + 旧 `.next` 缓存污染导致路由分块 404（环境问题非代码）。精准杀进程 + 清缓存 + 干净重启后 atelier / classic / particle / astra 全部恢复。顺手消除 astra `contact` 星球缺失贴图的 404（`planetTextures.ts` 加已知贴图清单、缺失 id 直接走程序化兜底）。 |
+| Phase 12 | `414d782` | 静奢品牌字 `LUZHAOTIAN` → `孙珺宇·Jader`；流星字符集改为 `JaderAI.cn`；修复字符水平镜像。                                                                                                                                                                                                                |
+| Phase 13 | `8baf45f` | **需求纠偏**：撤销 Phase 12 引入的 `sequence` 全套（固定顺序 / 整列常亮 / 固定亮度），恢复原始 Matrix 稀疏拖尾雨；最终只保留「沿列固定顺序 `JaderAI.cn `（末尾空格分隔）+ 正向字符」，所有密度 / 亮度 / 字号 / 速度参数保持原始值。                                                                      |
+
+### 15.1 · 关键约定
+
+- **蓝图画布是独立体系**：桌面端常驻 `BuildPhase` 绘制页，`SettledHome`（含共享 `LabSection`）只在移动端 / 减弱动效时挂载。任何「主页新增区块」需求必须同时考虑画布侧是否要 `scene.frame()` + `NAV_TARGETS` + `createPortfolioInteractions` 三处联动。
+- **最小改动原则**：用户要「改字符串 / 改文案」时只改该处，不要为提升可读性自作主张改渲染机制或视觉参数。Phase 12→13 的返工即因违反此原则。
+- **当前静奢流星的有效实现以 Phase 13 为准**，Phase 12 段落中的 `sequence` 描述已作废。
+
+### 15.2 · 验收基线（Phase 13 后）
+
+`typecheck` ✓ ｜ `eslint . --max-warnings 0` ✓ 0 warning ｜ `vitest run` ✓ 23 files / 94 tests ｜ `next build` ✓ 9 静态页 ｜ 五主题浏览器全量实跑全 200、无 404、无 pageerror ｜ 工作区干净。
