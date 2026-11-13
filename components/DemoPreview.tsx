@@ -52,7 +52,7 @@ export default function DemoPreview({
   const Demo = entry.Component;
 
   return (
-    <div className={styles.wrap}>
+    <div className={styles.wrap} data-testid="demo-preview">
       {entry.wide ? <p className={styles.hint}>{copy.wideHint}</p> : null}
       <div className={`${styles.host} ${entry.wide ? styles.hostWide : ""}`}>
         <DemoErrorBoundary key={slug} fallback={fallback}>

@@ -19,6 +19,7 @@ export default function BlogSection() {
           <li key={post.slug} className="border-b border-divider">
             <button
               type="button"
+              data-testid="blog-card"
               onClick={() => openBlog(post.slug)}
               className="focus-ring block w-full py-4 text-left transition-colors hover:bg-[var(--nav-hover)]"
             >

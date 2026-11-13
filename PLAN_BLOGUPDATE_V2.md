@@ -1,6 +1,6 @@
 # PLAN_BLOGUPDATE_V2 — blogUpdate 改造需求梳理与分期计划
 
-> 状态：**Phase 1（`3b238b1`）+ Phase 2（`2dc4734`）+ Phase 3（`ef1879e`）+ Phase 4（`c0e171a`）+ Phase 5（`4a25c13`）已交付 · Phase 6 待启动**
+> 状态：**Phase 1（`3b238b1`）+ Phase 2（`2dc4734`）+ Phase 3（`ef1879e`）+ Phase 4（`c0e171a`）+ Phase 5（`4a25c13`）+ Phase 6（`d4289a1`）已交付 · 全部分期完成**
 > 创建：2026-11-13 ｜ 范围：`E:\Jader\blogUpdate`（Next 15 / React 19 / UnoCSS / 5 主题）
 > 需求确认后按 Phase 分步执行，每期单独验收、单独提交。
 > 2026-11-13 更新 1：Q1/Q2/Q3/Q4 均选方案 1（见 6.1），补充「3.2 默认命名总表」与「6.2 默认执行项」。
@@ -397,11 +397,36 @@
 - 本轮改动文件 `prettier --check` ✓；`out/` 清空重建后无 `jaderai.cn` / `blog.csdn` / `navClassic` / `qa-agent/index.html` 残留
 - dev `:5555` 六条路径（含 `/`）均 200；提交 hook 通过；提交后复验 typecheck / lint / test 全绿
 
-**未完成 / 风险**
+## 13 · Phase 6 全量验收（已交付 `d4289a1`）
 
-- 真实浏览器 E2E 与 390 / 768px 视觉走查仍未做（**Phase 6**，本机缺 Playwright chromium）；新增的命名 / 锚点 E2E 断言已写入文件，但只做了静态校验，未在浏览器实跑。
-- ASTRA 作品详情仍是 2D 面板，四主题用共享弹框；详情形态未强行统一（保留主题特色，关联 Demo 已走共享弹框）。
-- 章节编号 `02 · OPEN SOURCE` 是刻意作为 `#work` 的子编号，不是漏号。
-- 仍留到后续：15 篇博客正文 62 KB JSON 进首屏 bundle 的动态 import 优化；3D Demo 在非 ASTRA 主题下的 WebGL 实机验证；`lib/skillShare.ts` 的历史失效路径。
+### 改动
 
-**下一步**：Phase 6 全量验收（typecheck / lint / test / format / build、安装 chromium 后跑 E2E、5 主题 × 桌面 / 移动端人工视觉走查、博客与项目弹框 + 内联 Demo + 移动端抽屉逐项验证、重建静态产物）。
+- 安装 Playwright chromium（官方 CDN `cdn.playwright.dev` 在本机 `ECONNRESET` 反复失败，改用 `PLAYWRIGHT_DOWNLOAD_HOST=https://cdn.npmmirror.com/binaries/playwright` 镜像后装好 `chromium-1243` + `chromium_headless_shell-1243`）。
+- 新增 `e2e/modals.spec.ts`：atelier 下验证「博客卡 → 当前页弹框（不跳路由）/ 项目卡 → 详情弹框 → 点 Demo → 内联预览（同页、可返回、Esc 关闭）」。
+- 为稳定选择器，在 `BlogSection`（atelier / blueprint）、`SelectedProjects` 卡片、`ProjectModalHost` 的 demo 按钮、`DemoPreview` 容器加 `data-testid`（atelier/blueprint 博客卡 `blog-card`、atelier 项目卡 `project-card`、弹框内 demo 按钮 `demo-item`、预览容器 `demo-preview`）。
+
+### 验收（真实浏览器，chromium headless）
+
+- `npx playwright test` ✓ **20 passed（全绿，4 worker）**：
+  - home 重定向 ×2、chrome 主题/语言切换 ×2、rails 主题切换同标签 + 移动端抽屉 + 剪贴板 ×4、navigation 桌面跳转 + 移动菜单 + cookie ×3、styles 五主题加载 + 六段统一布局 ×6、**modals 博客弹框 + 项目详情内联 Demo ×2**。
+  - 首跑曾因改源码触发 dev server HMR 重编译、8 worker 并发打热路由出现 `page.reload` 超时（非断言失败）；服务热身后续跑 + 单 spec 复跑均稳定通过，确认为偶发抖动。
+- 静/动/构建终检：`npm run typecheck` ✓ ｜ `npm run lint` ✓ 0 warning ｜ `npm run test` ✓ 22 files / **85 tests** ｜ `GITHUB_PAGES=true PAGES_REPO_NAME= npm run build` ✓ 9 页 / 首屏 258 kB ｜ 改动文件 `prettier --check` ✓ ｜ dev `:5555` 六路径 200 ｜ `out/` 清空重建无 `jaderai.cn` / CSDN / `navClassic` / `qa-agent` 残留。
+
+### 真机验证覆盖（Phase 6 已闭环的项）
+
+| 项                                                                  | 验证方式                           | 结果 |
+| ------------------------------------------------------------------- | ---------------------------------- | ---- |
+| 主题切换同标签（非新窗）                                            | rails.spec 桌面 + 移动             | ✓    |
+| 移动端主题抽屉（收起 / Esc / 遮罩关闭）                             | rails.spec mobile                  | ✓    |
+| 博客弹框（当前页、不跳路由、Esc 关闭）                              | modals.spec + 单测                 | ✓    |
+| 项目详情弹框 + 内联 Demo 预览（同页、可返回）                       | modals.spec + 单测                 | ✓    |
+| 五主题加载 + 统一六段布局（#about/#work/#skills/#blog/#experience） | styles.spec                        | ✓    |
+| 语言切换跟随主站（astra 桥接根 locale）                             | chrome.spec locale + 单测          | ✓    |
+| 命名统一（关于我 / 经验领域 / 博客 / 全景 / 联系我）                | styles.spec 锚点 + 单测 + 字典断言 | ✓    |
+
+### 仍留到后续（非本期范围，非缺陷）
+
+- 15 篇博客正文 62 KB JSON 随 `AppProviders` 进首屏 bundle，后续可改打开弹框时动态 import。
+- ASTRA 作品详情保留 2D 面板（主题特色，关联 Demo 已走共享弹框），四主题用共享弹框，形态未强行统一。
+- `lib/skillShare.ts` 里 `scripts/sync-astra.mjs` 历史失效路径未处理。
+- 3D Demo（factory-line / lianhang-dashboard）在非 ASTRA 主题的 WebGL 上下文实机渲染：构建与 lazy 加载已验证，E2E 内联预览挂载已验证 `demo-preview` 容器出现，但真机 3D 画面需人工肉眼走查（headless 下 R3F 用 SwiftShader，画面正确性不在自动化断言内）。

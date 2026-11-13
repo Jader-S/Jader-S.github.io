@@ -56,6 +56,7 @@ export default function SelectedProjects() {
               <article
                 role="button"
                 tabIndex={0}
+                data-testid="project-card"
                 aria-label={`${text.name} · ${copy.viewDetails}`}
                 onClick={() => openProject(project.id)}
                 onKeyDown={(event) => {

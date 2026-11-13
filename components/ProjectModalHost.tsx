@@ -102,6 +102,7 @@ function ProjectView({
                     <li key={slug}>
                       <button
                         type="button"
+                        data-testid="demo-item"
                         className={styles.demoItem}
                         onClick={() => openDemo(slug)}
                       >
@@ -149,6 +150,7 @@ function DemoIndexView({ locale }: { locale: Locale }) {
           <li key={demo.slug}>
             <button
               type="button"
+              data-testid="demo-item"
               className={styles.demoItem}
               onClick={() => openDemo(demo.slug)}
             >

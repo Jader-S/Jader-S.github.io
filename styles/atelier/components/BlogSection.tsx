@@ -25,6 +25,7 @@ export default function BlogSection() {
               <li key={post.slug} className="group border-t border-divider">
                 <button
                   type="button"
+                  data-testid="blog-card"
                   onClick={() => openBlog(post.slug)}
                   className="focus-ring group grid w-full grid-cols-1 gap-2 py-6 pl-0 text-left transition-[padding,background-color,colors] duration-300 hover:bg-[var(--row-hover)] hover:pl-3 sm:grid-cols-[5.5rem_minmax(0,1fr)_auto] sm:items-baseline sm:gap-8 sm:py-7 sm:hover:pl-4"
                 >
