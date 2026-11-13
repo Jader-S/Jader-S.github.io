@@ -1,0 +1,525 @@
+.swarm-experience {
+  --paper: #f4f5f7;
+  --ink: #1a1c1f;
+}
+html[data-theme="dark"] .swarm-experience {
+  --paper: #0e141b;
+  --ink: #e8ecf1;
+}
+.swarm-experience {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  font-family:
+    Space Grotesk,
+    Source Sans\3,
+    Noto Sans SC,
+    system-ui,
+    sans-serif;
+}
+.swarm-experience,
+.swarm-experience *,
+.swarm-experience :after,
+.swarm-experience :before {
+  box-sizing: border-box;
+}
+.swarm-experience .page {
+  position: relative;
+  width: 100%;
+  overflow: clip;
+  display: flow-root;
+}
+.swarm-experience .canvas,
+.swarm-experience .nav-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+}
+.swarm-experience .nav-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.swarm-experience .nav-backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--paper);
+}
+.swarm-experience .paths {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+.swarm-experience .el-text {
+  position: absolute;
+  font-feature-settings: "cv11", "ss01";
+}
+.swarm-experience .el-rect {
+  position: absolute;
+  transition:
+    background-color 0.22s ease,
+    border-radius 0.22s ease,
+    box-shadow 0.22s ease;
+}
+.swarm-experience .text-sel {
+  background: #0d99ff47;
+}
+.swarm-experience .caret {
+  display: inline-block;
+  width: 1px;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: currentColor;
+  animation: swarm-blink 1s steps(1) infinite;
+}
+@keyframes swarm-blink {
+  50% {
+    opacity: 0;
+  }
+}
+.swarm-experience .intro-logo {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+.swarm-experience .intro-logo.gone {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.92);
+}
+.swarm-experience .cursors {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 30;
+}
+.swarm-experience .cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+.swarm-experience .cursor svg {
+  position: absolute;
+  overflow: visible;
+  filter: drop-shadow(0 1px 1.5px rgb(0 0 0/28%));
+}
+.swarm-experience .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+.swarm-experience .overlay svg {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+.swarm-experience .badge {
+  position: absolute;
+  transform: translate(-50%);
+  padding: 1px 4px;
+  border-radius: 2px;
+  color: #fff;
+  font:
+    600 11px/16px Inter,
+    system-ui,
+    sans-serif;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.swarm-experience .ruler {
+  position: fixed;
+  z-index: 20;
+  background: #2c2c2c;
+  pointer-events: none;
+}
+.swarm-experience .ruler-top {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  border-bottom: 1px solid #3a3a3a;
+}
+.swarm-experience .ruler-left {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 20px;
+  border-right: 1px solid #3a3a3a;
+}
+.swarm-experience .ruler svg {
+  display: block;
+}
+.swarm-experience .ruler-corner {
+  position: fixed;
+  z-index: 21;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  background: #2c2c2c;
+}
+.swarm-experience .rtext {
+  font:
+    500 9px Inter,
+    system-ui,
+    sans-serif;
+  fill: #8c8c8c;
+}
+.swarm-experience .rsel {
+  fill: #0d99ff;
+}
+.swarm-experience .scene-action {
+  position: absolute;
+  z-index: 1;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    background-color 0.16s ease,
+    box-shadow 0.16s ease;
+}
+.swarm-experience .scene-action--link:hover {
+  background: rgb(76 91 212/8%);
+  box-shadow: 0 2px 0 #4c5bd4;
+}
+.swarm-experience .scene-action--button:hover {
+  background: rgb(76 91 212/18%);
+  box-shadow: 0 0 0 2px rgb(76 91 212/35%);
+}
+.swarm-experience .scene-action:active {
+  background: rgb(76 91 212/28%);
+}
+.swarm-experience .intro-trigger:focus-visible,
+.swarm-experience .scene-action:focus-visible {
+  outline: 2px solid #4c5bd4;
+  outline-offset: 4px;
+}
+.swarm-experience .intro-trigger {
+  display: grid;
+  place-items: center;
+  padding: 14px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.swarm-experience .intro-trigger:hover {
+  background: rgb(76 91 212/5%);
+}
+.swarm-experience .intro-mark {
+  display: block;
+  width: 112px;
+  height: 112px;
+  color: #8b93a1;
+}
+html[data-theme="dark"] .swarm-experience .intro-mark {
+  color: #9aa3ad;
+}
+.swarm-experience .intro-trigger:disabled {
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .swarm-experience .scene-action {
+    transition: none;
+  }
+}
+.swarm-experience .interaction-dialog {
+  width: min(680px, calc(100vw - 32px));
+  max-height: min(86vh, 900px);
+  max-height: min(86dvh, 900px);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  color: #121417;
+  background: #f8f9fa;
+  border: 1px solid #d7dade;
+  border-radius: 18px;
+  box-shadow: 0 24px 96px rgb(18 20 23/24%);
+  font:
+    400 15px/1.55 Inter,
+    system-ui,
+    sans-serif;
+}
+.swarm-experience .interaction-dialog::backdrop {
+  background: rgb(18 20 23/42%);
+  backdrop-filter: blur(5px);
+}
+.swarm-experience .dialog-surface {
+  padding: 28px 32px 30px;
+}
+.swarm-experience .dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.swarm-experience .dialog-eyebrow {
+  color: #62666d;
+  font:
+    500 11px/1.4 JetBrains Mono,
+    monospace;
+  letter-spacing: 0.04em;
+}
+.swarm-experience .dialog-eyebrow span {
+  margin: 0 8px;
+  color: #4c5bd4;
+}
+.swarm-experience .dialog-close {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  background: transparent;
+  color: #62666d;
+  border: 1px solid #d7dade;
+  border-radius: 50%;
+  font:
+    400 24px/1 Inter,
+    system-ui,
+    sans-serif;
+  cursor: pointer;
+}
+.swarm-experience .dialog-close:hover {
+  background: #eceef1;
+  color: #121417;
+}
+.swarm-experience .dialog-title {
+  margin: 0 0 16px;
+  font-size: clamp(26px, 5vw, 36px);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+}
+.swarm-experience .dialog-title:focus {
+  outline: none;
+}
+.swarm-experience .dialog-description {
+  margin: 0 0 24px;
+  color: #62666d;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.swarm-experience .dialog-field-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 20px 0;
+  margin-bottom: 24px;
+  border-block: 1px solid #d7dade;
+}
+.swarm-experience .dialog-field-grid strong {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4c5bd4;
+}
+.swarm-experience .dialog-field-grid p {
+  margin: 8px 0 0;
+  color: #62666d;
+  font-size: 13px;
+}
+.swarm-experience .dialog-file-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  border: 1px solid #25282d;
+  border-radius: 10px 10px 0 0;
+  color: #aeb4bd;
+  background: #131518;
+  font:
+    400 12px/1.5 JetBrains Mono,
+    monospace;
+}
+.swarm-experience .dialog-code {
+  padding: 18px 16px;
+  margin: 0;
+  max-height: 290px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid #25282d;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  background: #131518;
+  color: #e0e2e5;
+  font:
+    400 12px/1.8 JetBrains Mono,
+    monospace;
+  white-space: pre;
+  tab-size: 2;
+}
+.swarm-experience .dialog-code code {
+  font: inherit;
+}
+.swarm-experience .dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.swarm-experience .dialog-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid #121417;
+  border-radius: 8px;
+  color: #fff;
+  background: #121417;
+  font:
+    500 13px/1.4 Inter,
+    system-ui,
+    sans-serif;
+  cursor: pointer;
+  transition:
+    background-color 0.16s ease,
+    border-color 0.16s ease;
+}
+.swarm-experience .dialog-button:hover {
+  background: #30343a;
+  border-color: #30343a;
+}
+.swarm-experience .dialog-button.secondary {
+  color: #121417;
+  border-color: #d7dade;
+  background: #fff;
+}
+.swarm-experience .dialog-button.secondary:hover {
+  border-color: #a0a6b0;
+  background: #eceef1;
+}
+.swarm-experience .dialog-button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+.swarm-experience .dialog-button:focus-visible,
+.swarm-experience .dialog-close:focus-visible,
+.swarm-experience .dialog-code:focus-visible {
+  outline: 3px solid #4c5bd4;
+  outline-offset: 3px;
+}
+.swarm-experience .dialog-feedback {
+  min-height: 36px;
+  margin: 10px 0 0;
+  color: #62666d;
+  font-size: 12px;
+}
+.swarm-experience .dialog-note {
+  padding: 14px 16px;
+  margin: 16px 0;
+  background: #eef0f6;
+  border-radius: 8px;
+  color: #62666d;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.swarm-experience .dialog-plan-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin: 20px 0;
+  padding: 20px 0;
+  border-block: 1px solid #d7dade;
+}
+.swarm-experience .dialog-plan-summary strong {
+  display: block;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+.swarm-experience .dialog-plan-summary span {
+  display: block;
+  margin-top: 8px;
+  color: #62666d;
+  font-size: 12px;
+}
+.swarm-experience .dialog-plan-summary ul {
+  padding-left: 18px;
+  margin: 0;
+  font-size: 13px;
+}
+.swarm-experience .dialog-plan-summary li + li {
+  margin-top: 7px;
+}
+.swarm-experience .dialog-article {
+  color: #62666d;
+  margin-bottom: 26px;
+}
+.swarm-experience .dialog-article p {
+  margin: 0 0 16px;
+}
+.swarm-experience .dialog-status {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0;
+  border-top: 1px solid #d7dade;
+}
+.swarm-experience .dialog-status li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px 0;
+  border-bottom: 1px solid #d7dade;
+  font-size: 13px;
+}
+.swarm-experience .dialog-status strong {
+  color: #4c5bd4;
+  text-align: right;
+  font-size: 12px;
+  font-weight: 500;
+}
+@media (max-width: 520px) {
+  .swarm-experience .dialog-surface {
+    padding: 20px;
+  }
+  .swarm-experience .dialog-header {
+    margin-bottom: 20px;
+  }
+  .swarm-experience .dialog-field-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .swarm-experience .dialog-field-grid p {
+    margin-top: 3px;
+  }
+  .swarm-experience .dialog-plan-summary {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .swarm-experience .dialog-actions {
+    flex-direction: column;
+  }
+  .swarm-experience .dialog-actions .dialog-button {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .swarm-experience .dialog-button {
+    transition: none;
+  }
+}

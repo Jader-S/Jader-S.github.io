@@ -2,7 +2,6 @@
 
 import { useI18n } from "@/components/I18nProvider";
 import { profile } from "@/data/profile";
-import { csdnProfile } from "@/data/blogs";
 
 export default function FooterSection() {
   const { t } = useI18n();
@@ -48,14 +47,6 @@ export default function FooterSection() {
           </a>
           <a className="particle-link text-sm" href="#blog">
             {t.footer.blog}
-          </a>
-          <a
-            className="particle-link text-sm"
-            href={csdnProfile}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t.footer.csdn}
           </a>
         </nav>
 

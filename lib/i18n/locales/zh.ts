@@ -193,7 +193,7 @@ export const zh: LocaleMessages = {
       astraPortfolio: {
         name: "ASTRA · 3D 星图作品站",
         description:
-          "一个前端工程师的太空站：9 万粒子螺旋星系、飞行式星球导航、可交互 Demo 与 MDX 技术日志。Vite + React + R3F + Zustand，纯静态部署在 jaderai.cn。",
+          "一个前端工程师的太空站：9 万粒子螺旋星系、飞行式星球导航、可交互 Demo 与 MDX 技术日志。基于 Vite + React + R3F + Zustand 构建的纯静态作品站。",
       },
       skillQaAgent: {
         name: "技能问答 Agent · Skill QA",

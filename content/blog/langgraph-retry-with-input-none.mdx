@@ -1,0 +1,97 @@
+---
+title: "Agent 报错后别再发一遍消息：用 input=None 从检查点接着跑"
+date: "2026-08-25"
+tags: ["LangGraph", "检查点", "运行时"]
+excerpt: "检查点已经替我保存了现场，我却亲手又铺了一层新现场。「重试」和「用户又发了一句」，是两种 API。"
+---
+
+> 2026 年 8 月 25 日，LangGraph 的一次 Run 在工具节点抛错停住了。我想「接着跑」，于是对同一个 thread 又发了一遍用户消息——结果对话重复、账单多打一轮，而且根本没从错误前恢复。Retry 和「用户又说了句话」，原来是两种 API。
+
+## 现象
+
+某次 Run 在工具调用 / 模型节点抛错，图停住。想接着跑，就对同一 thread 再次 `runs.wait(..., input={用户消息})`，甚至把原话原样再发一次。
+
+结果状态里**又追加**了一轮用户输入，对话变重复，模型白跑一轮，也不是从错误前的检查点恢复。
+
+我真正想要的是：**从错误发生前的最新检查点继续**，不是新开一轮对话。
+
+## 问题代码
+
+```python
+# 错误：再塞一遍 input，等于追加新状态，不是重试
+await client.runs.wait(
+    thread_id,
+    assistant_id,
+    input={"messages": [{"role": "user", "content": "刚才那句再来一次"}]},
+)
+```
+
+本地图同理：
+
+```python
+# 错误
+await graph.ainvoke({"messages": [...]}, config=config)
+```
+
+## 根因
+
+出错时 LangGraph 的行为是：图立即停止，而**最新检查点 = 错误发生之前**的那个检查点。
+
+所以「重试」的语义是：对同一 thread，带着检查点上下文再跑，**不要追加新的 input**。再传 `input` 会被当成一次新的状态更新，例如又 append 一条 HumanMessage。
+
+换句话说，检查点机制已经替我保存了现场，我却亲手又铺了一层新现场上去。
+
+## 正确写法
+
+Agent Server / SDK：
+
+```python
+# 同一 thread，input=None = 从错误前检查点继续
+await client.runs.wait(
+    thread_id,
+    assistant_id,
+    input=None,
+)
+```
+
+时间旅行 / Replay（指定检查点）同理：
+
+```python
+await client.runs.wait(
+    thread_id,
+    assistant_id,
+    input=None,
+    checkpoint=after_start,  # 或 fork 后的 checkpoint
+)
+```
+
+本地编译图：
+
+```python
+await graph.ainvoke(input=None, config=config, context=context)
+```
+
+对照一下，四种意图别混：
+
+
+<table>
+<thead>
+<tr><th>意图</th><th>做法</th></tr>
+</thead>
+<tbody>
+<tr><td>用户说了句新话</td><td>传新的 <code>input</code></td></tr>
+<tr><td>上轮出错，原样重试</td><td>同 thread，<code>input=None</code></td></tr>
+<tr><td>从历史某检查点重放</td><td><code>input=None</code> + <code>checkpoint=...</code></td></tr>
+<tr><td>改状态后再跑</td><td>更新 values / fork，再 <code>input=None</code></td></tr>
+</tbody>
+</table>
+
+
+同一系列还有三个相关提醒，够格做后续短文但不必单独成篇：子图 `compile(checkpointer=False)` 时 interrupt 不生效；中断恢复会**整节点重跑**，副作用必须幂等；`Command(goto=...)` 与静态边并不互斥，可能两条路径都走。
+
+## 可复用结论
+
+在有检查点的 Agent 里，**「重试」和「用户又发了一句」是两种 API**。习惯性把用户消息再 post 一次，往往只会制造重复状态。
+
+看到报错先停一秒问自己：我是要新输入，还是要 `input=None`？这一秒能省掉一轮无谓的推理和一次莫名其妙的重复对话。
+

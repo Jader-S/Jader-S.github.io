@@ -198,7 +198,7 @@ export const en: LocaleMessages = {
       astraPortfolio: {
         name: "ASTRA · 3D Galaxy Portfolio",
         description:
-          "A frontend engineer's space station: a 90k-particle spiral galaxy, fly-to navigation between planets, interactive demos and MDX engineering notes. Vite + React + R3F + Zustand, served statically at jaderai.cn.",
+          "A frontend engineer's space station: a 90k-particle spiral galaxy, fly-to navigation between planets, interactive demos and MDX engineering notes. A static portfolio built with Vite + React + R3F + Zustand.",
       },
       skillQaAgent: {
         name: "Skill QA Agent",

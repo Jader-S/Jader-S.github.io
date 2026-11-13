@@ -1,37 +1,24 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import AppProviders from "@/styles/shared/providers/AppProviders";
 import StyleRail from "@/styles/shared/chrome/StyleRail";
-import { basePath } from "@/lib/site";
 
 /**
- * Fifth style: the original ASTRA space station.
+ * Fifth style: ASTRA space station, rendered natively (no iframe).
  *
- * ASTRA is a Vite + React 18 + R3F SPA. Merging its source into this Next 15 /
- * React 19 tree would conflict on renderer, router and WebGL context, so it is
- * embedded as an isolated static sub-app behind an iframe.
- * `public/embed/astra/` is produced by `node scripts/sync-astra.mjs`.
+ * R3F v9 + React 19 run client-only; the scene is mounted via dynamic import
+ * with `ssr: false` so WebGL never touches the server. Phase 1.4 swaps the
+ * placeholder scene in `@/styles/astra` for the ported galaxy/planet/demo core.
  */
-export default function AstraPage() {
-  const src = `${basePath}/embed/astra/index.html`;
+const AstraApp = dynamic(() => import("@/styles/astra/src/AstraApp"), {
+  ssr: false,
+});
 
+export default function AstraPage() {
   return (
     <AppProviders style="astra" hideChrome>
-      <main
-        style={{
-          position: "fixed",
-          inset: 0,
-          background: "#05060a",
-          overflow: "hidden",
-        }}
-      >
-        <iframe
-          src={src}
-          title="ASTRA · 太空站"
-          style={{ display: "block", width: "100%", height: "100%", border: 0 }}
-          allow="fullscreen; autoplay; xr-spatial-tracking"
-        />
-      </main>
+      <AstraApp />
       {/* Keep the global style rail so switching back to the four template styles works. */}
       <StyleRail />
     </AppProviders>

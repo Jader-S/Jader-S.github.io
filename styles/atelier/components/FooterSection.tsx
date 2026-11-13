@@ -5,7 +5,6 @@ import Shatter from "@/styles/atelier/components/canvasui/Shatter";
 import { useI18n } from "@/components/I18nProvider";
 import { useTheme } from "@/components/ThemeProvider";
 import { useViewport } from "@/lib/hooks/useViewport";
-import { csdnProfile } from "@/data/blogs";
 import { profile } from "@/data/profile";
 
 function usePrefersReducedMotion() {
@@ -98,14 +97,6 @@ export default function FooterSection() {
             </a>
             <a href="#blog" className="text-link-muted">
               {t.footer.blog}
-            </a>
-            <a
-              href={csdnProfile}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-link-muted"
-            >
-              {t.footer.csdn}
             </a>
           </nav>
 

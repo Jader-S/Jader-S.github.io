@@ -1,12 +1,12 @@
 "use client";
 
 import { useI18n } from "@/components/I18nProvider";
-import { blogPosts, csdnProfile } from "@/data/blogs";
+import { blogPosts } from "@/data/blogs";
 import { formatCount } from "@/lib/format";
 
 export default function BlogSection() {
   const { t } = useI18n();
-  const posts = blogPosts.slice(0, 5);
+  const posts = blogPosts.filter((p) => p.theme === "particle");
 
   return (
     <section id="blog" className="particle-section">
@@ -15,11 +15,9 @@ export default function BlogSection() {
       <p className="particle-body">{t.blog.subtitle}</p>
       <ul className="mt-8 space-y-0 border-t border-divider">
         {posts.map((post) => (
-          <li key={post.url} className="border-b border-divider">
+          <li key={post.slug} className="border-b border-divider">
             <a
-              href={post.url}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={`/particle/blog/${post.slug}`}
               className="focus-ring block py-4 transition-colors hover:bg-[var(--nav-hover)]"
             >
               <p className="text-[15px] text-heading">{post.title}</p>
@@ -31,15 +29,6 @@ export default function BlogSection() {
           </li>
         ))}
       </ul>
-      <a
-        className="particle-link mt-6"
-        href={csdnProfile}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {t.common.viewCsdn}
-        <span aria-hidden="true">→</span>
-      </a>
     </section>
   );
 }

@@ -1,0 +1,41 @@
+---
+title: "一个能跑的电商后台，和会流式说话的 AI 导购"
+date: "2026-08-03"
+tags: ["FastAPI", "SQLAlchemy", "流式 API"]
+excerpt: "从 UV workspace 到 OSS 直传、JWT、SSE / WS，做完一个带测试和前端 Demo 的电商后台 + AI 导购闭环。真正值钱的是配置、逻辑、测试各切一刀。"
+---
+
+> 2026 年 7 月 23 日到 8 月 3 日，我在 `00-duyi-project` 里把一个电商后台从空目录做到了能跑、能测、能流式说话。这段最让我满意的不是功能多，而是每一层都留了「换掉它」的余地。
+
+## 先把骨架搭对
+
+工程用 UV workspace 分成 `apps/web-service` 和 `packages/duyi-utils` 两半，`make dev` 热重载启动。配置走 `pydantic-settings`，从 `.env` 分层读 Web / DB / Log——这件事早做早省事，后面加 OSS、加 AI 配置都不用改代码结构。
+
+数据层是 SQLAlchemy 2.x 的 asyncio 模式配 asyncpg，分类 / 商品 / SKU 建模；Alembic 管版本化迁移，`make db-migrate` / `db-upgrade` / `db-downgrade` 三个命令把「改表」变成可回滚的动作。业务逻辑我从路由拆到 Service 层，`get_db` 保持短事务，统一异常映射 + 统一 JSON 响应信封 + 请求日志中间件各司其职。日志用 loguru 替掉 uvicorn 默认访问日志，开发环境错误落盘，排查时省不少眼力。
+
+测试我坚持写了金字塔：unit 测 Schema、integration 测 Service、e2e 起 uvicorn 子进程打真实 HTTP，覆盖率目标压在 80% 以上。当时觉得慢，后来改 SSE 和鉴权时，是这层网兜住了我。
+
+## 两个我特意绕开「省事写法」的地方
+
+**OSS 直传。** 没让文件经过后端，而是 `duyi-utils` 签发 PostObject 直传凭证：服务端签名、浏览器直传，集成测试打真实 Bucket。后端不扛文件流，带宽和超时问题一起消失，代价是签名逻辑和回调要自己测严。
+
+**系统设置放库里。** 启动时同步预置分组（`jwt` / `aliyun_oss` / `ai`），运行时 `PUT /api/settings` 维护。这样 JWT 密钥、OSS 凭据、AI 模型配置都不写死在 `.env`，改配置不用重启。
+
+鉴权用 bcrypt + JWT（HS256），`get_current_user` 作为依赖保护设置和上传接口。AI 导购走 OpenAI 兼容 API + Jinja2 提示词，按商品上下文生成介绍，配置从 settings 的 `ai` 分组读。
+
+## 让 AI 导购「流式说话」
+
+最后是 SSE 和 WebSocket：`StreamingResponse` 推 `text/event-stream`，WS 用 query token 鉴权，前端 `pnpm dev:ai` 选商品 → 初始化会话 → 流式聊天。
+
+这里有个坑值得单独记：全局「统一响应」中间件默认把 `/api/` 的响应包成 JSON 信封，SSE 一接上就被包成一坨 `{"code":"0","data":...}`，或者中间件读完 `body_iterator` 把流消费光。解法是给流式路径留显式逃生舱——路由里打 `request.state.is_stream = True`，中间件入口直接跳过。我后来把这次排查单独写成了一篇，因为「横切中间件默认假设响应是完整 JSON」这个假设太容易踩。
+
+配套还有三个前端 Demo：`pnpm dev:upload` 演示签名直传，`dev:login` 联调账号体系与系统设置，`dev:ai` 跑流式导购。部署章节走通了 Docker → ACR → Helm / k8s 的链路，含健康检查与云效 CI 单测。
+
+8 月 3 日顺手过了 NumPy / Pandas / Matplotlib 这一组数据工具：数组与切片、脏数据清洗、统计图与中文字体配置，还玩了 Slider / `blit` 动画类 Demo。它们不是主线，但补上了「数据进来长什么样」这一环。
+
+## 收官
+
+使用 FastAPI + SQLAlchemy + Alembic + OSS + JWT + SSE/WS，做完了一个带测试和前端 Demo 的**电商后台 + AI 导购小闭环**。
+
+回头看，真正值钱的不是这堆技术名词，是「配置分层、逻辑分层、测试分层」这三刀——后面接 Agent 时，几乎原样复用。
+

@@ -329,8 +329,8 @@ GITHUB_PAGES=true npm run build   # 产物在 out/；basePath 一般为 /portfol
 ## 相关链接
 
 - 本仓库：[Jader-S/astra-portfolio](https://github.com/Jader-S/astra-portfolio)（private）
-- 主站 ASTRA：[https://jaderai.cn/](https://jaderai.cn/)（仓库 `Jader-S/Jader-S.github.io`）
-- 技术日志：[https://jaderai.cn/blog](https://jaderai.cn/blog)
+- 本地运行：`npm run dev` 后访问 `/astra`、`/blueprint`、`/atelier`、`/classic`、`/particle` 等主题路由
+- 技术日志：见仓库 `content/blog/` 与各主题页 `/<theme>/blog`
 - 模板来源：[Luzhaotian/portfolio](https://github.com/Luzhaotian/portfolio)（MIT，`LICENSE` 保留原作者版权）
 - Hero 卡片环绕：[@fxshelf/card-orbit](https://github.com/Luzhaotian/fxshelf/tree/main/packages/card-orbit)
 - 风格扩展说明：[`styles/README.md`](./styles/README.md)

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 import { useI18n } from "@/components/I18nProvider";
-import { blogPosts, csdnProfile } from "@/data/blogs";
+import { blogPosts } from "@/data/blogs";
 import { experienceDomains, type ExperienceDomainId } from "@/data/experience";
 import { profile } from "@/data/profile";
 import {
@@ -64,11 +64,14 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
           .join(" · "),
       };
     });
-    const posts = blogPosts.slice(0, 4).map((post) => ({
-      title: post.title,
-      meta: `${post.date} · ${post.likes}`,
-      href: post.url,
-    }));
+    const posts = blogPosts
+      .filter((post) => post.theme === "blueprint")
+      .slice(0, 4)
+      .map((post) => ({
+        title: post.title,
+        meta: `${post.date} · ${post.likes}`,
+        href: `/blueprint/blog/${post.slug}`,
+      }));
     const domains = experienceDomains.map((domain) => {
       const id = domain.id as ExperienceDomainId;
       return {
@@ -123,7 +126,6 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
       footer: `© ${new Date().getFullYear()} ${t.profile.name}. ${t.common.footerTech}`,
       links: [
         { id: "github", label: t.hero.github, kind: "github" },
-        { id: "csdn", label: t.footer.csdn, kind: "open", href: csdnProfile },
         { id: "about", label: t.footer.about, kind: "scroll", target: "a-title" },
         { id: "blog", label: t.footer.blog, kind: "scroll", target: "b-title" },
       ],

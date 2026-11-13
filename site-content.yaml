@@ -19,7 +19,7 @@ meta:
 site:
   github: "https://github.com/Jader-S"
   yearsOfExperience: 7
-  blogProfile: "https://jaderai.cn/blog"
+  blogProfile: "/blueprint/blog"
 
 profile:
   zh:
@@ -199,10 +199,10 @@ githubProjects:
     highlight: true
     zh:
       name: "ASTRA · 3D 星图作品站"
-      description: "一个前端工程师的太空站：9 万粒子螺旋星系、飞行式星球导航、可交互 Demo 与 MDX 技术日志。Vite + React + R3F + Zustand，纯静态部署在 jaderai.cn。"
+      description: "一个前端工程师的太空站：9 万粒子螺旋星系、飞行式星球导航、可交互 Demo 与 MDX 技术日志。基于 Vite + React + R3F + Zustand 构建的纯静态作品站。"
     en:
       name: "ASTRA · 3D Galaxy Portfolio"
-      description: "A frontend engineer's space station: a 90k-particle spiral galaxy, fly-to navigation between planets, interactive demos and MDX engineering notes. Vite + React + R3F + Zustand, served statically at jaderai.cn."
+      description: "A frontend engineer's space station: a 90k-particle spiral galaxy, fly-to navigation between planets, interactive demos and MDX engineering notes. A static portfolio built with Vite + React + R3F + Zustand."
   - id: skillQaAgent
     tech: ["React", "TypeScript", "Vite", "Zustand", "sql.js"]
     link: "https://github.com/Jader-S/skill-qa-agent"

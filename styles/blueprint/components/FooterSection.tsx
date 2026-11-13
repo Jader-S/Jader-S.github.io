@@ -1,7 +1,6 @@
 "use client";
 
 import { useI18n } from "@/components/I18nProvider";
-import { csdnProfile } from "@/data/blogs";
 import { profile } from "@/data/profile";
 
 export default function FooterSection() {
@@ -11,7 +10,6 @@ export default function FooterSection() {
     { label: t.hero.github, href: profile.github, external: true },
     { label: t.footer.about, href: "#about", external: false },
     { label: t.footer.blog, href: "#blog", external: false },
-    { label: t.footer.csdn, href: csdnProfile, external: true },
   ];
 
   return (

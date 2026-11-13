@@ -1,0 +1,126 @@
+.post {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: clamp(2.5rem, 6vw, 5rem) 1.25rem 6rem;
+  color: var(--text-body);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 2.25rem;
+  color: var(--theme-accent);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.back:hover {
+  color: var(--theme-accent-light);
+}
+
+.title {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  line-height: 1.15;
+  color: var(--text-heading);
+  margin: 0 0 0.6rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.date {
+  color: var(--text-faint);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.8rem;
+  margin: 0 0 2.5rem;
+}
+
+.body {
+  font-size: 1.02rem;
+  line-height: 1.85;
+}
+
+.body :global(h2) {
+  font-size: 1.45rem;
+  line-height: 1.3;
+  color: var(--text-heading);
+  margin: 2.4rem 0 1rem;
+  font-weight: 700;
+}
+.body :global(h3) {
+  font-size: 1.15rem;
+  color: var(--text-heading);
+  margin: 1.8rem 0 0.8rem;
+  font-weight: 600;
+}
+.body :global(p) {
+  margin: 1rem 0;
+  color: var(--text-body);
+}
+.body :global(a) {
+  color: var(--theme-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.body :global(ul),
+.body :global(ol) {
+  margin: 1rem 0;
+  padding-left: 1.4rem;
+}
+.body :global(li) {
+  margin: 0.4rem 0;
+}
+.body :global(blockquote) {
+  margin: 1.4rem 0;
+  padding: 0.2rem 0 0.2rem 1rem;
+  border-left: 3px solid var(--theme-accent);
+  color: var(--text-muted);
+}
+.body :global(code) {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.88em;
+  background: var(--color-surface);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+.body :global(pre) {
+  background: var(--color-surface);
+  padding: 1rem 1.1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1.2rem 0;
+}
+.body :global(pre code) {
+  background: none;
+  padding: 0;
+}
+.body :global(table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.4rem 0;
+  font-size: 0.95rem;
+}
+.body :global(th),
+.body :global(td) {
+  border: 1px solid var(--color-surface);
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+}
+.body :global(th) {
+  color: var(--text-heading);
+  background: var(--color-surface);
+}
+.body :global(img) {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 1.2rem 0;
+}
+.body :global(hr) {
+  border: none;
+  border-top: 1px solid var(--color-surface);
+  margin: 2rem 0;
+}
+.body :global(strong) {
+  color: var(--text-heading);
+  font-weight: 600;
+}
