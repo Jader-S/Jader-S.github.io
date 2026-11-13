@@ -1,6 +1,6 @@
 # PLAN_BLOGUPDATE_V2 — blogUpdate 改造需求梳理与分期计划
 
-> 状态：**Phase 1（`3b238b1`）+ Phase 2（`2dc4734`）+ Phase 3（`ef1879e`）+ Phase 4（`c0e171a`）已交付 · Phase 5 待启动**
+> 状态：**Phase 1（`3b238b1`）+ Phase 2（`2dc4734`）+ Phase 3（`ef1879e`）+ Phase 4（`c0e171a`）+ Phase 5（`4a25c13`）已交付 · Phase 6 待启动**
 > 创建：2026-11-13 ｜ 范围：`E:\Jader\blogUpdate`（Next 15 / React 19 / UnoCSS / 5 主题）
 > 需求确认后按 Phase 分步执行，每期单独验收、单独提交。
 > 2026-11-13 更新 1：Q1/Q2/Q3/Q4 均选方案 1（见 6.1），补充「3.2 默认命名总表」与「6.2 默认执行项」。
@@ -8,6 +8,7 @@
 > 2026-11-13 更新 3：Phase 2 完成并提交，路由 10 → 6 条、静态导出 24 → 9 页，验收结果见第 9 节。
 > 2026-11-13 更新 4：Phase 3 完成并提交（移动端主题切换抽屉），验收结果见第 10 节。
 > 2026-11-13 更新 5：Phase 4 完成并提交（共享项目详情 + 内联 Demo），验收结果见第 11 节。
+> 2026-11-13 更新 6：Phase 5 完成并提交（命名 / 六段锚点 / 语言双轨统一），验收结果见第 12 节。
 
 ---
 
@@ -366,4 +367,41 @@
 - ASTRA 自己的作品详情仍是 2D 面板（主题特色），但其中「关联 Demo」按钮已改为打开共享弹框内联预览；5 主题详情形态尚未完全一致，Phase 5 可再评估。
 - `public/qa-agent/` 静态产物缺失是历史问题，本轮从代码侧彻底移除引用；`lib/skillShare.ts` 里 `scripts/sync-astra.mjs` 的失效路径属另一处历史文案，不在本期范围。
 
-**下一步**：Phase 5 路由与命名统一（按 3.2 命名表统一 5 主题区块 / 导航文案，旧路径加 alias，并修 astra 语言双轨）。
+**当时的下一步**：Phase 5 路由与命名统一 —— 已完成，见第 12 节。
+
+---
+
+## 12. Phase 5 交付记录（2026-11-13 · commit `4a25c13`）
+
+**改动范围**：29 files，+309 / −110（含 2 个新增测试文件）。
+
+| 项                  | 落地内容                                                                                                                                                                                                                                                                                                                                                                                       |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 5a astra 命名       | `config/site.ts` 的 PLANETS label：起源→关于我 / About me、日志→博客 / Blog、联络→联系我 / Contact me、母星→全景 / Overview；作品 / Projects、实验室 / Forge 保留。同步 astra `i18n/zh.ts` + `en.ts` 的 `nav.*` 与 home / about / blog / contact heading；`NavRail` / `Planet` / `FallbackRoute` / `CornerGauge` 标签全部跟随字典，FallbackRoute 去掉写死的 `.zh`                              |
+| 5b 四主题文案与区块 | 根 `lib/i18n/locales/*`：关于→关于我、领域 / Fields→经验领域 / Domains；删除 `navClassic` 及 `types.ts` 对应字段（classic 改读 `t.nav`）。`nav` 统一 5 条 `#about / #work / #skills / #blog / #experience`（`#top` 由 Hero 承载）；blueprint / particle NavBar 的硬编码 `LABELS` 改读 `t.nav`；章节编号按新顺序重排 `01 ABOUT / 02 WORK / 02 · OPEN SOURCE / 03 SKILLS / 04 BLOG / 05 DOMAINS` |
+| 5b 区块合并         | atelier `SelectedProjects` 的 `#selected`→`#work`、`WorkIndex`→`#work-index`，`Home.tsx` 顺序改为 Hero → 关于 → 作品（两段）→ 技能 → 博客 → 经验领域；`NavBar` 观察初始项 `selected`→`top`。classic `HeroSection` 补 `id="top"`，企业段改 `id="work"`，开源段保留 `id="github"` 作为作品内一组卡片，Home 顺序同上                                                                              |
+| 5c 语言双轨         | `@astra/i18n` 的 `useT()` 改读根 `useI18n().locale`（唯一真源），astra `prefs.language` 退化为镜像；`NavRail` 语言按钮改调 `setLocale()`；`CornerGauge` / `Planet` 不再各自订阅 `prefs.language`；两个共享 Demo（SchneiderPOI / EChartMagnifier）的 `useT()` 因此跟随主站语言                                                                                                                  |
+| 5d 旧锚点 alias     | 在合并后的 `#work` 内保留不可见 `<span id="selected" aria-hidden="true" />` 与 `aliasId="enterprise"`；`#github` 仍是真实 section id。`output:"export"` 下没有 redirects / rewrites，且 URL 路径本期无变化（Q4 保留 5 路径、Q1 已删博客深链），故用**静态别名锚点**让浏览器原生 hash 滚动兜底，不新增 alias 页、不加 hashchange JS                                                             |
+| 5e 测试与文档       | 新增 `styles/astra/src/i18n/bridge.test.tsx`（语言桥接）、`components/SectionAliases.test.tsx`（3 例）；`lib/i18n/index.test.ts` 补命名表断言；`e2e/navigation.spec.ts` / `e2e/styles.spec.ts` 改新文案与新锚点；README 更新入口说明、两处区块顺序与「日志→博客」表述                                                                                                                          |
+
+**三个架构决定**
+
+- **语言只保留一个真源**：根 `I18nProvider.locale` 是唯一真源，astra 的 zustand `prefs.language` 不再驱动 UI。`useT()` 被 19 个 astra 组件与 2 个共享 Demo 调用，改 hook 内部实现比逐个改调用方风险低；`NavRail` 切换按钮改调 `setLocale()`，全站语言状态联动。
+- **锚点 alias 用静态 DOM 而非运行时映射**：静态导出没有 rewrites / redirects，只要 DOM 里存在 `#selected` / `#enterprise`，浏览器原生就会滚到；加 hashchange 监听反而会在 `ssr:false` 的主题上出现「锚点尚未挂载」竞态。
+- **classic 开源段保留独立 `id="github"`**：既是旧链接兜底，也避免把两组卡片硬塞进同一 section 破坏毛玻璃 / 透明交替节奏；它位于 `#work` 与 `#skills` 之间，概念上仍属「作品」区块。
+
+**验收**
+
+- `npm run typecheck` ✓ ｜ `npm run lint` ✓ 0 warning ｜ `npm run test` ✓ 22 files / **85 tests**（较 Phase 4 的 74 新增 11 个）
+- `GITHUB_PAGES=true PAGES_REPO_NAME= npm run build` ✓ 静态导出 9 页；5 主题首屏 258 kB，与 Phase 4 持平（无新增运行时依赖）
+- 本轮改动文件 `prettier --check` ✓；`out/` 清空重建后无 `jaderai.cn` / `blog.csdn` / `navClassic` / `qa-agent/index.html` 残留
+- dev `:5555` 六条路径（含 `/`）均 200；提交 hook 通过；提交后复验 typecheck / lint / test 全绿
+
+**未完成 / 风险**
+
+- 真实浏览器 E2E 与 390 / 768px 视觉走查仍未做（**Phase 6**，本机缺 Playwright chromium）；新增的命名 / 锚点 E2E 断言已写入文件，但只做了静态校验，未在浏览器实跑。
+- ASTRA 作品详情仍是 2D 面板，四主题用共享弹框；详情形态未强行统一（保留主题特色，关联 Demo 已走共享弹框）。
+- 章节编号 `02 · OPEN SOURCE` 是刻意作为 `#work` 的子编号，不是漏号。
+- 仍留到后续：15 篇博客正文 62 KB JSON 进首屏 bundle 的动态 import 优化；3D Demo 在非 ASTRA 主题下的 WebGL 实机验证；`lib/skillShare.ts` 的历史失效路径。
+
+**下一步**：Phase 6 全量验收（typecheck / lint / test / format / build、安装 chromium 后跑 E2E、5 主题 × 桌面 / 移动端人工视觉走查、博客与项目弹框 + 内联 Demo + 移动端抽屉逐项验证、重建静态产物）。
