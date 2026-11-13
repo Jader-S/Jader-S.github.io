@@ -1,12 +1,13 @@
 # PLAN_BLOGUPDATE_V2 — blogUpdate 改造需求梳理与分期计划
 
-> 状态：**Phase 1（`3b238b1`）+ Phase 2（`2dc4734`）+ Phase 3（`ef1879e`）已交付 · Phase 4 待启动**
+> 状态：**Phase 1（`3b238b1`）+ Phase 2（`2dc4734`）+ Phase 3（`ef1879e`）+ Phase 4（`c0e171a`）已交付 · Phase 5 待启动**
 > 创建：2026-11-13 ｜ 范围：`E:\Jader\blogUpdate`（Next 15 / React 19 / UnoCSS / 5 主题）
 > 需求确认后按 Phase 分步执行，每期单独验收、单独提交。
 > 2026-11-13 更新 1：Q1/Q2/Q3/Q4 均选方案 1（见 6.1），补充「3.2 默认命名总表」与「6.2 默认执行项」。
 > 2026-11-13 更新 2：命名表按默认确认；Phase 1 完成并提交，验收结果见第 8 节。
 > 2026-11-13 更新 3：Phase 2 完成并提交，路由 10 → 6 条、静态导出 24 → 9 页，验收结果见第 9 节。
-> 2026-11-13 更新 4：Phase 3 完成并提交，移动端切换器收成 30px 细边条 + 左滑抽屉，验收结果见第 10 节。
+> 2026-11-13 更新 4：Phase 3 完成并提交（移动端主题切换抽屉），验收结果见第 10 节。
+> 2026-11-13 更新 5：Phase 4 完成并提交（共享项目详情 + 内联 Demo），验收结果见第 11 节。
 
 ---
 
@@ -329,4 +330,40 @@
 - 抽屉底部 `JADERAI · STYLES` 为静态品牌字，不随 locale 变化（刻意）。
 - `blueprint` 的 `BuildPhase` / `SettledHome` 与 `app/astra/page.tsx` 各自挂 `StyleRail`（`hideChrome` 跳过全局 chrome），5 主题共用同一实现，无重复挂载。
 
-**下一步**：Phase 4 共享 Demo + 项目详情（4a 扩 `data/projects.ts` 数据模型 → 4b 抽共享 demo 层、验证 `factory-line` 与 R3F 解耦 → 4c 共享详情弹窗 → 4d 四主题作品卡片接入）。
+**当时的下一步**：Phase 4 共享 Demo + 项目详情 —— 已完成，见第 11 节。
+
+---
+
+## 11. Phase 4 交付记录（2026-11-13 · commit `c0e171a`）
+
+**改动范围**：47 files，+1497 / −476（其中 21 个 demo 文件为 **100% rename**，无内容改动）。
+
+| 项              | 落地内容                                                                                                                                                                                                                                                                                                                                                                                                          |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 4a 数据层       | 新建 `data/project-details.ts`：3 个企业项目 + 2 个开源项目的双语详情（背景 / 职责 / 成果数组）、6 个 Demo 的中英元数据、项目→Demo 关联、弹框 UI 文案。内容按 Q8 由现有 i18n 描述 + 已落地性能数据扩写；结构字段沿用 `data/projects.ts` 的 `tech`，不重复维护                                                                                                                                                     |
+| 4b 共享 Demo 层 | `styles/astra/src/demos/` **整体移到** `styles/shared/demos/`；`DemosPage.tsx` 改引 `@/styles/shared/demos/registry`；新建 `components/DemoPreview.tsx`（lazy + Suspense + ErrorBoundary + 宽画布横滚）；`vitest.config.ts` 补 `@astra` alias；`qa-agent/index.html` 失效链路整条删除（i18n 的 `embedUrl` + 14 个 `embed*` 键、`ProjectDetailPage` 的 iframe 区块、`ProjectEmbed.tsx/.css`、types 的 embed 字段） |
+| 4c 共享弹框     | 新建 `lib/project-modal.ts`（zustand 外部 store，closed / project / demo / demos 四视图 + 命令式 API）、`components/ProjectModalHost.tsx`（Portal、焦点陷阱、Esc / 遮罩 / 关闭、body 滚动锁）、`styles/shared/project-modal.module.css`；挂进 `AppProviders`（5 主题含 `hideChrome` 均可达）；与博客弹框互斥                                                                                                      |
+| 4d 四主题接入   | blueprint / particle `WorkSection` 企业项 `<div>` → `<button>`；classic `ProjectsSection` 企业段传 `onClick`（复用 `ContentCard`）；atelier `SelectedProjects` 卡片整体可点 + 键盘可达、`WorkIndex.IndexRow` 支持 `onClick`；blueprint 绘制态画布按 board 的 `work-t~N` 元素 id 注册 interaction，企业项目 → 详情弹框、开源项目 → GitHub 新标签；四主题作品区与蓝图控件区加 `LabButton` 打开全部 Demo             |
+
+**三个架构决定**
+
+- **demo 物理移动而非复制**：21 个文件 100% rename，实现只有一份。`tsconfig` 的 `@astra/*` 是根级 `paths`，与引用方目录无关，所以 demo 内部 5 处 `@astra/i18n` / `@astra/ui` / `@astra/state` / `@astra/utils` 引用在 shared 目录下仍解析成功；`vitest.config.ts` 补 alias 时改用数组并把 `@astra/` 放在 `@/` 之前，避免 `@` 前缀抢先匹配。Git Bash 的 `mv` / `git mv` 被 Windows 文件锁挡住，最终用 PowerShell `Move-Item` 完成。
+- **详情文案用 `{zh,en}` 结构化数据**：`LocaleMessages` 只放 UI 短文案；项目背景 / 成果等大段结构化内容放 `data/project-details.ts`，按 `useI18n().locale` 取，避免污染 i18n 类型系统。
+- **两个弹框共用 shell**：`ProjectModalHost` 直接复用 `blog-modal.module.css` 的 `.overlay/.panel/.bar/.close/.scroll`，只扩展内容样式；两者都是 `z-index:9999`，因此在 project-modal store 里单向关闭博客弹框（`closeBlogModal()`），避免叠层。
+
+**验收**
+
+- `npm run typecheck` ✓ ｜ `npm run lint` ✓ 0 warning ｜ `npm run test` ✓ 20 files / **74 tests**（新增 13：弹框 7 + 四主题入口/画布 6）
+- `GITHUB_PAGES=true PAGES_REPO_NAME= npm run build` ✓ 静态导出 9 页；**5 主题全部编译通过，证明 2 个 R3F / three Demo 在非 ASTRA 主题下也能打包**；首屏 JS 252 → 258 kB，Demo 组件仍是 lazy chunk
+- `out/` 已清空重建：无 `qa-agent/index.html`、`jaderai.cn`、CSDN 字样；dev `:5555` 五主题均 200，5 个 page chunk 都含新弹框与 demo registry
+- 提交 hook 通过；提交后复验 typecheck / lint / test 全绿、工作区干净
+
+**未完成 / 风险**
+
+- **真实浏览器交互未端到端验证**：本机仍缺 Playwright chromium（Phase 1 遗留）。构建成功只证明能编译；2 个 3D Demo 在四主题下的 WebGL 上下文、宽画布横滚、3D 场景与主题 CSS 的兼容，需人工走查或 Phase 6 补 E2E。
+- **语言双轨**：`SchneiderPOI` / `EChartMagnifier` 的 `useT()` 读 ASTRA 自己的 zustand `prefs.language`，四主题切到英文时 Demo 内文案仍是中文；弹框外壳与详情已跟随根 `I18nProvider`。Phase 5 统一语言状态时一起处理。
+- 蓝图绘制态画布交互依赖 `scene-builder.js` 的 `duplicate()` 任务 id 规律（`d:work:{i}` / `work-t~N`），若以后改 work board 结构需同步 `portfolio-actions.js`。
+- ASTRA 自己的作品详情仍是 2D 面板（主题特色），但其中「关联 Demo」按钮已改为打开共享弹框内联预览；5 主题详情形态尚未完全一致，Phase 5 可再评估。
+- `public/qa-agent/` 静态产物缺失是历史问题，本轮从代码侧彻底移除引用；`lib/skillShare.ts` 里 `scripts/sync-astra.mjs` 的失效路径属另一处历史文案，不在本期范围。
+
+**下一步**：Phase 5 路由与命名统一（按 3.2 命名表统一 5 主题区块 / 导航文案，旧路径加 alias，并修 astra 语言双轨）。
