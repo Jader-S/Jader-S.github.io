@@ -1,10 +1,11 @@
 # PLAN_BLOGUPDATE_V2 — blogUpdate 改造需求梳理与分期计划
 
-> 状态：**Phase 1 已交付（commit `3b238b1`）· Phase 2 待启动**
+> 状态：**Phase 1（`3b238b1`）+ Phase 2（`2dc4734`）已交付 · Phase 3 待启动**
 > 创建：2026-11-13 ｜ 范围：`E:\Jader\blogUpdate`（Next 15 / React 19 / UnoCSS / 5 主题）
 > 需求确认后按 Phase 分步执行，每期单独验收、单独提交。
 > 2026-11-13 更新 1：Q1/Q2/Q3/Q4 均选方案 1（见 6.1），补充「3.2 默认命名总表」与「6.2 默认执行项」。
 > 2026-11-13 更新 2：命名表按默认确认；Phase 1 完成并提交，验收结果见第 8 节。
+> 2026-11-13 更新 3：Phase 2 完成并提交，路由 10 → 6 条、静态导出 24 → 9 页，验收结果见第 9 节。
 
 ---
 
@@ -44,6 +45,8 @@
 ## 2. 全量路由 / 区块 / 名称清单（第 6 条交付）
 
 ### 2.1 URL 路由表（共 10 条）
+
+> ⚠️ 下表是 **Phase 2 改造前** 的快照（10 条）。4 条 `blog/[slug]` 已删除，实际只剩 6 条，见第 9 节。
 
 | #   | URL                      | 文件                                 | 类型         | 备注                                                                                             |
 | --- | ------------------------ | ------------------------------------ | ------------ | ------------------------------------------------------------------------------------------------ |
@@ -249,11 +252,48 @@
 - `GITHUB_PAGES=true PAGES_REPO_NAME= npm run build` ✓ 静态导出 24 页（含 15 篇博客）；`out/` 已重建为**无 basePath** 的根路径产物（面向 jaderai.cn），复验其中无 `jaderai.cn` / CSDN 字样
 - 提交 hook（eslint --fix + prettier --write + commitlint）通过；提交后复验 typecheck / lint / test 全绿，工作区干净
 
-**过渡措施**：4 条 `blog/[slug]` 路由补了 `generateStaticParams()`，否则 `output: "export"` 构建失败。Phase 2 删除这些路由时一并移除。
+**过渡措施（已在 Phase 2 移除）**：4 条 `blog/[slug]` 路由曾补 `generateStaticParams()`，否则 `output: "export"` 构建失败；Phase 2 删除路由时一并移除，同时清理了 `.next-dev/types/app/*/blog/` 的类型残留。
 
 **未完成 / 风险**
 
 - E2E 未跑通：本机缺 Playwright chromium，两条用例都在 `browserType.launch` 阶段失败（与改动无关，测试文件已正常加载）。装好浏览器后跑 `npm run test:e2e` 验证 `rails.spec.ts` 的同标签导航断言；已列入 Phase 6 全量验收。
 - GitHub 外链仍保留 `target="_blank"`（外站，刻意保留）；站内链接已全部当前页打开。
 
-**下一步**：Phase 2 博客弹框化 —— 删 4 条 `blog/[slug]` 路由、5 主题统一弹框读本地 MDX、astra「日志」不再跳 `/blueprint`。
+**下一步（当时）**：Phase 2 博客弹框化 —— 删 4 条 `blog/[slug]` 路由、5 主题统一弹框读本地 MDX、astra「日志」不再跳 `/blueprint`。已完成，见第 9 节。
+
+---
+
+## 9. Phase 2 交付记录（2026-11-13 · commit `2dc4734`）
+
+**改动范围**：37 files，+772 / −185。路由 **10 条 → 6 条**，静态导出 **24 页 → 9 页**。
+
+| 项            | 落地内容                                                                                                                                                                                                                                                                                                                                                                 |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 2a 静态正文   | `scripts/gen-blog-content.mjs` 从 15 篇 MDX 去 frontmatter 生成 `data/blog-content.generated.json`（62 KB）；`predev` / `prebuild` 自动执行；`.prettierignore` 排除生成文件；`data/blog-content.ts` 暴露 `getBlogContent(slug)`                                                                                                                                          |
+| 2b 共享弹框   | `lib/blog-modal.ts` 用 zustand 外部 store（`openBlog` / `openBlogIndex` / `closeBlog`）；`components/BlogModalHost.tsx` 用 `createPortal` 挂到 body，支持正文 / 列表两模式、Esc / 遮罩 / 关闭按钮、焦点陷阱、body 滚动锁定、`aria-modal`；`styles/shared/blog-modal.module.css` 用 `html[data-style]` 变量主题化并给 astra 做霓虹特化；挂在 `AppProviders` 供 5 主题共用 |
+| 2c 四主题入口 | 4 个 `BlogSection` 的 `<a href>` 改 `<button onClick={openBlog}>`；classic `ContentCard` 新增 `onClick` 且优先于 `href`；blueprint `BuildPhase` 的 CUSTOM `open` action 由 `href` 改 `slug` 并调 `openBlog`（同步改 `portfolio-actions.js` 的 JSDoc 类型）                                                                                                               |
+| 2d ASTRA 日志 | `Planet.tsx` / `NavRail.tsx` / `FallbackRoute.tsx` 三处 `window.location.href = "/blueprint"` 改 `openBlogIndex()`；`site.ts` 的 blog `route` 改 `/astra`（仅元数据）；删 astra i18n 过期的 `coming` 占位文案；更新 `AstraContentPanel` 注释                                                                                                                             |
+| 2e 删路由     | 删 `app/{blueprint,atelier,classic,particle}/blog/[slug]/page.tsx` 与 `components/BlogPostPage.tsx`；`BlogPostReader` 改为弹框内正文组件（去掉 back 链接）；README / `PLAN_INTEGRATE_ASTRA.md` 同步                                                                                                                                                                      |
+
+**两个架构决定**
+
+- **用外部 store 而非 Context**：ASTRA 的 `<Canvas>` 走 R3F 独立 reconciler，React Context 穿透不可靠；blueprint 绘制动画也脱离 React 树发起 action。命令式 API 在任何位置都能触发弹框。
+- **用静态生成数据而非运行时读文件**：5 个主题页都是 `"use client"` + `ssr:false` 动态导入，运行时拿不到 `node:fs`；项目又是 `output: "export"`，没有服务端可按需读文件。正文必须在 dev / build 前固化，同时天然兼容 basePath。
+
+**验收**
+
+- `npm run typecheck` ✓（清理 `.next-dev/types/app/*/blog/` 旧路由类型残留后通过，非源码问题）
+- `npm run lint` ✓ 0 warning ｜ `npm run test` ✓ 18 files / **57 tests**（新增 10 个：弹框 6 + 四主题入口 4）
+- `GITHUB_PAGES=true PAGES_REPO_NAME= npm run build` ✓ 静态导出 9 页，路由表仅 `/` + 5 主题 + `/_not-found`
+- `out/` 已清空重建：无 `blog/` 目录、无 `/blog/` 深链、无 `jaderai.cn` / CSDN；15 篇正文已进客户端 bundle
+- dev `:5555` 五主题均 200，旧深链 `/blueprint/blog/<slug>` 返回 404
+- 提交 hook（eslint --fix + prettier --write + commitlint）通过；提交后复验 typecheck / lint / test 全绿，工作区干净
+
+**未完成 / 风险**
+
+- E2E 仍未跑通（本机缺 Playwright chromium，Phase 1 遗留）；弹框的**真实浏览器交互**尚未端到端验证，单测已覆盖核心逻辑。Phase 6 补 `blog-modal` E2E。
+- 15 篇正文（原始 62 KB JSON）随 `AppProviders` 进入每个主题页首屏 bundle；后续可改成打开弹框时动态 import 优化。
+- astra 的语言偏好存在自己的 zustand store，未与根 `I18nProvider` 同步，弹框在 astra 下的文案语言可能与星图 UI 不一致 —— Phase 5 统一命名时一并处理。
+- 改动 `content/blog/*.mdx` 后需重跑 `npm run gen:blog-content`（或重启 dev / 重新 build，pre-hook 会自动执行）。
+
+**下一步**：Phase 3 移动端主题切换器抽屉（<768px 收成左侧 28–32px 细边条 + 点击展开），按 Q3 方案 1 执行。
