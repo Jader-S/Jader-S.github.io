@@ -9,7 +9,7 @@ export const astraStyle = {
   id: "astra",
   path: "/astra",
   favicon: "/favicon-astra.svg",
-  title: "ASTRA · 太空站",
+  title: "Jader | 太空站",
   labelKey: "astra",
   chrome: "atelier",
 } as const satisfies StyleDefinition;
