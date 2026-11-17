@@ -62,6 +62,16 @@ describe("BlogModalHost", () => {
     expect(dialog).not.toBeInTheDocument();
   });
 
+  it("uses 返回全景 as the close label in the ASTRA style", async () => {
+    renderWithProviders(<BlogModalHost />, { style: "astra" });
+
+    act(() => openBlog(sortedPosts[0].slug));
+    await screen.findByRole("dialog");
+
+    expect(screen.getByRole("button", { name: "返回全景" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "关闭" })).not.toBeInTheDocument();
+  });
+
   it("index mode lists every post and drills into one", async () => {
     const user = userEvent.setup();
     renderWithProviders(<BlogModalHost />);

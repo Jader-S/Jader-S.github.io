@@ -194,6 +194,7 @@ export const zh: LocaleMessages = {
     subtitle: "ASTRA 日志：前端工程化、Agent 运行时与实战复盘",
     allPosts: "全部日志",
     close: "关闭",
+    returnToOverview: "返回全景",
     notFound: "找不到这篇日志。",
     emptyBody: "正文尚未生成，请运行 npm run gen:blog-content。",
     postCount: (count: number) => `共 ${count} 篇`,

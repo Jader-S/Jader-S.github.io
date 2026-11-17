@@ -13,6 +13,7 @@ import {
   useBlogModalStore,
 } from "@/lib/blog-modal";
 import { lockBodyScroll } from "@/lib/lock-body-scroll";
+import { useStyle } from "@/styles/shared/providers/StyleProvider";
 import styles from "@/styles/shared/blog-modal.module.css";
 
 const SORTED_POSTS = [...blogPosts].sort((a, b) =>
@@ -89,6 +90,9 @@ export default function BlogModalHost() {
   const { t } = useI18n();
   const view = useBlogModalStore((state) => state.view);
   const [mounted, setMounted] = useState(false);
+  const { style } = useStyle();
+  // ASTRA 太空主题下，关闭博客弹框即回到全景，与其他星球的「返回全景」一致。
+  const isAstra = style === "astra";
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => setMounted(true), []);
@@ -187,7 +191,7 @@ export default function BlogModalHost() {
             type="button"
             className={styles.close}
             onClick={closeBlog}
-            aria-label={t.blog.close}
+            aria-label={isAstra ? t.blog.returnToOverview : t.blog.close}
           >
             ✕
           </button>

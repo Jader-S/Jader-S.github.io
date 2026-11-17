@@ -201,6 +201,7 @@ export const en: LocaleMessages = {
       "ASTRA log: frontend engineering, agent runtimes and post-mortems from the field",
     allPosts: "All posts",
     close: "Close",
+    returnToOverview: "Back to overview",
     notFound: "Post not found.",
     emptyBody: "Body not generated. Run npm run gen:blog-content.",
     postCount: (count: number) => `${count} posts`,

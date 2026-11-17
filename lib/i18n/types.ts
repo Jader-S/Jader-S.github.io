@@ -113,6 +113,8 @@ export interface LocaleMessages {
     subtitle: string;
     allPosts: string;
     close: string;
+    /** ASTRA 太空主题下弹框关闭即返回全景，用此文案替代 close。 */
+    returnToOverview: string;
     notFound: string;
     emptyBody: string;
     postCount: (count: number) => string;
