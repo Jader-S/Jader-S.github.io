@@ -247,65 +247,133 @@ function drawHero(scene, copy) {
       deps: ["r:g-disp"],
     }
   );
+
+  // 首屏技能快照：三层分叉树（调度条 → 领域卡 → 技术节点）。
+  // 全部复用现有颜色令牌，明暗主题切换时自动跟随，不引入硬编码色。
   const stem = scene.path(
     "g-stem",
     [
       { x: 970, y: 232 },
-      { x: 970, y: 264 },
+      { x: 970, y: 258 },
     ],
     { stroke: COLORS.stem, deps: ["r:g-disp"] }
   );
+  // 三列等距：图区 776~1164（宽 388），列宽 110、列间距 29。
+  const COL_W = 110;
+  const colX = [776, 915, 1054];
+  const colCenter = [831, 970, 1109];
+
+  // 第二层总线：从中心向左右两列展开，中列单独下拉。
   scene.path(
     "g-bus",
     [
-      { x: 866, y: 296 },
-      { x: 866, y: 264 },
-      { x: 1074, y: 264 },
-      { x: 1074, y: 296 },
+      { x: colCenter[0], y: 290 },
+      { x: colCenter[0], y: 258 },
+      { x: colCenter[2], y: 258 },
+      { x: colCenter[2], y: 290 },
     ],
     { stroke: COLORS.stem, deps: [stem] }
   );
-  scene.rect("w0", 776, 296, 180, 64, {
-    r: 10,
-    fill: COLORS.card,
-    stroke: COLORS.line,
-  });
-  scene.text("w0-n", 796, 307, "React", TEXT_STYLES.nodeName, { deps: ["r:w0"] });
-  scene.text("w0-s", 796, 329, "● drawing", monoStyle(12, COLORS.accent), {
-    deps: ["r:w0"],
-  });
-  scene.duplicate(
-    "workers",
-    ["w0", "w0-n", "w0-s"],
-    [
-      { dx: 208, dy: 0, edits: ["Vue", "● drawing"] },
-      { dx: 0, dy: 104, edits: ["TypeScript", "● queued"] },
-      { dx: 208, dy: 104, edits: ["AI", "○ waiting"] },
-    ]
-  );
   scene.path(
-    "g-l1",
+    "g-bus-mid",
     [
-      { x: 866, y: 360 },
-      { x: 866, y: 400 },
+      { x: colCenter[1], y: 258 },
+      { x: colCenter[1], y: 290 },
     ],
-    { stroke: COLORS.stem, deps: ["d:workers:2"] }
+    { stroke: COLORS.stem, deps: [stem] }
   );
-  scene.path(
-    "g-l2",
+
+  // 领域卡：深色实心 + 白字，沿用调度条的视觉权重。
+  const domains = [
+    { id: "g-domain-fe", x: colX[0], label: "FRONTEND" },
+    { id: "g-domain-ai", x: colX[1], label: "AI AGENT" },
+    { id: "g-domain-be", x: colX[2], label: "BACKEND" },
+  ];
+  for (const domain of domains) {
+    scene.rect(domain.id, domain.x, 290, COL_W, 40, {
+      r: 8,
+      fill: COLORS.solid,
+      deps: ["p:g-bus", "p:g-bus-mid"],
+    });
+    scene.text(
+      `${domain.id}-t`,
+      domain.x + 12,
+      303,
+      domain.label,
+      TEXT_STYLES.nodeWhite,
+      { deps: [`r:${domain.id}`] }
+    );
+  }
+
+  // 第三层技术节点：每卡挂 3 个，节点内是技术名 + 三格档位条。
+  // level: 3=主力, 2=常用, 1=能用。格数直接表达熟练度，无需文字图例。
+  const techNodes = [
     [
-      { x: 1074, y: 360 },
-      { x: 1074, y: 400 },
+      { name: "React / Vue", level: 3 },
+      { name: "Next.js", level: 3 },
+      { name: "Three.js / R3F", level: 3 },
     ],
-    { stroke: COLORS.stem, deps: ["d:workers:2"] }
-  );
-  scene.rect("g-track", 776, 546, 388, 6, { r: 3, fill: COLORS.track });
-  scene.rect("g-fill", 776, 546, 252, 6, {
+    [
+      { name: "LangChain", level: 3 },
+      { name: "LangGraph", level: 3 },
+      { name: "Langfuse", level: 2 },
+    ],
+    [
+      { name: "Python / Java", level: 2 },
+      { name: "Spring 生态", level: 2 },
+      { name: "Docker", level: 2 },
+    ],
+  ];
+  const rowYs = [362, 426, 490];
+  for (let col = 0; col < techNodes.length; col++) {
+    const domain = domains[col];
+    const cx = colCenter[col];
+    for (let row = 0; row < techNodes[col].length; row++) {
+      const node = techNodes[col][row];
+      const y = rowYs[row];
+      const nodeId = `${domain.id}-n${row}`;
+      // 从上一节点（或领域卡）向下引线到当前节点。
+      const parentTask = row === 0 ? `r:${domain.id}` : `r:${domain.id}-n${row - 1}`;
+      const branch = scene.path(
+        `${nodeId}-line`,
+        [
+          { x: cx, y: row === 0 ? 330 : rowYs[row - 1] + 48 },
+          { x: cx, y },
+        ],
+        { stroke: COLORS.stem, deps: [parentTask] }
+      );
+      scene.rect(nodeId, domain.x, y, COL_W, 48, {
+        r: 7,
+        fill: COLORS.card,
+        stroke: COLORS.line,
+        deps: [branch],
+      });
+      scene.text(
+        `${nodeId}-t`,
+        domain.x + 12,
+        y + 9,
+        node.name,
+        monoStyle(11, COLORS.ink),
+        { deps: [`r:${nodeId}`] }
+      );
+      // 三格档位条：填充格表达熟练度层次。
+      for (let bar = 0; bar < 3; bar++) {
+        scene.rect(`${nodeId}-b${bar}`, domain.x + 12 + bar * 26, y + 32, 20, 6, {
+          r: 3,
+          fill: bar < node.level ? COLORS.accent : COLORS.track,
+          deps: [`r:${nodeId}`],
+        });
+      }
+    }
+  }
+
+  scene.rect("g-track", 776, 562, 388, 6, { r: 3, fill: COLORS.track });
+  scene.rect("g-fill", 776, 562, 252, 6, {
     r: 3,
     fill: COLORS.accent,
     deps: ["r:g-track"],
   });
-  scene.text("g-stat", 776, 566, copy.diagramNote, TEXT_STYLES.small, {
+  scene.text("g-stat", 776, 582, copy.diagramNote, TEXT_STYLES.small, {
     w: 388,
     snap: "g-hero-r",
   });

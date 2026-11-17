@@ -82,7 +82,7 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
       kicker: t.hero.role,
       github: t.hero.github,
       primaryCta: t.about.title,
-      diagramNote: "React · Vue · TypeScript · AI",
+      diagramNote: locale === "zh" ? "前端 · 后端 · AI" : "Frontend · Backend · AI",
       highlights: t.profile.highlights,
       nav: { brand: t.profile.name, items: navItems.map((item) => item.label) },
       about: {
