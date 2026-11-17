@@ -8,7 +8,7 @@
  */
 import { create } from "zustand";
 import type { DemoSlug, ProjectId } from "@/data/project-details";
-import { useBlogModalStore } from "./blog-modal";
+import { closeOtherModals, registerModal } from "./modal-registry";
 
 /**
  * Where a demo's back button returns to.
@@ -36,23 +36,27 @@ interface ProjectModalStore {
   close: () => void;
 }
 
-/** The two modals share z-index 9999; opening one always dismisses the other. */
-function closeBlogModal() {
-  useBlogModalStore.getState().closeBlog();
+/**
+ * Two modals share z-index 9999; opening one always dismisses the other.
+ * Mutual exclusion goes through the neutral registry (not a direct import of
+ * blog-modal) so the two stores never form an import cycle.
+ */
+function closeSelf() {
+  useProjectModalStore.getState().close();
 }
 
 export const useProjectModalStore = create<ProjectModalStore>((set) => ({
   view: { kind: "closed" },
   openProject: (id) => {
-    closeBlogModal();
+    closeOtherModals(closeSelf);
     set({ view: { kind: "project", id } });
   },
   openDemoIndex: () => {
-    closeBlogModal();
+    closeOtherModals(closeSelf);
     set({ view: { kind: "demos" } });
   },
   openDemo: (slug, returnTo) => {
-    closeBlogModal();
+    closeOtherModals(closeSelf);
     set((state) => ({
       view: {
         kind: "demo",
@@ -77,6 +81,8 @@ export const useProjectModalStore = create<ProjectModalStore>((set) => ({
     }),
   close: () => set({ view: { kind: "closed" } }),
 }));
+
+registerModal(closeSelf);
 
 /** Command-style API — safe to call from canvas actions, R3F and plain buttons. */
 export function openProject(id: ProjectId) {

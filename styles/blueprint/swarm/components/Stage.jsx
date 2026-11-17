@@ -1,5 +1,5 @@
 import React from "react";
-import { LuSeal } from "./LuSeal.jsx";
+import { SunSeal } from "./SunSeal.jsx";
 import { NAV_HEIGHT, NAV_TOP, PAGE_WIDTH, RULER_SIZE } from "../scene/theme.js";
 import { SceneElements } from "./SceneElements.jsx";
 import { SceneInteractions } from "./SceneInteractions.jsx";
@@ -96,7 +96,7 @@ export function IntroLogo({ started, onAction }) {
         disabled={started}
         onClick={() => onAction(START_ACTION)}
       >
-        <LuSeal className="intro-mark" />
+        <SunSeal className="intro-mark" />
       </button>
     </div>
   );

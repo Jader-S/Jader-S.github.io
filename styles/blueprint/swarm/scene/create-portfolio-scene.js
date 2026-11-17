@@ -1,5 +1,9 @@
 import { SceneBuilder } from "./scene-builder.js";
-import { LU_SEAL_ANCHORS, LU_SEAL_PATH_D, LU_SEAL_VIEWBOX } from "./lu-seal-path.js";
+import {
+  SUN_SEAL_ANCHORS,
+  SUN_SEAL_PATH_D,
+  SUN_SEAL_VIEWBOX,
+} from "./sun-seal-path.js";
 import {
   COLORS,
   CONTENT_LEFT,
@@ -12,6 +16,8 @@ import {
 
 /** Full drawn page. Each block sits lower on the canvas so scrolling reveals the next build. */
 export const PORTFOLIO_SCENE_HEIGHT = 5880;
+/** 实验室从 3×2（2 行）扩到 3 行后新增的高度：沿用原始行高 250，正好 +一行。 */
+const LAB_GROW = 250;
 
 const COL = 373;
 const ROW = 250;
@@ -82,7 +88,7 @@ function fit(text, width, size, maxLines) {
  * @param {number} y Top of the first title.
  * @param {{title:string, body:string}[]} items Six cells; the first is the source.
  */
-function board(scene, id, x, y, items) {
+function board(scene, id, x, y, items, rowHeight = ROW) {
   const [first, ...rest] = items;
   scene.text(`${id}-t`, x, y, fit(first.title, 300, 21, 2), TEXT_STYLES.h3, { w: 300 });
   scene.text(`${id}-b`, x, y + 58, fit(first.body, 300, 15.5, 3), TEXT_STYLES.body, {
@@ -97,7 +103,7 @@ function board(scene, id, x, y, items) {
       const row = Math.floor((index + 1) / 3);
       return {
         dx: column * COL,
-        dy: row * ROW,
+        dy: row * rowHeight,
         edits: [fit(item.title, 300, 21, 2), fit(item.body, 300, 15.5, 3)],
       };
     })
@@ -124,12 +130,23 @@ export function createPortfolioSceneFactory(copy) {
     drawExperience(scene, copy.experience);
     drawClosing(scene, copy, getWorkerCount);
     drawFooter(scene, copy);
+    // 实验室改为三行后多占 60px：所有章节画完后把 2860 以下的后续区块整体下移。
+    // 实验室自身元素（帧底 / 网格 / 卡片已按 2920 排好）必须跳过，否则会被二次平移。
+    const labIds = scene.elements
+      .map((el) => el.id)
+      .filter((id) =>
+        /^(lab-|lab$|l-|l[0-9]|left-lab$|right-lab$|rule-lab$|left-lgrid$|right-lgrid$|rule-lgrid$)/.test(
+          id
+        )
+      );
+    scene.shiftY(2860, LAB_GROW, labIds);
 
     return {
       els: scene.elements,
       tasks: scene.tasks,
       groups: scene.groups,
-      height: PORTFOLIO_SCENE_HEIGHT,
+      // 实验室加高 60px 后，页面实际高度随之后移。
+      height: PORTFOLIO_SCENE_HEIGHT + LAB_GROW,
     };
   };
 }
@@ -399,7 +416,9 @@ function drawWork(scene, work) {
  * @param {{index:string, title:string, subtitle:string, items:{title:string, body:string, slug?:string}[]}} lab Lab copy.
  */
 function drawLab(scene, lab) {
-  scene.frame("lab", 2140, 2860);
+  // 与 work / skills 一致：每行沿用原始 ROW=250 的行高，只是多一行。
+  // 网格高 2380→3130（3×250），横线落在行间空隙（标题上方约 58px），不压文字。
+  scene.frame("lab", 2140, 3130);
   scene.guide("g-lab", "x", CONTENT_LEFT, 2180);
   scene.guide("g-lab-r", "x", 760, 2180);
   scene.text("l-index", CONTENT_LEFT, 2200, lab.index, TEXT_STYLES.small, {
@@ -414,11 +433,14 @@ function drawLab(scene, lab) {
     w: 380,
     snap: "g-lab-r",
   });
-  scene.frame("lgrid", 2380, 2860, true);
-  scene.horizontal("l-mid", 2620);
-  scene.vertical("l-v1", 453, 2380, 2860);
-  scene.vertical("l-v2", 826, 2380, 2860);
-  board(scene, "lab", CONTENT_LEFT, 2428, lab.items.slice(0, 6));
+  scene.frame("lgrid", 2380, 3130, true);
+  // 原横线 2620 = 第一行标题 2428 下方 192（正文之后、下一行标题 2678 之前）。
+  // 第二、三行按同样规则各加 ROW：2870 落在第二行正文后、第三行标题 2928 前。
+  scene.horizontal("l-mid1", 2620);
+  scene.horizontal("l-mid2", 2870);
+  scene.vertical("l-v1", 453, 2380, 3130);
+  scene.vertical("l-v2", 826, 2380, 3130);
+  board(scene, "lab", CONTENT_LEFT, 2428, lab.items.slice(0, 9));
 }
 
 /**
@@ -459,29 +481,25 @@ function drawSkills(scene, skills) {
 /**
  * Blog rows. Each title is its own element so a click can open that article.
  * @param {SceneBuilder} scene Scene under construction.
- * @param {{index:string, title:string, subtitle:string, posts:{title:string, meta:string}[]}} blog Blog copy.
+ * @param {{index:string, title:string, subtitle:string, posts:{title:string, meta:string}[], allPostsLabel?:string}} blog Blog copy.
  */
 function drawBlog(scene, blog) {
   scene.frame("blog", 3580, 4240);
   scene.guide("g-blog", "x", CONTENT_LEFT, 3620);
+  scene.guide("g-blog-r", "x", 760, 3620);
   scene.text("b-index", CONTENT_LEFT, 3640, blog.index, TEXT_STYLES.small, {
     snap: "g-blog",
   });
   scene.text("b-title", CONTENT_LEFT, 3672, blog.title, TEXT_STYLES.h2, {
-    w: 640,
+    w: 560,
     snap: "g-blog",
     grow: true,
   });
-  scene.text(
-    "b-lead",
-    CONTENT_LEFT,
-    3768,
-    fit(blog.subtitle, 760, 15.5, 2),
-    TEXT_STYLES.body,
-    {
-      w: 760,
-    }
-  );
+  // 与其他章节一致：描述放右栏、与标题同一水平带，而不是堆在标题下方。
+  scene.text("b-lead", 760, 3684, fit(blog.subtitle, 380, 15.5, 3), TEXT_STYLES.body, {
+    w: 380,
+    snap: "g-blog-r",
+  });
   blog.posts.slice(0, 4).forEach((post, index) => {
     const y = 3860 + index * 88;
     scene.horizontal(
@@ -507,6 +525,24 @@ function drawBlog(scene, blog) {
       deps: [`t:b${index}`],
     });
   });
+
+  // 与其他主题博客区同构的「全部日志」入口：画布里也能一键打开完整列表，
+  // 不必先点进单篇再返回。放在最后一行下方，仍在本帧（3580–4240）内。
+  if (blog.allPostsLabel) {
+    // 最后一行 meta 在 4152；入口压到 4200，横线 4180，仍留在 blog 帧（4240 底）内。
+    const allY = 4200;
+    scene.horizontal("b-rule-all", allY - 20, CONTENT_LEFT, 1100, [
+      `t:b${Math.min(blog.posts.length, 4) - 1}m`,
+    ]);
+    scene.text(
+      "b-all",
+      CONTENT_LEFT,
+      allY,
+      blog.allPostsLabel,
+      sansStyle(15, 600, 1.35),
+      { w: 520, deps: ["p:b-rule-all"] }
+    );
+  }
 }
 
 /**
@@ -545,14 +581,14 @@ function drawExperience(scene, experience) {
 }
 
 /**
- * Closing beat: title, gray 九叠篆「卢」seal, then a quiet cursor count.
+ * Closing beat: title, gray 九叠篆「孙」seal, then a quiet cursor count.
  * @param {SceneBuilder} scene Scene under construction.
  * @param {object} copy Scene copy.
  * @param {() => number} getWorkerCount Live worker total from the engine.
  */
 function drawClosing(scene, copy, getWorkerCount) {
   const sealSize = 88;
-  const sealScale = sealSize / LU_SEAL_VIEWBOX;
+  const sealScale = sealSize / SUN_SEAL_VIEWBOX;
   const sealX = CONTENT_LEFT;
   const sealY = 5100;
   const sealInk = COLORS.dim;
@@ -566,7 +602,7 @@ function drawClosing(scene, copy, getWorkerCount) {
   });
   scene.path(
     "seal",
-    LU_SEAL_ANCHORS.map(([x, y]) => ({
+    SUN_SEAL_ANCHORS.map(([x, y]) => ({
       x: sealX + x * sealScale,
       y: sealY + y * sealScale,
     })),
@@ -575,7 +611,7 @@ function drawClosing(scene, copy, getWorkerCount) {
       stroke: sealInk,
       fill: sealInk,
       add: false,
-      d: LU_SEAL_PATH_D,
+      d: SUN_SEAL_PATH_D,
       tf: { x: sealX, y: sealY, s: sealScale },
       deps: ["t:x-title"],
     }

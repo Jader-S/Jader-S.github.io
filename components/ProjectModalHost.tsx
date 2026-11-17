@@ -21,6 +21,7 @@ import {
   useProjectModalStore,
 } from "@/lib/project-modal";
 import type { LocaleMessages } from "@/lib/i18n";
+import { lockBodyScroll } from "@/lib/lock-body-scroll";
 import modal from "@/styles/shared/blog-modal.module.css";
 import styles from "@/styles/shared/project-modal.module.css";
 
@@ -195,54 +196,68 @@ export default function ProjectModalHost() {
 
   const isOpen = view.kind !== "closed";
 
+  // 滚动锁只在「打开/关闭」切换时获取与释放，内部视图切换不重复上锁。
   useEffect(() => {
     if (!isOpen) return;
-
     const opener = document.activeElement as HTMLElement | null;
-    const previousOverflow = document.body.style.overflow;
-    const previousPaddingRight = document.body.style.paddingRight;
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const release = lockBodyScroll();
+    return () => {
+      release();
+      opener?.focus?.();
+    };
+  }, [isOpen]);
 
-    document.body.style.overflow = "hidden";
-    if (scrollbarWidth > 0) {
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
+  // 焦点陷阱跟随 view：project → demo → 返回等内部切换会卸载原焦点节点，
+  // 必须重新把焦点拉回面板，否则会逃到 body。
+  useEffect(() => {
+    if (!isOpen || !panelRef.current) return;
+    const panel = panelRef.current;
+
+    const active = document.activeElement as HTMLElement | null;
+    if (!active || active === document.body || !panel.contains(active)) {
+      panel.focus();
     }
-    panelRef.current?.focus();
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         closeProjectModal();
         return;
       }
-      if (event.key !== "Tab" || !panelRef.current) return;
+      if (event.key !== "Tab") return;
 
       const focusable = Array.from(
-        panelRef.current.querySelectorAll<HTMLElement>(
+        panel.querySelectorAll<HTMLElement>(
           'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
         )
       );
-      if (focusable.length === 0) return;
+      if (focusable.length === 0) {
+        event.preventDefault();
+        panel.focus();
+        return;
+      }
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
-      const active = document.activeElement;
+      const current = document.activeElement as HTMLElement | null;
 
-      if (event.shiftKey && (active === first || active === panelRef.current)) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && active === last) {
+      if (event.shiftKey) {
+        if (
+          !current ||
+          current === panel ||
+          current === first ||
+          !panel.contains(current)
+        ) {
+          event.preventDefault();
+          last.focus();
+        }
+      } else if (!current || current === last || !panel.contains(current)) {
         event.preventDefault();
         first.focus();
       }
     };
 
     document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = previousOverflow;
-      document.body.style.paddingRight = previousPaddingRight;
-      opener?.focus?.();
-    };
-  }, [isOpen]);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isOpen, view]);
 
   if (!mounted || !isOpen) return null;
 
@@ -258,7 +273,7 @@ export default function ProjectModalHost() {
         role="dialog"
         aria-modal="true"
         aria-labelledby={TITLE_ID}
-        className={modal.panel}
+        className={`${modal.panel} ${view.kind === "demo" ? modal.panelWide : ""}`}
       >
         <div className={modal.bar}>
           {view.kind === "demo" ? (

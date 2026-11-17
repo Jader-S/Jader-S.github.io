@@ -22,7 +22,7 @@ export default function SettledHome({ onReplay }: SettledHomeProps) {
   return (
     <div className="blueprint-shell blueprint-grid">
       <NavBar />
-      <main id="main-content">
+      <main id="main-content" tabIndex={-1}>
         <HeroSection onReplay={onReplay} />
         <AboutSection />
         <WorkSection />

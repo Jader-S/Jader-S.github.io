@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 import ProjectModalHost from "@/components/ProjectModalHost";
+import { demoCatalog } from "@/data/project-details";
 import { openBlogIndex, useBlogModalStore } from "@/lib/blog-modal";
 import {
   openDemo,
@@ -74,7 +75,7 @@ describe("ProjectModalHost", () => {
     expect(useProjectModalStore.getState().view).toEqual({ kind: "closed" });
   });
 
-  it("lists all six demos in the lab view", () => {
+  it("lists all demos in the lab view", () => {
     renderWithProviders(<ProjectModalHost />);
     act(() => openDemoIndex());
 
@@ -82,12 +83,10 @@ describe("ProjectModalHost", () => {
     expect(within(dialog).getByRole("heading", { level: 1 })).toHaveTextContent(
       "实验室"
     );
-    expect(within(dialog).getByText(/共 6 个/)).toBeInTheDocument();
     expect(
-      within(dialog).getAllByRole("button", {
-        name: /Demo|看板|放大镜|工厂|大屏|基准|动画/,
-      })
-    ).toHaveLength(6);
+      within(dialog).getByText(new RegExp(`共 ${demoCatalog.length} 个`))
+    ).toBeInTheDocument();
+    expect(within(dialog).getAllByTestId("demo-item")).toHaveLength(demoCatalog.length);
   });
 
   it("closes on Escape, the close button and overlay click", async () => {

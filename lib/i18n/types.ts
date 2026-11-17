@@ -99,7 +99,7 @@ export interface LocaleMessages {
     /** 作品文案查找表，key 与 data/projects.ts 的 projects id 一致 */
     projects: Record<ProjectId, ProjectText>;
   };
-  /** 独立「实验室」区块（Phase 8）：与作品并列的一级菜单，平铺 6 个 Demo。 */
+  /** 独立「实验室」区块（Phase 8）：与作品并列的一级菜单，平铺全部 Demo。 */
   lab: {
     index: string;
     title: string;
@@ -116,6 +116,9 @@ export interface LocaleMessages {
     notFound: string;
     emptyBody: string;
     postCount: (count: number) => string;
+    /** 日志卡片上的互动计数单位；无真实数据时整段计数不渲染。 */
+    likes: string;
+    views: string;
   };
   experience: {
     index: string;
@@ -171,5 +174,6 @@ export interface LocaleMessages {
   locale: {
     zh: string;
     en: string;
+    ariaLabel: string;
   };
 }

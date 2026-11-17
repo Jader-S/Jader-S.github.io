@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 import { useI18n } from "@/components/I18nProvider";
-import { blogPosts } from "@/data/blogs";
-import { openBlog } from "@/lib/blog-modal";
+import { blogPosts, getRecentPosts } from "@/data/blogs";
+import { openBlog, openBlogIndex } from "@/lib/blog-modal";
 import { demoCatalog, type DemoSlug, type ProjectId } from "@/data/project-details";
 import { experienceDomains, type ExperienceDomainId } from "@/data/experience";
 import { profile } from "@/data/profile";
@@ -16,6 +16,7 @@ import { createPortfolioInteractions } from "@/styles/blueprint/swarm/interactio
 import { createPortfolioSceneFactory } from "@/styles/blueprint/swarm/scene/create-portfolio-scene.js";
 import { SwarmExperience } from "@/styles/blueprint/swarm/SwarmExperience.jsx";
 import LabButton from "@/styles/shared/chrome/LabButton";
+import BlogButton from "@/styles/shared/chrome/BlogButton";
 import LocaleToggle from "@/styles/shared/chrome/LocaleToggle";
 import SkillShareRail from "@/styles/shared/chrome/SkillShareRail";
 import StyleRail from "@/styles/shared/chrome/StyleRail";
@@ -52,14 +53,13 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
           .join(" · "),
       };
     });
-    const posts = blogPosts
-      .filter((post) => post.theme === "blueprint")
-      .slice(0, 4)
-      .map((post) => ({
-        title: post.title,
-        meta: `${post.date} · ${post.likes}`,
-        slug: post.slug,
-      }));
+    // 蓝图画布只放得下 4 行：动态取全站最新的 4 篇，不再锁死某个主题的旧文章。
+    // 完整 18 篇由工具栏的「全部日志」入口打开。
+    const posts = getRecentPosts(4).map((post) => ({
+      title: post.title,
+      meta: post.date,
+      slug: post.slug,
+    }));
     const domains = experienceDomains.map((domain) => {
       const id = domain.id as ExperienceDomainId;
       return {
@@ -68,7 +68,7 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
       };
     });
 
-    // 实验室：平铺 6 个 Demo，卡片点击在当前页打开对应 Demo（与作品卡片同构）。
+    // 实验室：平铺全部 Demo，卡片点击在当前页打开对应 Demo（与作品卡片同构）。
     const demos = demoCatalog.map((demo) => ({
       title: demo.title[locale],
       body: demo.desc[locale],
@@ -114,6 +114,7 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
         title: t.blog.title,
         subtitle: t.blog.subtitle,
         posts,
+        allPostsLabel: `${t.blog.allPosts} · ${t.blog.postCount(blogPosts.length)} →`,
       },
       experience: {
         index: t.experience.index,
@@ -144,6 +145,7 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
         primaryCta: sceneCopy.primaryCta,
         github: sceneCopy.github,
         posts: sceneCopy.blog.posts,
+        allPostsLabel: sceneCopy.blog.allPostsLabel,
         projects: sceneCopy.work.items,
         demos: sceneCopy.lab.items,
         links: sceneCopy.links,
@@ -203,11 +205,20 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
       openBlog(next.slug);
       return true;
     }
+    if (next.id === "allPosts") {
+      // 画布博客区的「全部日志」入口：打开完整列表，与其他主题同构。
+      openBlogIndex();
+      return true;
+    }
     return false;
   }, []);
 
   return (
-    <div className="blueprint-shell relative min-h-[100dvh]">
+    <div
+      className="blueprint-shell relative min-h-[100dvh]"
+      id="main-content"
+      tabIndex={-1}
+    >
       <SwarmExperience
         key={`${replayKey}-${locale}-${resolved}`}
         sceneFactory={sceneFactory}
@@ -220,6 +231,7 @@ export default function BuildPhase({ replayKey }: BuildPhaseProps) {
         }}
       />
       <div className="pointer-events-auto fixed right-3 top-7 z-[80] flex items-center gap-2 sm:right-4">
+        <BlogButton compact />
         <LabButton compact />
         <LocaleToggle compact />
         <ThemeToggle compact />

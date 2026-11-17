@@ -2,7 +2,7 @@
  * Project subpath for GitHub Pages. Set PAGES_REPO_NAME="" when deploying to a
  * custom domain or a <user>.github.io user site (root path, no basePath).
  */
-export const repoName = process.env.PAGES_REPO_NAME ?? "portfolio";
+export const repoName = process.env.PAGES_REPO_NAME ?? "astra-portfolio";
 
 export const isGithubPages = process.env.GITHUB_PAGES === "true";
 
@@ -16,7 +16,7 @@ function resolveBasePath(): string {
   return isGithubPages && repoName ? `/${repoName}` : "";
 }
 
-/** Subpath when deployed to GitHub Pages (e.g. `/portfolio`). Empty locally. */
+/** Subpath when deployed to GitHub Pages (e.g. `/astra-portfolio`). Empty locally. */
 export const basePath = resolveBasePath();
 
 /** Client-only: derive origin from the address bar (supports custom domains). */

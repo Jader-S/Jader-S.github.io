@@ -1,1 +1,36 @@
 @unocss all;
+
+/* 桌面左侧风格竖栏安全区：仅在中窄桌面启用，宽屏内容居中时无需避让。 */
+:root {
+  --rail-safe: 0px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  :root {
+    --rail-safe: 4.5rem;
+  }
+}
+
+/* 高特异性兜底：即使 UnoCSS 在 dev 下沿用了 shortcut 的旧展开，中窄桌面
+   下各主题 section 左缘仍需避开固定风格竖栏。宽屏内容居中，无需避让。 */
+@media (min-width: 768px) and (max-width: 1199px) {
+  html[data-style="atelier"] .section-shell {
+    padding-left: calc(2rem + var(--rail-safe));
+  }
+  html[data-style="classic"] .classic-section-shell,
+  html[data-style="classic"] #top {
+    padding-left: calc(1.5rem + var(--rail-safe));
+  }
+  html[data-style="atelier"] #top {
+    padding-left: calc(2rem + var(--rail-safe));
+  }
+  html[data-style="particle"] .particle-section,
+  html[data-style="blueprint"] .blueprint-section {
+    padding-left: calc(2rem + var(--rail-safe));
+  }
+}
+@media (min-width: 1024px) and (max-width: 1199px) {
+  html[data-style="particle"] .particle-section,
+  html[data-style="blueprint"] .blueprint-section {
+    padding-left: calc(3rem + var(--rail-safe));
+  }
+}

@@ -8,6 +8,15 @@ import { PARTICLE_SECTION_IDS, type ParticleSectionId } from "@/styles/particle/
 /** Scroll animation duration — slightly under particle morph so content leads. */
 const SCROLL_MS = 880;
 
+/**
+ * 有 aria-modal 对话框打开时（博客/项目弹框、主题抽屉都 portal 到 body 且带
+ * 该属性），snap 控制器完全让路。否则在弹框里按方向键/空格仍会切换背后的
+ * section，且弹框的键盘操作被抢走。
+ */
+function modalDialogOpen(): boolean {
+  return document.querySelector('[role="dialog"][aria-modal="true"]') !== null;
+}
+
 interface SnapScrollControllerProps {
   columnRef: RefObject<HTMLElement | null>;
   enabled: boolean;
@@ -114,6 +123,7 @@ export function useSnapScrollController({
     let wheelResetTimer = 0;
 
     const onWheel = (event: WheelEvent) => {
+      if (modalDialogOpen()) return;
       if (lockedRef.current || animatingRef.current) {
         event.preventDefault();
         return;
@@ -140,6 +150,7 @@ export function useSnapScrollController({
     };
 
     const onKey = (event: KeyboardEvent) => {
+      if (modalDialogOpen()) return;
       if (lockedRef.current || animatingRef.current) {
         if (
           event.key === "ArrowDown" ||

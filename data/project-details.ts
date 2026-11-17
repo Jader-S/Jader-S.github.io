@@ -20,9 +20,10 @@ export type DemoSlug =
   | "power-grid-flow"
   | "factory-line"
   | "echarts-magnifier"
-  | "lianhang-dashboard";
+  | "lianhang-dashboard"
+  | "skill-qa-agent";
 
-export type DemoCategory = "perf" | "schedule" | "power" | "factory";
+export type DemoCategory = "perf" | "ai" | "schedule" | "power" | "factory";
 
 export interface DemoMeta {
   slug: DemoSlug;
@@ -35,7 +36,7 @@ export interface DemoMeta {
   heavy3d?: boolean;
 }
 
-/** 6 个 Demo 的唯一目录。slug 必须与 styles/shared/demos/registry.ts 一一对应。 */
+/** Demo 唯一目录。slug 必须与 styles/shared/demos/registry.ts 一一对应。 */
 export const demoCatalog: DemoMeta[] = [
   {
     slug: "schneider-poi-perf",
@@ -97,6 +98,18 @@ export const demoCatalog: DemoMeta[] = [
     category: "factory",
     wide: true,
     heavy3d: true,
+  },
+  {
+    slug: "skill-qa-agent",
+    title: {
+      zh: "技能问答 Agent · 本地预览",
+      en: "Skill QA Agent · Local Preview",
+    },
+    desc: {
+      zh: "本地优先的学习与面试助手：导入资料、按章节自测、模拟面试，数据落在浏览器。",
+      en: "Local-first study and interview assistant: import material, self-test by chapter, mock interviews — all in the browser.",
+    },
+    category: "ai",
   },
 ];
 
@@ -202,7 +215,7 @@ export const projectDetails: ProjectDetailEntry[] = [
   },
   {
     id: "skillQaAgent",
-    demos: [],
+    demos: ["skill-qa-agent"],
     text: {
       zh: {
         background:
@@ -236,7 +249,7 @@ export function getProjectDetail(id: string): ProjectDetailEntry | undefined {
 export const projectModalCopy = {
   zh: {
     lab: "实验室",
-    labSub: "6 个可交互 Demo · 点开在当前页预览",
+    labSub: "7 个可交互 Demo · 点开在当前页预览",
     background: "项目背景",
     role: "我的职责",
     stack: "技术栈",
@@ -255,7 +268,7 @@ export const projectModalCopy = {
   },
   en: {
     lab: "Lab",
-    labSub: "6 interactive demos · open and preview in this page",
+    labSub: "7 interactive demos · open and preview in this page",
     background: "Background",
     role: "My role",
     stack: "Stack",

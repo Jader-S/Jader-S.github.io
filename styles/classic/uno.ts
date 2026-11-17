@@ -4,7 +4,8 @@ export const classicShortcuts = {
     "rounded-2xl border border-[var(--glass-border)] bg-[var(--glass-bg)] shadow-[0_8px_32px_rgba(15,23,42,0.06)] backdrop-blur-xl backdrop-saturate-150",
   "glass-card-interactive":
     "glass-card transition-[border-color,background-color,transform,box-shadow] duration-300 hover:border-theme/25 hover:bg-[var(--glass-bg-hover)] hover:-translate-y-0.5 hover:shadow-[0_12px_36px_rgba(15,23,42,0.1)]",
-  "classic-section-shell": "relative px-4 py-16 sm:px-6 sm:py-20 md:py-28",
+  "classic-section-shell":
+    "relative px-4 py-16 sm:px-6 sm:py-20 md:py-28 md:pl-[calc(1.5rem_+_var(--rail-safe))]",
   "classic-section-shell-frost":
     "classic-section-shell isolate overflow-hidden before:pointer-events-none before:absolute before:inset-0 before:z-0 before:border-y before:border-[var(--glass-border)] before:bg-[var(--section-frost-bg)] before:shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] before:backdrop-blur-2xl before:backdrop-saturate-150 before:content-empty",
   "classic-section-inner": "relative z-10 mx-auto max-w-6xl",

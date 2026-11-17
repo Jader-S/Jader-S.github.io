@@ -145,9 +145,11 @@ export default function Planet({ planet }: Props) {
     const st = useStore.getState();
     if (st.flight === "FLYING_IN" || st.flight === "FLYING_OUT") return;
     if (!planet.unlocked) return;
-    // blog 不再离开太空主题：直接打开全局博客弹框（列表 → 正文）。
+    // blog 内容走全局弹框（列表 → 正文），但仍先飞到 LOGOS 星球，保持
+    // 与其余星球的俯冲反馈一致；不飞行会让人以为点击没生效。
     // 用外部 store 而非 Context —— Canvas 走 R3F 独立 reconciler，Context 穿透不可靠。
     if (planet.id === "blog") {
+      requestFlyTo("blog");
       openBlogIndex();
       return;
     }

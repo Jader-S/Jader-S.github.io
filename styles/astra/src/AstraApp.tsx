@@ -34,6 +34,8 @@ export default function AstraApp() {
   return (
     <div
       className="astra-root"
+      id="main-content"
+      tabIndex={-1}
       style={{
         position: "fixed",
         inset: 0,

@@ -1,6 +1,7 @@
 /** Atelier (静奢) — Uno shortcuts, rules, and CSS variables. */
 export const atelierShortcuts = {
-  "section-shell": "relative px-4 py-[clamp(4.5rem,12vw,9rem)] sm:px-6 md:px-8",
+  "section-shell":
+    "relative px-4 py-[clamp(4.5rem,12vw,9rem)] sm:px-6 md:pr-8 md:pl-[calc(2rem_+_var(--rail-safe))]",
   "section-shell-mute": "section-shell bg-surface",
   "section-inner": "mx-auto w-full max-w-[1080px]",
   "section-title":

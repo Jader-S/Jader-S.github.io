@@ -27,8 +27,10 @@ export default function NavRail() {
   const planets = PLANETS.filter((p) => p.id !== "home");
 
   const handlePlanetClick = (planetId: PlanetId) => {
-    // blog 用全局弹框承载，不离开 /astra
+    // blog 内容走全局弹框，但仍要飞到 LOGOS 星球：只开弹框不飞行会让
+    // 导航看起来「点了没反应」，其他星球都有俯冲动画，交互不一致。
     if (planetId === "blog") {
+      requestFlyTo("blog");
       openBlogIndex();
       return;
     }

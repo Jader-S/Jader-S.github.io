@@ -632,6 +632,37 @@ a.project-card:focus-visible {
   min-width: 0;
   max-width: 100%;
 }
+/* lazy chunk 加载占位：半透明透出星空，避免切换 demo 时整块黑屏 */
+.demo-host__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 460px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--neon-cyan, #22d3ee);
+  background: color-mix(in srgb, var(--demo-page, #05060a) 32%, transparent);
+}
+.demo-host__spinner {
+  width: 12px;
+  height: 12px;
+  border: 1px solid color-mix(in srgb, var(--neon-cyan, #22d3ee) 30%, transparent);
+  border-top-color: var(--neon-cyan, #22d3ee);
+  border-radius: 50%;
+  animation: demo-host-spin 0.8s linear infinite;
+}
+@keyframes demo-host-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .demo-host__spinner {
+    animation: none;
+  }
+}
 /* 宽画布 demo 的横滑提示：仅移动断点出现，桌面不占位 */
 .demo-host__hint {
   display: none;
@@ -850,6 +881,9 @@ a.project-card:focus-visible {
     font-size: 17px;
   }
   .demo-host {
+    min-height: 320px;
+  }
+  .demo-host__loading {
     min-height: 320px;
   }
   .demo-host__hint {

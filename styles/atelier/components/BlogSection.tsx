@@ -5,6 +5,7 @@ import { useI18n } from "@/components/I18nProvider";
 import { blogPosts } from "@/data/blogs";
 import { openBlog } from "@/lib/blog-modal";
 import { formatCount } from "@/lib/format";
+import BlogButton from "@/styles/shared/chrome/BlogButton";
 
 export default function BlogSection() {
   const { t } = useI18n();
@@ -42,10 +43,20 @@ export default function BlogSection() {
                     <span className="mt-2 block text-sm text-muted line-clamp-2 text-pretty">
                       {post.description}
                     </span>
-                    <span className="mt-3 flex gap-4 font-mono text-[11px] text-faint">
-                      <span>{formatCount(post.likes)} likes</span>
-                      <span>{formatCount(post.views)} views</span>
-                    </span>
+                    {post.likes > 0 || post.views > 0 ? (
+                      <span className="mt-3 flex gap-4 font-mono text-[11px] text-faint">
+                        {post.likes > 0 ? (
+                          <span>
+                            {formatCount(post.likes)} {t.blog.likes}
+                          </span>
+                        ) : null}
+                        {post.views > 0 ? (
+                          <span>
+                            {formatCount(post.views)} {t.blog.views}
+                          </span>
+                        ) : null}
+                      </span>
+                    ) : null}
                   </span>
                   <span className="text-sm text-faint transition-all duration-300 group-hover:translate-x-1 group-hover:text-theme">
                     {t.common.readMore} →
@@ -54,6 +65,10 @@ export default function BlogSection() {
               </li>
             ))}
         </ul>
+
+        <div className="mt-8 flex justify-end">
+          <BlogButton />
+        </div>
       </div>
     </section>
   );

@@ -7,7 +7,7 @@ export const particleShortcuts = {
   // Desktop snap is JS-driven (eased scrollTop); avoid CSS snap fighting the animator.
   "particle-snap-column": "particle-column",
   "particle-section":
-    "relative mx-auto flex min-h-[64vh] w-full max-w-3xl flex-col justify-center px-5 py-10 sm:px-8 lg:min-h-[100dvh] lg:max-w-4xl lg:px-12 lg:py-16",
+    "relative mx-auto flex min-h-[64vh] w-full max-w-3xl flex-col justify-center px-5 py-10 sm:pr-8 sm:pl-[calc(2rem_+_var(--rail-safe))] lg:min-h-[100dvh] lg:max-w-4xl lg:pr-12 lg:pl-[calc(3rem_+_var(--rail-safe))] lg:py-16",
   "particle-eyebrow":
     "mb-3 font-mono text-[11px] uppercase tracking-[0.28em] text-faint",
   "particle-title":

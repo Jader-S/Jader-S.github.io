@@ -25,7 +25,7 @@ export default function ClassicHome() {
       <VantaBackground />
       <div className="relative z-10">
         <NavBar />
-        <main id="main-content">
+        <main id="main-content" tabIndex={-1}>
           <HeroSection />
           <AboutSection />
           {/* 单一「作品」区块：企业 + 开源已合并，旧 #enterprise / #github 保留别名锚点。 */}

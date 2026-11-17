@@ -43,7 +43,11 @@ export default function BlueprintHome() {
       {phase === "build" ? <BuildPhase replayKey={replayKey} /> : null}
       {phase === "settled" ? <SettledHome onReplay={replay} /> : null}
       {phase === "pending" ? (
-        <div className="blueprint-shell flex min-h-[100dvh] items-center justify-center text-sm text-muted">
+        <div
+          className="blueprint-shell flex min-h-[100dvh] items-center justify-center text-sm text-muted"
+          id="main-content"
+          tabIndex={-1}
+        >
           …
         </div>
       ) : null}

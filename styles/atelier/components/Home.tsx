@@ -24,7 +24,7 @@ export default function AtelierHome() {
       <PageDroplets />
       <div className="relative z-10">
         <NavBar />
-        <main id="main-content">
+        <main id="main-content" tabIndex={-1}>
           <HeroSection />
           <AboutSection />
           {/* 单一「作品」区块：企业项目与开源项目已合并，别名锚点保留在段内。 */}

@@ -4,6 +4,7 @@ import { useI18n } from "@/components/I18nProvider";
 import { blogPosts } from "@/data/blogs";
 import { openBlog } from "@/lib/blog-modal";
 import { formatCount } from "@/lib/format";
+import BlogButton from "@/styles/shared/chrome/BlogButton";
 
 export default function BlogSection() {
   const { t } = useI18n();
@@ -26,12 +27,16 @@ export default function BlogSection() {
               <p className="text-[15px] text-heading">{post.title}</p>
               <p className="mt-1 line-clamp-2 text-sm text-muted">{post.description}</p>
               <p className="mt-2 font-mono text-[11px] text-faint">
-                {post.date} · {formatCount(post.views)} views
+                {post.date}
+                {post.views > 0 ? ` · ${formatCount(post.views)} ${t.blog.views}` : ""}
               </p>
             </button>
           </li>
         ))}
       </ul>
+      <div className="mt-8 flex justify-end">
+        <BlogButton />
+      </div>
     </section>
   );
 }

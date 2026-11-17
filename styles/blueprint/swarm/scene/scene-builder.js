@@ -255,6 +255,32 @@ export class SceneBuilder {
   }
 
   /**
+   * 把某个纵坐标以下的元素与施工任务整体下移。
+   * 用于同一份场景里给前面的区块加高，而不必手改后续所有硬编码坐标。
+   * @param {number} from 起始纵坐标（含）。
+   * @param {number} delta 下移量。
+   * @returns {void}
+   */
+  shiftY(from, delta, skipIds = []) {
+    if (!delta) return;
+    const skip = new Set(skipIds);
+    for (const el of this.elements) {
+      if (skip.has(el.id)) continue;
+      // 文本 / 矩形用 y；路径用 pts 与变换原点；参考线用 pos 无关的 cur。
+      if (typeof el.y === "number" && el.y >= from) el.y += delta;
+      if (el.pts) {
+        for (const p of el.pts) if (p.y >= from) p.y += delta;
+      }
+      if (el.tf && typeof el.tf.y === "number" && el.tf.y >= from) el.tf.y += delta;
+    }
+    for (const task of this.tasks) {
+      const el = "el" in task.spec ? task.spec.el : null;
+      if (el && skip.has(el)) continue;
+      if (task.y >= from) task.y += delta;
+    }
+  }
+
+  /**
    * 添加区块下边界和左右边界，横线延伸至画布之外。
    * @param {string} id 区块标识。
    * @param {number} top 区块顶边。

@@ -13,7 +13,8 @@
  * 注：导航由 flightMachine 状态机驱动，不再依赖 URL（原 react-router 的
  * FlightRouterSync 已移除——/astra 是单路由，行星切换走 requestFlyTo）。
  */
-import { Canvas } from "@react-three/fiber";
+import { useEffect } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
 import { Environment, Lightformer } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { useStore } from "@astra/state/useStore";
@@ -27,6 +28,21 @@ import { detectMobile, detectPortrait } from "@astra/utils/device";
 import GalaxyScene from "./GalaxyScene";
 import CameraRig from "./CameraRig";
 
+/**
+ * 重 3D demo 激活时把星空降到低频渲染（约 8fps），而不是 frameloop="never"
+ * 完全冻结：停渲会让相机漂移停住，恢复瞬间的跳变正是「星空闪烁/卡顿」的来源。
+ * 低频下 WebGL 压力足够小，又保持连续运动。
+ */
+function LowPowerTicker({ active }: { active: boolean }) {
+  const invalidate = useThree((s) => s.invalidate);
+  useEffect(() => {
+    if (!active) return;
+    const id = window.setInterval(() => invalidate(), 120);
+    return () => window.clearInterval(id);
+  }, [active, invalidate]);
+  return null;
+}
+
 export default function GalaxyRoute() {
   const quality = useStore((s) => s.prefs.quality);
   const heavy3DDemoActive = useStore((s) => s.heavy3DDemoActive);
@@ -35,8 +51,8 @@ export default function GalaxyRoute() {
 
   return (
     <Canvas
-      /* 重量级 3D demo（工厂流水线）激活时暂停背景星系渲染，避免双 WebGL context 并行 */
-      frameloop={heavy3DDemoActive ? "never" : "always"}
+      /* 重量级 3D demo 激活时降频而非停渲：避免双 context 抢占，又不冻结星空 */
+      frameloop={heavy3DDemoActive ? "demand" : "always"}
       camera={{
         position: portrait ? CAMERA_HOME_POS_PORTRAIT : CAMERA_HOME_POS,
         fov: portrait ? CAMERA_FOV_PORTRAIT : CAMERA_FOV,
@@ -100,6 +116,8 @@ export default function GalaxyRoute() {
         distance={40}
         decay={2}
       />
+
+      <LowPowerTicker active={heavy3DDemoActive} />
 
       {/* ══════════════════════════════════
           真实感螺旋星系场景（含嵌入其中的导航行星）

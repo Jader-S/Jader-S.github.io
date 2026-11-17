@@ -5,6 +5,7 @@ export const STYLE_ROUTES = [
   "/classic",
   "/particle",
   "/blueprint",
+  "/astra",
 ] as const;
 
 export type StyleRoute = (typeof STYLE_ROUTES)[number];
@@ -29,7 +30,7 @@ export async function clearClientStorage(page: Page) {
 /**
  * Open a style route with a clean preference state.
  * Clears storage once, then reloads so init scripts see the empty state.
- * Blueprint stays on the drawn page. Other styles expose #main-content.
+ * Blueprint stays on the drawn page; every style exposes #main-content.
  */
 export async function gotoStyle(page: Page, route: StyleRoute) {
   await page.goto(route);

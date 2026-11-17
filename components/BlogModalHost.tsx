@@ -12,6 +12,7 @@ import {
   openBlogIndex,
   useBlogModalStore,
 } from "@/lib/blog-modal";
+import { lockBodyScroll } from "@/lib/lock-body-scroll";
 import styles from "@/styles/shared/blog-modal.module.css";
 
 const SORTED_POSTS = [...blogPosts].sort((a, b) =>
@@ -94,55 +95,69 @@ export default function BlogModalHost() {
 
   const isOpen = view.kind !== "closed";
 
+  // 只在「打开/关闭」切换时获取与释放滚动锁（引用计数由工具内部维护），
+  // 视图在弹框内部切换（index ↔ post）不应重复上锁/解锁。
   useEffect(() => {
     if (!isOpen) return;
-
     const opener = document.activeElement as HTMLElement | null;
-    const previousOverflow = document.body.style.overflow;
-    const previousPaddingRight = document.body.style.paddingRight;
-    // 锁滚动时补上滚动条宽度，避免背景页面横向跳动。
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const release = lockBodyScroll();
+    return () => {
+      release();
+      opener?.focus?.();
+    };
+  }, [isOpen]);
 
-    document.body.style.overflow = "hidden";
-    if (scrollbarWidth > 0) {
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
+  // 焦点陷阱跟随 view：内部切换视图会让原焦点节点卸载，必须重新把焦点拉回
+  // 面板，否则 activeElement 落到 body，Tab 会逃出对话框。
+  useEffect(() => {
+    if (!isOpen || !panelRef.current) return;
+    const panel = panelRef.current;
+
+    const active = document.activeElement as HTMLElement | null;
+    if (!active || active === document.body || !panel.contains(active)) {
+      panel.focus();
     }
-    panelRef.current?.focus();
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         closeBlog();
         return;
       }
-      if (event.key !== "Tab" || !panelRef.current) return;
+      if (event.key !== "Tab") return;
 
       const focusable = Array.from(
-        panelRef.current.querySelectorAll<HTMLElement>(
+        panel.querySelectorAll<HTMLElement>(
           'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
         )
       );
-      if (focusable.length === 0) return;
+      if (focusable.length === 0) {
+        event.preventDefault();
+        panel.focus();
+        return;
+      }
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
-      const active = document.activeElement;
+      const current = document.activeElement as HTMLElement | null;
 
-      if (event.shiftKey && (active === first || active === panelRef.current)) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && active === last) {
+      if (event.shiftKey) {
+        if (
+          !current ||
+          current === panel ||
+          current === first ||
+          !panel.contains(current)
+        ) {
+          event.preventDefault();
+          last.focus();
+        }
+      } else if (!current || current === last || !panel.contains(current)) {
         event.preventDefault();
         first.focus();
       }
     };
 
     document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = previousOverflow;
-      document.body.style.paddingRight = previousPaddingRight;
-      opener?.focus?.();
-    };
-  }, [isOpen]);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isOpen, view]);
 
   if (!mounted || !isOpen) return null;
 

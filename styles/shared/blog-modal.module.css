@@ -39,6 +39,14 @@
   outline: none;
 }
 
+/* Demo preview needs a wide canvas: grow the dialog on roomy viewports while
+   blog/project reading views keep the comfortable 56rem measure. */
+@media (min-width: 1280px) {
+  .panelWide {
+    width: min(calc(100vw - 8rem), 80rem);
+  }
+}
+
 :global(html[data-style="astra"]) .panel {
   border-color: rgba(34, 211, 238, 0.4);
   box-shadow:

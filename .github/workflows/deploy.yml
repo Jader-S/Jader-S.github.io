@@ -30,14 +30,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Update blog data
-        run: npm run fetch:blogs
-        continue-on-error: true
-
       - name: Build for GitHub Pages
         run: npm run build
         env:
           GITHUB_PAGES: "true"
+          PAGES_REPO_NAME: ""
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

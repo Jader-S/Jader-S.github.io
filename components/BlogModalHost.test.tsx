@@ -4,6 +4,7 @@ import BlogModalHost from "@/components/BlogModalHost";
 import { getBlogContent } from "@/data/blog-content";
 import { blogPosts } from "@/data/blogs";
 import { openBlog, openBlogIndex, useBlogModalStore } from "@/lib/blog-modal";
+import { openProject, useProjectModalStore } from "@/lib/project-modal";
 import { act, fireEvent, renderWithProviders, screen } from "@/test/render";
 
 const sortedPosts = [...blogPosts].sort((a, b) =>
@@ -11,7 +12,10 @@ const sortedPosts = [...blogPosts].sort((a, b) =>
 );
 
 beforeEach(() => {
-  act(() => useBlogModalStore.setState({ view: { kind: "closed" } }));
+  act(() => {
+    useBlogModalStore.setState({ view: { kind: "closed" } });
+    useProjectModalStore.setState({ view: { kind: "closed" } });
+  });
   document.body.style.overflow = "";
   document.body.style.paddingRight = "";
 });
@@ -86,6 +90,19 @@ describe("BlogModalHost", () => {
 
     act(() => useBlogModalStore.getState().closeBlog());
     expect(document.body.style.overflow).toBe("scroll");
+  });
+
+  it("dismisses an open project modal when a blog post is opened", () => {
+    act(() => openProject("poiConfigTools"));
+    expect(useProjectModalStore.getState().view.kind).toBe("project");
+
+    act(() => openBlog(sortedPosts[0].slug));
+
+    expect(useProjectModalStore.getState().view.kind).toBe("closed");
+    expect(useBlogModalStore.getState().view).toEqual({
+      kind: "post",
+      slug: sortedPosts[0].slug,
+    });
   });
 
   it("shows a fallback for an unknown slug", async () => {

@@ -13,6 +13,8 @@
   color: var(--text-dim);
   font-family: var(--font-mono);
   isolation: isolate;
+  /* HUD 列宽按画布自身宽度响应，而不是按视口——弹窗里画布远小于视口。 */
+  container-type: inline-size;
 }
 
 /* 全屏 3D 背景 */
@@ -424,5 +426,28 @@
   }
   .dash__kpi-value {
     font-size: 16px;
+  }
+}
+
+/* 画布变窄时收窄两侧悬浮 HUD，把中间 3D 通道让出来。
+   用容器查询而非视口查询：弹窗画布宽约 800–1100px，视口却可能 1920px。 */
+@container (max-width: 1180px) {
+  .dash__hud {
+    grid-template-columns: minmax(200px, 270px) minmax(0, 1fr) minmax(200px, 270px);
+    gap: 12px;
+    padding: 12px;
+  }
+}
+@container (max-width: 900px) {
+  .dash__hud {
+    grid-template-columns: minmax(176px, 224px) minmax(0, 1fr) minmax(176px, 224px);
+    gap: 10px;
+    padding: 10px;
+  }
+  .dash__clock-frame {
+    flex-basis: 132px;
+  }
+  .dash__kpi-value {
+    font-size: 15px;
   }
 }

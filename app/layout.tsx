@@ -50,7 +50,8 @@ export const metadata: Metadata = {
   authors: [{ name: "Jader Sun", url: "https://github.com/Jader-S" }],
   openGraph: {
     title: "孙珺宇 Jader | 高级前端工程师",
-    description: "7 年前端工程师，专注性能治理、数字孪生与 AI 工程。ASTRA 太空站作者。",
+    description:
+      "7 年前端工程师，专注性能治理、数字孪生与 AI 工程。五套主题的个人作品站作者。",
     type: "website",
     locale: "zh_CN",
     siteName: "Jader · ASTRA Portfolio",
@@ -58,7 +59,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "孙珺宇 Jader | 高级前端工程师",
-    description: "7 年前端工程师，专注性能治理、数字孪生与 AI 工程。ASTRA 太空站作者。",
+    description:
+      "7 年前端工程师，专注性能治理、数字孪生与 AI 工程。五套主题的个人作品站作者。",
   },
   robots: {
     index: true,

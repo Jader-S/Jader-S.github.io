@@ -1,11 +1,19 @@
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, startTransition, useEffect, useMemo, useRef, useState } from "react";
 import Panel from "@astra/ui/Panel";
 import Reveal from "@astra/ui/Reveal";
 import CategoryFilter, { type CatNode } from "@astra/ui/CategoryFilter";
 import { useStore } from "@astra/state/useStore";
 import { useT } from "@astra/i18n";
-import { demoRegistry, type DemoCategory } from "@/styles/shared/demos/registry";
+import {
+  demoRegistry,
+  preloadDemo,
+  type DemoCategory,
+} from "@/styles/shared/demos/registry";
 import ErrorBoundary from "@astra/ui/ErrorBoundary";
+// 共享 demo 的颜色变量桥：[data-demo-theme] 作用域。此前只有作品弹框路径
+// (DemoPreview) 引入并挂载该属性，实验室路径缺失 → --demo-* 全部 undefined，
+// 会议编排的已排会议背景色等直接消失。
+import "@/styles/shared/demos/demo-tokens.css";
 import "./content.css";
 
 const CAT_ORDER: DemoCategory[] = [
@@ -16,6 +24,16 @@ const CAT_ORDER: DemoCategory[] = [
   "power",
   "factory",
 ];
+
+/** 轻量加载占位：透出星空，不用整块黑屏当 fallback。 */
+function DemoLoading({ label }: { label: string }) {
+  return (
+    <div className="demo-host__loading" role="status">
+      <span className="demo-host__spinner" aria-hidden="true" />
+      {label}
+    </div>
+  );
+}
 
 export default function DemosPage() {
   const t = useT();
@@ -30,6 +48,12 @@ export default function DemosPage() {
       setFlight("VIEWING");
     }
   }, [setActive, setFlight]);
+
+  // 进入实验室就预热当前 demo 的 lazy chunk：首次预览不再等到点击才下载
+  // echarts / three 这类大依赖。
+  useEffect(() => {
+    preloadDemo(activeSlug);
+  }, [activeSlug]);
 
   // V3/3A：URL 统一交给 FlightRouterSync，页面不再双写导航。
   const onReturn = () => {
@@ -61,13 +85,28 @@ export default function DemosPage() {
     [cat]
   );
 
+  // transition 中触发 lazy suspend 时 React 保留旧 demo，而不是把容器清空
+  // 露出一帧黑屏；新 chunk 就绪后才替换。
+  const pickDemo = (slug: string) => {
+    if (slug === activeSlug) return;
+    startTransition(() => setActiveSlug(slug));
+  };
+
+  // hover 预取做防抖：鼠标快速扫过列表时不该把所有大 chunk 全拉下来。
+  const hoverTimer = useRef<number | undefined>(undefined);
+  const hoverPreload = (slug: string) => {
+    window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => preloadDemo(slug), 180);
+  };
+  useEffect(() => () => window.clearTimeout(hoverTimer.current), []);
+
   const onPick = (node: CatNode) => {
     if (node.key === "all") {
       setCat("all");
     } else if (node.children && node.children.length > 0) {
       setCat(node.key); // 桌面点击分支 → 筛选
     } else {
-      setActiveSlug(node.key); // 移动端点击具体 demo → 跳转
+      pickDemo(node.key); // 移动端点击具体 demo → 跳转
     }
   };
 
@@ -95,7 +134,8 @@ export default function DemosPage() {
               type="button"
               className="demo-list__item"
               data-active={d.slug === activeSlug}
-              onClick={() => setActiveSlug(d.slug)}
+              onMouseEnter={() => hoverPreload(d.slug)}
+              onClick={() => pickDemo(d.slug)}
             >
               <span className="demo-list__name">{d.title}</span>
               <span className="demo-list__tag">{d.category}</span>
@@ -108,9 +148,11 @@ export default function DemosPage() {
         <Reveal delay={100}>
           {active.wide && <p className="demo-host__hint">← 左右滑动查看完整画布 →</p>}
           {/* scroll-x：宽画布 demo 在窄屏保留桌面宽度后，由这里提供可拖动的横向滚动 */}
-          <div className="demo-host scroll-x">
-            <ErrorBoundary scope="demo">
-              <active.Component />
+          <div className="demo-host scroll-x" data-demo-theme>
+            <ErrorBoundary scope="demo" key={activeSlug}>
+              <Suspense fallback={<DemoLoading label={t.loading} />}>
+                <active.Component />
+              </Suspense>
             </ErrorBoundary>
           </div>
         </Reveal>

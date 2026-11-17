@@ -201,11 +201,22 @@ export const blogPosts: BlogPost[] = [
   },
 ];
 
+/** 按发布日期倒序的比较器（新文章排前面）。 */
+function byDateDesc(a: BlogPost, b: BlogPost): number {
+  return a.date < b.date ? 1 : a.date > b.date ? -1 : 0;
+}
+
+/** 全站全部日志，按日期倒序。各主题的「全部日志」入口用同一份动态数据。 */
+export const allPostsByDate: BlogPost[] = [...blogPosts].sort(byDateDesc);
+
+/** 取全站最新的 count 篇日志（按日期倒序），供蓝图画布等有限展示位动态取用。 */
+export function getRecentPosts(count: number): BlogPost[] {
+  return allPostsByDate.slice(0, count);
+}
+
 /** 取某主题下的全部日志，按日期倒序 */
 export function getPostsByTheme(theme: StyleMode): BlogPost[] {
-  return blogPosts
-    .filter((p) => p.theme === theme)
-    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+  return blogPosts.filter((p) => p.theme === theme).sort(byDateDesc);
 }
 
 /** 按 slug 取单篇（不校验主题） */

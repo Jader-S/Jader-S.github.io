@@ -95,7 +95,7 @@ export default function ParticleHome() {
           className={snapEnabled ? "particle-snap-column" : "particle-column"}
         >
           <NavBar activeId={activeId} onNavigate={navigateTo} locked={locked} />
-          <main id="main-content">
+          <main id="main-content" tabIndex={-1}>
             <HeroSection />
             <AboutSection />
             <WorkSection />

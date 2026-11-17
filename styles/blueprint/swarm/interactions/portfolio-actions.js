@@ -3,7 +3,7 @@ import { ActionType, InteractionStyle } from "./actions.js";
 /**
  * Click targets for the full drawn portfolio.
  * Scroll targets are scene element ids, so the engine keeps building as the page moves.
- * @param {{nav:string[], primaryCta:string, github:string, posts:{title:string, meta?:string, slug:string}[], projects:{title:string, id:string, link?:string}[], demos?:{title:string, slug:string}[], links:{id:string, label:string, kind:string, href?:string, target?:string}[]}} copy Nav labels, buttons, blog post slugs, work items, lab demos, and the footer index.
+ * @param {{nav:string[], primaryCta:string, github:string, posts:{title:string, meta?:string, slug:string}[], allPostsLabel?:string, projects:{title:string, id:string, link?:string}[], demos?:{title:string, slug:string}[], links:{id:string, label:string, kind:string, href?:string, target?:string}[]}} copy Nav labels, buttons, blog post slugs, work items, lab demos, and the footer index.
  * @returns {object[]} Interaction definitions.
  */
 export function createPortfolioInteractions(copy) {
@@ -50,6 +50,20 @@ export function createPortfolioInteractions(copy) {
     action: { type: ActionType.CUSTOM, id: "open", slug: post.slug },
   }));
 
+  // 博客区底部的「全部日志」入口，与其他主题博客区同构。
+  const allPosts = copy.allPostsLabel
+    ? [
+        {
+          id: "b-all",
+          elements: ["b-all"],
+          after: ["t:b-all"],
+          label: copy.allPostsLabel,
+          style: InteractionStyle.LINK,
+          action: { type: ActionType.CUSTOM, id: "allPosts" },
+        },
+      ]
+    : [];
+
   // Work board: item 0 is the source element ("work-t"/"work-b"), items 1..n
   // are duplicates ("work-t~1" ...). Duplicates only become clickable after
   // their copy task finishes, so the animation never exposes a dead region.
@@ -68,7 +82,7 @@ export function createPortfolioInteractions(copy) {
   });
 
   // 实验室卡片：与作品卡片同构，点击在当前页打开对应 Demo 弹框（不跳路由）。
-  const labCards = (copy.demos ?? []).slice(0, 6).map((demo, index) => {
+  const labCards = (copy.demos ?? []).slice(0, 9).map((demo, index) => {
     const suffix = index === 0 ? "" : `~${index}`;
     return {
       id: `l${index}`,
@@ -99,6 +113,7 @@ export function createPortfolioInteractions(copy) {
       action: { type: ActionType.CUSTOM, id: "github" },
     },
     ...posts,
+    ...allPosts,
     ...workItems,
     ...labCards,
     ...copy.links.map((link, index) => ({

@@ -35,7 +35,7 @@ export default function HeroSection() {
   return (
     <section
       id="top"
-      className="relative flex min-h-[100dvh] items-start overflow-hidden px-4 pb-16 pt-24 sm:px-6 sm:pb-20 sm:pt-28 md:px-8 md:pt-28 lg:pb-14 lg:pt-24"
+      className="relative flex min-h-[100dvh] items-start overflow-hidden px-4 pb-16 pt-24 sm:px-6 sm:pb-20 sm:pt-28 md:pr-8 md:pl-[calc(2rem_+_var(--rail-safe))] md:pt-28 lg:pb-14 lg:pt-24"
     >
       <div
         className="hero-glow pointer-events-none absolute inset-0"

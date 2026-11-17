@@ -10,7 +10,7 @@ export type LabStyle = "atelier" | "classic" | "blueprint" | "particle";
 /**
  * 共享「实验室」区块（Phase 8）：与「作品」并列的一级菜单。
  *
- * 平铺 demoCatalog 的 6 个 Demo 卡片，点击在当前页打开 Demo 详情弹框
+ * 平铺 demoCatalog 的全部 Demo 卡片，点击在当前页打开 Demo 详情弹框
  * （不新开标签、不跳路由）。外壳由各主题提供（section 类名 + 标题），
  * 卡片统一用主题 token 配色，保证浅色 / 深色主题下文字对比度。
  */

@@ -30,7 +30,7 @@ export default function SelectedProjects() {
   const useFlame = !isMobile && !reducedMotion;
 
   return (
-    <section id="work" className="section-shell-mute">
+    <section id="work" className="section-shell-mute overflow-x-clip">
       {/* 旧链接的别名锚点：企业/开源合并进 #work 后仍可定位，不产生布局。 */}
       <span id="selected" aria-hidden="true" />
       <span id="work-index" aria-hidden="true" />

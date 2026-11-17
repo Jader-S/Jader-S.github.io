@@ -1,0 +1,33 @@
+/* 技能问答 Agent 预览：独立 iframe，宿主的 demo-tokens 不影响内部配色。 */
+.skill-qa {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.skill-qa__frame {
+  display: block;
+  width: 100%;
+  height: clamp(560px, 72vh, 820px);
+  border: 1px solid var(--demo-border, rgba(127, 145, 170, 0.28));
+  border-radius: var(--radius-md, 12px);
+  background: #0b1018;
+}
+
+.skill-qa__open {
+  align-self: flex-end;
+  color: var(--demo-accent, #22d3ee);
+  font-size: 0.78rem;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.skill-qa__open:hover {
+  color: var(--demo-accent-light, #67e8f9);
+}
+
+.skill-qa__open:focus-visible {
+  outline: 2px solid var(--demo-accent, #22d3ee);
+  outline-offset: 3px;
+}

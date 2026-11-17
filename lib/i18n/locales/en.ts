@@ -48,7 +48,7 @@ export const en: LocaleMessages = {
     name: "Jader Sun",
     title: "Senior Frontend Engineer / AI Application Engineer",
     tagline:
-      "A frontend engineer's space station · performance · digital twins · AI engineering",
+      "A frontend engineer's personal site · performance · digital twins · AI engineering",
     highlights: [
       { label: "Experience", value: "7 yrs" },
       { label: "Core Projects", value: "3" },
@@ -191,7 +191,7 @@ export const en: LocaleMessages = {
     index: "03 — LAB",
     title: "Lab",
     subtitle:
-      "6 interactive demos: benchmarks, power visualization, 3D lines and dashboards",
+      "7 interactive demos: benchmarks, power visualization, 3D lines, dashboards and skill QA",
     openHint: "Preview in this page →",
   },
   blog: {
@@ -204,6 +204,8 @@ export const en: LocaleMessages = {
     notFound: "Post not found.",
     emptyBody: "Body not generated. Run npm run gen:blog-content.",
     postCount: (count: number) => `${count} posts`,
+    likes: "likes",
+    views: "views",
   },
   experience: {
     index: "06 — DOMAINS",
@@ -290,5 +292,6 @@ export const en: LocaleMessages = {
   locale: {
     zh: "中文",
     en: "English",
+    ariaLabel: "Language",
   },
 };

@@ -47,7 +47,7 @@ export const zh: LocaleMessages = {
   profile: {
     name: "孙珺宇 · Jader",
     title: "高级前端工程师 / AI 应用工程师",
-    tagline: "一个前端工程师的太空站 · 性能治理 · 数字孪生 · AI 工程",
+    tagline: "一个前端工程师的个人网站 · 性能治理 · 数字孪生 · AI 工程",
     highlights: [
       { label: "前端经验", value: "7 年" },
       { label: "核心项目", value: "3 段实战" },
@@ -185,7 +185,7 @@ export const zh: LocaleMessages = {
   lab: {
     index: "03 — LAB",
     title: "实验室",
-    subtitle: "6 个可交互 Demo：性能基准、配电可视化、3D 产线与数据看板",
+    subtitle: "7 个可交互 Demo：性能基准、配电可视化、3D 产线、数据看板与技能问答",
     openHint: "在当前页预览 →",
   },
   blog: {
@@ -197,6 +197,8 @@ export const zh: LocaleMessages = {
     notFound: "找不到这篇日志。",
     emptyBody: "正文尚未生成，请运行 npm run gen:blog-content。",
     postCount: (count: number) => `共 ${count} 篇`,
+    likes: "赞",
+    views: "次浏览",
   },
   experience: {
     index: "06 — DOMAINS",
@@ -283,5 +285,6 @@ export const zh: LocaleMessages = {
   locale: {
     zh: "中文",
     en: "English",
+    ariaLabel: "语言",
   },
 };

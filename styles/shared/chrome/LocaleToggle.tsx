@@ -33,7 +33,7 @@ export default function LocaleToggle({ compact = false, onSelect }: LocaleToggle
             : "inline-flex items-center border border-divider bg-[var(--color-surface)]/40 p-0.5"
         }
         role="group"
-        aria-label="Language"
+        aria-label={t.locale.ariaLabel}
       >
         {options.map(({ value, label, short }) => (
           <button
@@ -64,7 +64,7 @@ export default function LocaleToggle({ compact = false, onSelect }: LocaleToggle
   }
 
   return (
-    <div className="flex flex-col gap-1" role="group" aria-label="Language">
+    <div className="flex flex-col gap-1" role="group" aria-label={t.locale.ariaLabel}>
       {options.map(({ value, label }) => (
         <button
           key={value}

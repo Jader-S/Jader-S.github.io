@@ -1,13 +1,13 @@
 import React from "react";
-import { LU_SEAL_PATH_D } from "../scene/lu-seal-path.js";
+import { SUN_SEAL_PATH_D } from "../scene/sun-seal-path.js";
 
 /**
- * Opening mark: 九叠篆「卢」.
- * Path from jiudiezhuan.com glyph jdz-8211-1; fill follows theme via currentColor.
+ * Opening mark: 九叠篆「孙」.
+ * Path from jiudiezhuan.com glyph jdz-8058-1 (孙/孫 · sūn); fill follows theme via currentColor.
  * @param {{className?: string}} props
  * @returns {React.ReactElement}
  */
-export function LuSeal({ className }) {
+export function SunSeal({ className }) {
   return (
     <svg
       className={className}
@@ -15,12 +15,12 @@ export function LuSeal({ className }) {
       fill="currentColor"
       aria-hidden="true"
     >
-      {/* Glyph path from jiudiezhuan.com — 卢; stroke thickens the filled corridors */}
+      {/* Glyph path from jiudiezhuan.com — 孙; stroke thickens the filled corridors */}
       <path
         stroke="currentColor"
         strokeWidth="10"
         strokeLinejoin="round"
-        d={LU_SEAL_PATH_D}
+        d={SUN_SEAL_PATH_D}
       />
     </svg>
   );

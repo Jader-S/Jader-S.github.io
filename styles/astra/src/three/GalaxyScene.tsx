@@ -376,7 +376,10 @@ export default function GalaxyScene({ quality = "high" }: { quality?: QualityTie
 
         {/* 吸收 drei <Html>「场景中首个 <Html> 首帧 portal 创建失败」的已知时序问题：
             放一个不可见占位 <Html> 当第一个，让后续 5 个行星标签都成为第 2 个及以后，
-            从而全部正常 portal（否则总会缺第一个行星的 chip，如首进全景缺 01 起源）。 */}
+            从而全部正常 portal（否则总会缺第一个行星的 chip，如首进全景缺 01 起源）。
+            另注：drei 10.7.9 的 <Html> 在 React 19 StrictMode 下会在 layout effect
+            cleanup 同步 unmount root（pmndrs/drei#2867），dev 控制台固定 6 次告警；
+            生产不受影响，E2E 已放行并设上限（e2e/astra.spec.ts）。 */}
         <Html
           position={[0, 0, 0]}
           center

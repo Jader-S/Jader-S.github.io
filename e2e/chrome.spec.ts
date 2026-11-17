@@ -24,7 +24,7 @@ test.describe("theme and locale chrome", () => {
     await expect(page.locator("html")).toHaveAttribute("lang", "zh-CN");
     await expect(page.getByRole("link", { name: "跳到主要内容" })).toBeAttached();
 
-    const localeGroup = page.getByRole("group", { name: "Language" }).first();
+    const localeGroup = page.getByRole("group", { name: /语言|Language/ }).first();
     await localeGroup.getByRole("button", { name: "English" }).click();
 
     await expect(page.locator("html")).toHaveAttribute("lang", "en");

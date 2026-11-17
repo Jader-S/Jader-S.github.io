@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState, type MouseEvent } from "react";
 import { createPortal } from "react-dom";
 import { useI18n } from "@/components/I18nProvider";
 import { useViewport } from "@/lib/hooks/useViewport";
+import { lockBodyScroll } from "@/lib/lock-body-scroll";
 import { getStyleHref } from "@/lib/style";
 import { STYLE_IDS, STYLE_REGISTRY, type StyleMode } from "@/styles/registry";
 import { useStyle } from "@/styles/shared/providers/StyleProvider";
@@ -94,10 +95,16 @@ export default function StyleRail() {
   useEffect(() => {
     if (!open) return;
 
-    const previousOverflow = document.body.style.overflow;
     const handle = handleRef.current;
-    document.body.style.overflow = "hidden";
-    panelRef.current?.focus();
+    const release = lockBodyScroll();
+    const panel = panelRef.current;
+
+    if (panel) {
+      const active = document.activeElement as HTMLElement | null;
+      if (!active || active === document.body || !panel.contains(active)) {
+        panel.focus();
+      }
+    }
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -106,20 +113,32 @@ export default function StyleRail() {
       }
       if (event.key !== "Tab" || !panelRef.current) return;
 
+      const activePanel = panelRef.current;
       const focusable = Array.from(
-        panelRef.current.querySelectorAll<HTMLElement>(
+        activePanel.querySelectorAll<HTMLElement>(
           'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
         )
       );
-      if (focusable.length === 0) return;
+      if (focusable.length === 0) {
+        event.preventDefault();
+        activePanel.focus();
+        return;
+      }
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
-      const active = document.activeElement;
+      const active = document.activeElement as HTMLElement | null;
 
-      if (event.shiftKey && (active === first || active === panelRef.current)) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && active === last) {
+      if (event.shiftKey) {
+        if (
+          !active ||
+          active === activePanel ||
+          active === first ||
+          !activePanel.contains(active)
+        ) {
+          event.preventDefault();
+          last.focus();
+        }
+      } else if (!active || active === last || !activePanel.contains(active)) {
         event.preventDefault();
         first.focus();
       }
@@ -128,7 +147,7 @@ export default function StyleRail() {
     document.addEventListener("keydown", onKeyDown);
     return () => {
       document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = previousOverflow;
+      release();
       handle?.focus();
     };
   }, [open]);

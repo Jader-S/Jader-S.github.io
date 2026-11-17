@@ -5,6 +5,7 @@ import LocaleToggle from "@/styles/shared/chrome/LocaleToggle";
 import ThemeToggle from "@/styles/shared/chrome/ThemeToggle";
 import { useI18n } from "@/components/I18nProvider";
 import { useViewport } from "@/lib/hooks/useViewport";
+import { lockBodyScroll } from "@/lib/lock-body-scroll";
 
 export default function NavBar() {
   const { t } = useI18n();
@@ -48,12 +49,7 @@ export default function NavBar() {
 
   useEffect(() => {
     if (!menuOpen || !isMobile) return;
-
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
+    return lockBodyScroll();
   }, [menuOpen, isMobile]);
 
   const headerBg =

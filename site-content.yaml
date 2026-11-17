@@ -25,7 +25,7 @@ profile:
   zh:
     name: "孙珺宇 · Jader"
     title: "高级前端工程师 / AI 应用工程师"
-    tagline: "一个前端工程师的太空站 · 性能治理 · 数字孪生 · AI 工程"
+    tagline: "一个前端工程师的个人网站 · 性能治理 · 数字孪生 · AI 工程"
     highlights:
       - { label: "前端经验", value: "7 年" }
       - { label: "核心项目", value: "3 段实战" }
@@ -34,7 +34,7 @@ profile:
   en:
     name: "Jader Sun"
     title: "Senior Frontend Engineer / AI Application Engineer"
-    tagline: "A frontend engineer's space station · performance · digital twins · AI engineering"
+    tagline: "A frontend engineer's personal site · performance · digital twins · AI engineering"
     highlights:
       - { label: "Experience", value: "7 yrs" }
       - { label: "Core Projects", value: "3" }
