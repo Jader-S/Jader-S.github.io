@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect } from "react";
 import { useStore } from "@astra/state/useStore";
+import { registerReturnToOverview } from "@/lib/overview-registry";
 import { useT } from "@astra/i18n";
 import { detectWebGL2 } from "@astra/utils/device";
 import GalaxyRoute from "@astra/three/GalaxyRoute";
@@ -30,6 +31,13 @@ export default function AstraApp() {
   useEffect(() => {
     if (!detectWebGL2()) setWebglBroken(true);
   }, [setWebglBroken]);
+
+  // 让共享的博客弹框能触发 astra 的返航飞行（与星球详情页「返回全景」同一机制）。
+  useEffect(() => {
+    return registerReturnToOverview(() => {
+      useStore.getState().dispatch({ type: "RETURN" });
+    });
+  }, []);
 
   return (
     <div

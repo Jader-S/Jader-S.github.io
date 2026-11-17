@@ -1,10 +1,11 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 import BlogModalHost from "@/components/BlogModalHost";
 import { getBlogContent } from "@/data/blog-content";
 import { blogPosts } from "@/data/blogs";
 import { openBlog, openBlogIndex, useBlogModalStore } from "@/lib/blog-modal";
 import { openProject, useProjectModalStore } from "@/lib/project-modal";
+import { registerReturnToOverview } from "@/lib/overview-registry";
 import { act, fireEvent, renderWithProviders, screen } from "@/test/render";
 
 const sortedPosts = [...blogPosts].sort((a, b) =>
@@ -62,14 +63,64 @@ describe("BlogModalHost", () => {
     expect(dialog).not.toBeInTheDocument();
   });
 
-  it("uses 返回全景 as the close label in the ASTRA style", async () => {
+  it("shows a visible ← 返回全景 button in the ASTRA style", async () => {
     renderWithProviders(<BlogModalHost />, { style: "astra" });
 
     act(() => openBlog(sortedPosts[0].slug));
     await screen.findByRole("dialog");
 
-    expect(screen.getByRole("button", { name: "返回全景" })).toBeInTheDocument();
+    const btn = screen.getByRole("button", { name: "返回全景" });
+    expect(btn).toBeInTheDocument();
+    // 可见文字必须是「← 返回全景」，而非仅 aria-label 改了、视觉仍是 ✕
+    expect(btn).toHaveTextContent("← 返回全景");
+    expect(btn).not.toHaveTextContent("✕");
     expect(screen.queryByRole("button", { name: "关闭" })).not.toBeInTheDocument();
+  });
+
+  it("keeps the ✕ close icon in non-ASTRA styles", async () => {
+    renderWithProviders(<BlogModalHost />, { style: "blueprint" });
+
+    act(() => openBlog(sortedPosts[0].slug));
+    await screen.findByRole("dialog");
+
+    const btn = screen.getByRole("button", { name: "关闭" });
+    expect(btn).toHaveTextContent("✕");
+    expect(btn).not.toHaveTextContent("返回全景");
+  });
+
+  it("triggers the registered return-to-overview action in ASTRA style", async () => {
+    const user = userEvent.setup();
+    const onReturn = vi.fn();
+    const unregister = registerReturnToOverview(onReturn);
+    try {
+      renderWithProviders(<BlogModalHost />, { style: "astra" });
+      act(() => openBlog(sortedPosts[0].slug));
+      await screen.findByRole("dialog");
+
+      await user.click(screen.getByRole("button", { name: "返回全景" }));
+
+      expect(onReturn).toHaveBeenCalledOnce();
+      expect(useBlogModalStore.getState().view.kind).toBe("closed");
+    } finally {
+      unregister();
+    }
+  });
+
+  it("does not trigger return-to-overview in non-ASTRA styles", async () => {
+    const user = userEvent.setup();
+    const onReturn = vi.fn();
+    const unregister = registerReturnToOverview(onReturn);
+    try {
+      renderWithProviders(<BlogModalHost />, { style: "blueprint" });
+      act(() => openBlog(sortedPosts[0].slug));
+      await screen.findByRole("dialog");
+
+      await user.click(screen.getByRole("button", { name: "关闭" }));
+
+      expect(onReturn).not.toHaveBeenCalled();
+    } finally {
+      unregister();
+    }
   });
 
   it("index mode lists every post and drills into one", async () => {

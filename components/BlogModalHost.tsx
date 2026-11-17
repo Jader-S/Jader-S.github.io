@@ -14,6 +14,7 @@ import {
 } from "@/lib/blog-modal";
 import { lockBodyScroll } from "@/lib/lock-body-scroll";
 import { useStyle } from "@/styles/shared/providers/StyleProvider";
+import { requestReturnToOverview } from "@/lib/overview-registry";
 import styles from "@/styles/shared/blog-modal.module.css";
 
 const SORTED_POSTS = [...blogPosts].sort((a, b) =>
@@ -98,6 +99,13 @@ export default function BlogModalHost() {
   useEffect(() => setMounted(true), []);
 
   const isOpen = view.kind !== "closed";
+
+  // ASTRA 下「返回全景」需先关弹框，再触发返航飞行（让相机飞回全景母星）；
+  // 其余主题就是普通关闭。
+  const handleClose = () => {
+    closeBlog();
+    if (isAstra) requestReturnToOverview();
+  };
 
   // 只在「打开/关闭」切换时获取与释放滚动锁（引用计数由工具内部维护），
   // 视图在弹框内部切换（index ↔ post）不应重复上锁/解锁。
@@ -189,11 +197,11 @@ export default function BlogModalHost() {
           )}
           <button
             type="button"
-            className={styles.close}
-            onClick={closeBlog}
+            className={isAstra ? styles.returnAsAstra : styles.close}
+            onClick={handleClose}
             aria-label={isAstra ? t.blog.returnToOverview : t.blog.close}
           >
-            ✕
+            {isAstra ? `← ${t.blog.returnToOverview}` : "✕"}
           </button>
         </div>
         <div className={styles.scroll}>

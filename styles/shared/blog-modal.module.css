@@ -109,8 +109,35 @@
   color: var(--text-heading, #fff);
 }
 
+/* ASTRA 主题下，博客弹框右上角改用与星球详情页一致的「← 返回全景」按钮。
+   弹框经 createPortal 挂到 body，不在 .astra-root 内，故写死 ASTRA token 色值。 */
+.returnAsAstra {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #22d3ee;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.returnAsAstra:hover {
+  background: rgba(34, 211, 238, 0.12);
+  color: #f0f4f8;
+  border-color: #22d3ee;
+}
+
 .back:focus-visible,
 .close:focus-visible,
+.returnAsAstra:focus-visible,
 .indexItem:focus-visible {
   outline: 2px solid var(--theme-accent, #22d3ee);
   outline-offset: 2px;
